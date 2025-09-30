@@ -217,13 +217,12 @@ Veri ambarları, çeşitli kaynaklardan veri toplayan ve bu veriyi analize uygun
 
 ```mermaid
 graph TD
-    subgraph Kaynak Sistemler
-        A[Operasyonel DB 1 (OLTP)]
-        B[Operasyonel DB 2 (CRM)]
-        C[Harici Veriler (Excel, API)]
+   subgraph "Kaynak Sistemler"
+        A["Operasyonel DB 1 (OLTP)"]
+        B["Operasyonel DB 2 (CRM)"]
+        C["Harici Veriler (Excel, API)"]
     end
-
-    subgraph Veri Hazırlama Alanı (Staging Area)
+    subgraph "Veri Hazırlama Alanı (Staging Area)"
         D{ETL Süreci}
         E[Veri Çıkarma]
         F[Temizleme, Birleştirme, Standardizasyon]
@@ -232,15 +231,12 @@ graph TD
         E -- 2. Transform (Dönüştürme) --> F
         F -- 3. Load (Yükleme) --> G
     end
-
-    H[Veri Ambarı (Data Warehouse)]
-
-    subgraph Analiz ve Raporlama
+    H["Veri Ambarı (Data Warehouse)"]
+    subgraph "Analiz ve Raporlama"
         I[OLAP Sunucusu]
         J[Raporlama Araçları]
         K[Veri Madenciliği Araçları]
     end
-
     A --> D
     B --> D
     C --> D
@@ -255,23 +251,208 @@ graph TD
 3.  **Yükleme (Load):** Dönüştürülmüş ve hazır hale getirilmiş veri, analiz edilmek üzere veri ambarına yüklenir.
 
 
-**MetaData:**  
-- Veritabanı nesnelerini tanımlayan, öznitelik türü ve bilgisini içeren veridir.  
+### Meta Veri (Metadata)
 
----
+**Tanım:** En basit tanımıyla meta veri, **"veri hakkında veri"** demektir. Veri ambarındaki verinin ne anlama geldiğini, nereden geldiğini, nasıl yapılandırıldığını ve nasıl kullanılacağını açıklayan bir tür "veri sözlüğü" veya "kullanım kılavuzu"dur. Ham veriye bağlam ve anlam kazandırır.
 
-### Veri Ambarı Şemaları
-1. **Yıldız Şeması (Star Schema):**  
-   - Ana tablo, anahtar özniteliklerden oluşur.  
+Meta veri, aşağıdaki gibi sorulara yanıt verir:
+-   Bu verinin adı nedir? (`Satis_Miktari`)
+-   Veri türü nedir? (Sayısal, metin, tarih vb.)
+-   Hangi tablodan veya sistemden geliyor? (Kaynak)
+-   En son ne zaman güncellendi?
+-   Hesaplanmış bir alan ise formülü nedir?
 
-2. **Kar Tanesi Şeması (Snowflake Schema):**  
-   - Boyut tabloları normalize edilmiştir.  
-   - Hiyerarşik durumlar için uygundur.  
-   - Çok sayıda birleştirme gerektirdiğinden performans düşebilir.  
+**Örnek:**
+Bir satış tablosunda `150` şeklinde bir değer olduğunu düşünelim. Bu değer tek başına bir anlam ifade etmez. Ancak meta verisi ile birlikte anlam kazanır:
 
-3. **Galaxy Şeması (Galaxy Schema):**  
-   - Çok sayıda kar tanesi şemasının birleşiminden oluşan koleksiyon.  
-   - Nitelik tablosu gibi çalışır.  
+-   **Veri (Data):** `150`
+-   **Meta Veri (Metadata):**
+    -   **Öznitelik Adı:** `Satis_Adedi`
+    -   **Açıklama:** "Tek bir işlemde satılan ürün sayısı"
+    -   **Veri Tipi:** `Tamsayı (Integer)`
+    -   **Kaynak Tablo:** `Gunluk_Satislar`
+    -   **Geçerli Aralık:** `1 - 500`
+
+Bu meta veri sayesinde `150` değerinin, `Gunluk_Satislar` tablosundaki bir satış işleminde 150 adet ürün satıldığını ifade eden bir tamsayı olduğunu anlarız. Meta veri olmadan, veri yığınları anlamsız sayılardan ibaret kalır.
+
+### Veri Ambarı Şemaları: Veriyi Anlamlandırma Sanatı
+
+Veri ambarında veriler, analiz sorgularını hızlı ve verimli bir şekilde çalıştıracak şekilde özel yapılarla organize edilir. Bu yapılara **şema** denir. En yaygın kullanılan üç şema türü Yıldız, Kar Tanesi ve Galaksi (Fact Constellation) şemalarıdır.
+
+#### 1. Yıldız Şeması (Star Schema)
+
+En basit ve en yaygın kullanılan veri ambarı şemasıdır. Adını, yapısının bir yıldıza benzemesinden alır: merkezde bir **olgu (fact) tablosu** ve bu tabloya doğrudan bağlı olan **boyut (dimension) tabloları** bulunur.
+
+-   **Olgu Tablosu (Fact Table):** İşletmenin sayısal ölçümlerini (satış adedi, gelir, maliyet gibi) ve boyut tablolarına ait yabancı anahtarları (foreign keys) içerir. İş süreçlerinden ölçülen nicel verileri (sayısal değerleri, metrikleri) tutan tablodur.
+-   **Boyut Tabloları (Dimension Tables):** Olgu tablosundaki verilere bağlam kazandıran tanımlayıcı bilgileri (ürün adı, müşteri bilgisi, tarih detayları gibi) içerir. Boyut tabloları **denormalize** edilmiştir, yani ilgili tüm bilgiler tek bir tabloda toplanır.
+
+**Avantajları:**
+-   **Basitlik:** Anlaşılması ve sorgulanması kolaydır.
+-   **Performans:** Daha az `JOIN` işlemi gerektirdiği için sorgular genellikle çok hızlı çalışır.
+
+```mermaid
+graph TD
+    subgraph "Yıldız Şeması (Star Schema)"
+        style FactSales fill:#f9f,stroke:#333,stroke-width:2px
+        style DimTime fill:#bbf,stroke:#333,stroke-width:2px
+        style DimStore fill:#bbf,stroke:#333,stroke-width:2px
+        style DimProduct fill:#bbf,stroke:#333,stroke-width:2px
+
+        FactSales("
+            <b>Fact: Sales</b><br/>
+            TimeKey<br/>
+            StoreKey<br/>
+            ProductKey<br/>
+            ---<br/>
+            <i>UnitsSold</i><br/>
+            <i>TotalRevenue</i>
+        ")
+
+        DimTime("
+            <b>Dim: Time</b><br/>
+            <b>TimeKey (PK)</b><br/>
+            Date<br/>
+            Month<br/>
+            Year
+        ")
+
+        DimStore("
+            <b>Dim: Store</b><br/>
+            <b>StoreKey (PK)</b><br/>
+            StoreName<br/>
+            City<br/>
+            Country
+        ")
+
+        DimProduct("
+            <b>Dim: Product</b><br/>
+            <b>ProductKey (PK)</b><br/>
+            ProductName<br/>
+            Category<br/>
+            Brand
+        ")
+
+        FactSales -- TimeKey --> DimTime
+        FactSales -- StoreKey --> DimStore
+        FactSales -- ProductKey --> DimProduct
+    end
+```
+
+#### 2. Kar Tanesi Şeması (Snowflake Schema)
+
+Yıldız şemasının bir uzantısıdır. Temel fark, boyut tablolarının **normalize** edilmiş olmasıdır. Yani, bir boyut tablosu, veri tekrarını azaltmak için daha küçük ve ilişkili birden fazla tabloya bölünür. Bu yapı, bir kar tanesinin dallanmış kristal yapısına benzediği için bu adı almıştır.
+
+**Avantajları:**
+-   **Veri Bütünlüğü:** Normalizasyon sayesinde veri tekrarı azalır ve depolama alanı daha verimli kullanılır.
+-   **Bakım Kolaylığı:** Hiyerarşik yapıların yönetimi daha kolaydır (örn. Ürün -> Kategori -> Departman).
+
+**Dezavantajları:**
+-   **Sorgu Karmaşıklığı:** Daha fazla tablo olduğu için sorgular daha fazla `JOIN` işlemi gerektirir, bu da performansı düşürebilir.
+
+```mermaid
+graph TD
+    subgraph "Kar Tanesi Şeması (Snowflake Schema)"
+        style FactSales fill:#f9f,stroke:#333,stroke-width:2px
+        style DimTime fill:#bbf,stroke:#333,stroke-width:2px
+        style DimStore fill:#bbf,stroke:#333,stroke-width:2px
+        style DimProduct fill:#bbf,stroke:#333,stroke-width:2px
+        style DimCategory fill:#ccf,stroke:#333,stroke-width:2px
+
+        FactSales("
+            <b>Fact: Sales</b><br/>
+            TimeKey<br/>
+            StoreKey<br/>
+            ProductKey<br/>
+            ---<br/>
+            <i>UnitsSold</i><br/>
+            <i>TotalRevenue</i>
+        ")
+
+        DimTime("
+            <b>Dim: Time</b><br/>
+            <b>TimeKey (PK)</b><br/>
+            Date<br/>
+            Month
+        ")
+
+        DimStore("
+            <b>Dim: Store</b><br/>
+            <b>StoreKey (PK)</b><br/>
+            StoreName<br/>
+            City
+        ")
+
+        DimProduct("
+            <b>Dim: Product</b><br/>
+            <b>ProductKey (PK)</b><br/>
+            ProductName<br/>
+            Brand<br/>
+            CategoryKey (FK)
+        ")
+
+        DimCategory("
+            <b>Dim: Category</b><br/>
+            <b>CategoryKey (PK)</b><br/>
+            CategoryName
+        ")
+
+        FactSales -- TimeKey --> DimTime
+        FactSales -- StoreKey --> DimStore
+        FactSales -- ProductKey --> DimProduct
+        DimProduct -- CategoryKey --> DimCategory
+    end
+```
+
+#### 3. Galaksi Şeması / Fact Constellation Şeması
+
+İki veya daha fazla olgu tablosunun, ortak boyut tablolarını paylaştığı daha karmaşık bir yapıdır. Bu şema, birbiriyle ilişkili farklı iş süreçlerini (örneğin, satış ve sevkiyat) tek bir modelde analiz etmek için kullanılır. Yapı, birden fazla yıldızın bir araya gelerek bir galaksi oluşturmasına benzetilir.
+
+**Avantajları:**
+-   **Esneklik:** Farklı iş süreçleri arasında entegre analiz yapma imkanı sunar.
+-   **Yeniden Kullanılabilirlik:** Boyut tabloları birden fazla olgu tablosu tarafından paylaşıldığı için tutarlılık ve verimlilik artar.
+
+```mermaid
+graph TD
+    subgraph "Galaksi Şeması (Fact Constellation)"
+        style FactSales fill:#f9f,stroke:#333,stroke-width:2px
+        style FactShipping fill:#f9f,stroke:#333,stroke-width:2px
+        style DimTime fill:#bbf,stroke:#333,stroke-width:2px
+        style DimStore fill:#bbf,stroke:#333,stroke-width:2px
+        style DimProduct fill:#bbf,stroke:#333,stroke-width:2px
+        style DimShipper fill:#bbf,stroke:#333,stroke-width:2px
+
+        FactSales("<b>Fact: Sales</b>")
+        FactShipping("<b>Fact: Shipping</b>")
+
+        DimTime("<b>Dim: Time</b>")
+        DimStore("<b>Dim: Store</b>")
+        DimProduct("<b>Dim: Product</b>")
+        DimShipper("<b>Dim: Shipper</b>")
+
+        FactSales -- Paylaşılan Boyut --> DimTime
+        FactSales -- Paylaşılan Boyut --> DimStore
+        FactSales -- Paylaşılan Boyut --> DimProduct
+
+        FactShipping -- Paylaşılan Boyut --> DimTime
+        FactShipping -- Paylaşılan Boyut --> DimProduct
+        FactShipping -- Ayrı Boyut --> DimShipper
+    end
+```
+
+### Şema Karşılaştırması
+
+| Özellik | Yıldız Şeması (Star) | Kar Tanesi Şeması (Snowflake) | Galaksi Şeması (Fact Constellation) |
+| :--- | :--- | :--- | :--- |
+| **Yapı** | Merkezi bir olgu tablosu, etrafında boyut tabloları | Yıldız şemasının normalize edilmiş hali | Birden fazla olgu tablosu, paylaşılan boyutlar |
+| **Normalizasyon** | Boyutlar denormalize (tek tablo) | Boyutlar normalize (çoklu tablo) | Boyutlar genellikle denormalize |
+| **Sorgu Performansı** | Yüksek (az `JOIN`) | Daha Düşük (çok `JOIN`) | Değişken (sorguya bağlı) |
+| **Veri Bütünlüğü** | Daha düşük (veri tekrarı olabilir) | Yüksek (veri tekrarı az) | Yüksek (paylaşılan boyutlar sayesinde) |
+| **Kullanım Alanı** | Çoğu veri ambarı ve veri pazarı (data mart) | Karmaşık hiyerarşilere sahip veri modelleri | Birbiriyle ilişkili birden fazla iş sürecinin analizi |  
+
+   - **Galaxy Şeması (Galaxy Schema):**  
+     - Çok sayıda kar tanesi şemasının birleşiminden oluşur.  
+     - Koleksiyon veya nitelik tablosu gibi düşünülebilir.  
+     - Büyük ölçekli sistemlerde tercih edilir.  
 
 ---
 
