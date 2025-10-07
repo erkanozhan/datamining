@@ -539,3 +539,276 @@ OLAP'ın kalbinde, veriyi sezgisel ve analize uygun bir şekilde organize eden �
 | :--- | :--- | :--- |
 | **Boyut (Dimension)** | Veriye bağlam kazandıran **kategorik** bilgiler. "Nasıl bakalım?" sorusunu yanıtlar. | Zaman, Ürün, Müşteri, Coğrafya |
 | **Ölçü (Measure)** | Analiz edilen **sayısal** değerler. "Ne kadar?" sorusunu yanıtlar. | Satış Miktarı, Gelir, Maliyet |
+<br/>
+
+<div style="display: flex; justify-content: space-between; gap: 2em;">
+    <div style="flex: 1; text-align: justify;">
+        <hr style="border: 2px solid #888888;">
+        <h2 style="text-align: center;">Karar Ağaçları (Decision Trees)</h2>
+        <hr style="border: 2px solid #CCCCCC;">
+    </div>
+</div>
+
+
+
+
+## 1. Giriş ve Temel Kavramlar
+
+Karar ağaçları, veri madenciliği ve makine öğrenmesinde yaygın olarak kullanılan, parametrik olmayan denetimli öğrenme algoritmalarıdır. Bu yöntem, hem sınıflandırma hem de regresyon problemlerinde kullanılabilir ve karmaşık karar süreçlerini görsel olarak anlaşılır bir ağaç yapısında temsil eder.
+
+
+### 1.1. Temel Özellikler
+
+Karar ağaçlarının başlıca özellikleri şunlardır:
+
+- **Parametrik olmayan yapı**: Veriler hakkında önceden belirlenmiş bir dağılım varsayımı gerektirmez, bu nedenle karmaşık ve heterojen veri kümeleriyle etkin bir şekilde çalışabilir.
+    - *Örnek*: Bir bankanın kredi başvurularını değerlendirirken, başvuru sahiplerinin gelir, yaş, meslek gibi farklı ve karmaşık özelliklerini kullanarak kredi onayı için karar ağacı oluşturulabilir. Bu süreçte gelir dağılımının normal olup olmadığına dair bir varsayım gerekmez; karar ağacı, verinin doğal yapısına uygun şekilde bölme işlemini gerçekleştirir.
+- **Görsel anlaşılabilirlik**: Karar süreçleri ters çevrilmiş bir ağaç yapısında gösterildiğinden, model yorumlanabilirliği oldukça yüksektir.
+- **Hibrit veri desteği**: Hem kategorik hem de sayısal değişkenlerle çalışabilir.
+- **Doğrusal olmayan ilişkileri yakalama**: Değişkenler arasındaki karmaşık, doğrusal olmayan etkileşimleri modelleyebilir.
+
+## 2. Karar Ağacının Yapısal Bileşenleri
+
+Aşağıda, karar ağacının temel yapısını gösteren renkli bir diyagram yer almaktadır:
+
+```mermaid
+graph TD
+    style RootNode fill:#ffeb3b,stroke:#333,stroke-width:2px
+    style InternalNode1 fill:#4fc3f7,stroke:#333,stroke-width:2px
+    style InternalNode2 fill:#4fc3f7,stroke:#333,stroke-width:2px
+    style LeafYes fill:#81c784,stroke:#333,stroke-width:2px
+    style LeafNo fill:#e57373,stroke:#333,stroke-width:2px
+
+    RootNode["Kök Düğüm<br/><b>(Sıcaklık?)</b>"]
+    InternalNode1["İç Düğüm<br/><b>(Nemli?)</b>"]
+    InternalNode2["İç Düğüm<br/><b>(Rüzgar?)</b>"]
+    LeafYes["Yaprak Düğüm<br/><b>Sınıf: Evet</b>"]
+    LeafNo["Yaprak Düğüm<br/><b>Sınıf: Hayır</b>"]
+
+    RootNode -- "Yüksek" --> InternalNode1
+    RootNode -- "Düşük" --> InternalNode2
+    InternalNode1 -- "Evet" --> LeafNo
+    InternalNode1 -- "Hayır" --> LeafYes
+    InternalNode2 -- "Güçlü" --> LeafNo
+    InternalNode2 -- "Zayıf" --> LeafYes
+```
+
+Bu diyagramda:
+- **Sarı**: Kök düğüm (ilk karar noktası)
+- **Mavi**: İç düğümler (ara karar noktaları)
+- **Yeşil**: Pozitif sınıfı temsil eden yaprak düğüm
+- **Kırmızı**: Negatif sınıfı temsil eden yaprak düğüm
+
+Karar ağacı, veriyi dallara ayırarak her yolun sonunda bir karar (sınıf) üretir. Görsel olarak anlaşılır olması, karar süreçlerinin şeffaf ve yorumlanabilir olmasını sağlar.
+
+### 2.1. Düğümler (Nodes)
+
+Karar ağacı üç tür düğümden oluşur:
+
+**a) Kök Düğüm (Root Node)**: Ağacın en üst seviyesinde yer alan ve tüm veri kümesini temsil eden ilk karar noktasıdır. Buradan veri ilk bölünmeye uğrar.
+
+**b) İç Düğümler (Internal Nodes)**: Kök düğüm ile yaprak düğümler arasında yer alan ara karar noktalarıdır. Her iç düğüm, belirli bir öznitelik üzerinde test yaparak veriyi alt gruplara ayırır.
+
+**c) Yaprak Düğümler (Leaf Nodes)**: Ağacın en alt seviyesinde yer alan ve nihai sınıflandırma veya tahmin sonucunu içeren terminal düğümlerdir. Bu düğümlerde artık bölme işlemi yapılmaz.
+
+### 2.2. Dallar (Branches)
+
+Dallar, düğümler arasındaki bağlantıları ve karar sonuçlarını temsil eder. Kök düğümden bir yaprak düğüme kadar uzanan her yol, "eğer-o zaman" (if-then) kuralları şeklinde ifade edilebilen bir sınıflandırma kuralını oluşturur.
+
+**Örnek kural**: Eğer (Sıcaklık = Yüksek) VE (Nemli = Evet) O HALDE (Sınıf = Hayır)
+
+## 3. Karar Ağacı Oluşturma Süreci
+
+### 3.1. Bölme (Splitting)
+
+Bölme işlemi, karar ağacı oluşturmanın en kritik aşamasıdır. Amaç, her düğümde veriyi hedef değişken açısından daha homojen (saf) alt gruplara ayırmaktır.
+
+**Bölme sürecinde izlenen adımlar**:
+
+1. Hedef değişkeni en iyi açıklayan girdi değişkeninin belirlenmesi
+2. Seçilen değişkenin optimal bölme noktasının bulunması
+3. Verinin bu noktaya göre alt gruplara ayrılması
+4. Sürecin alt düğümlerde tekrarlanması
+
+**Sayısal değişkenlerin işlenmesi**: Sürekli değişkenler, bölme işlemi öncesinde kategorilere veya aralıklara (binlere) ayrılır. Örneğin, yaş değişkeni "18-25", "26-35", "36+" gibi kategorilere dönüştürülebilir.
+
+### 3.2. Saflık Ölçütleri (Purity Measures)
+
+Bir düğümün saflığı, o düğümdeki kayıtların hedef değişkenin belirli bir değerine ne kadar homojen dağıldığını gösterir. En iyi bölme değişkenini seçmek için çeşitli saflık metrikleri kullanılır:
+
+#### 3.2.1. Entropi (Entropy)
+
+Entropi, bir düğümdeki düzensizlik veya belirsizlik miktarını ölçer. Bilgi teorisinden türetilmiş olup, ID3, C4.5 ve C5.0 algoritmaları tarafından kullanılır.
+
+**Matematiksel ifade**:
+$$E(S) = -\sum_{i=1}^{n} p_i \log_2(p_i)$$
+
+Burada $p_i$, düğümdeki i. sınıfın oranıdır. Entropi değeri 0 ile log₂(n) arasında değişir; 0 tamamen saf bir düğümü, yüksek değerler ise heterojen dağılımı gösterir.
+
+**Bilgi Kazancı (Information Gain)**: Bir özniteğe göre bölme yapıldığında entropideki azalma miktarıdır ve en yüksek bilgi kazancına sahip öznitelik seçilir.
+
+#### 3.2.2. Gini İndeksi (Gini Index)
+
+Gini indeksi, CART ve SPRINT algoritmaları tarafından kullanılan bir safsızlık (impurity) ölçütüdür. Rastgele seçilen bir kaydın yanlış sınıflandırılma olasılığını temsil eder.
+
+**Matematiksel ifade**:
+$$Gini(S) = 1 - \sum_{i=1}^{n} p_i^2$$
+
+Gini indeksi 0 ile 1 arasında değişir; 0 tamamen homojen bir düğümü (saf), 1 ise tamamen heterojen bir dağılımı gösterir.
+
+#### 3.2.3. Diğer Ölçütler
+
+- **Sınıflandırma Hatası**: En yaygın sınıfın oranının 1'den çıkarılmasıyla hesaplanır.
+- **Kazanç Oranı (Gain Ratio)**: Bilgi kazancının normalleştirilmiş halidir ve çok kategorili değişkenlere karşı ön yargıyı azaltır.
+
+## 4. Durdurma Kriterleri (Stopping Criteria)
+
+Karar ağacının büyümesinin ne zaman durdurulacağı, model performansı açısından kritik öneme sahiptir. Uygun durdurma kriterleri belirlenmezse, model aşırı uyum (overfitting) veya eksik uyum (underfitting) problemleriyle karşılaşabilir.
+
+### 4.1. Yaygın Durdurma Parametreleri
+
+**a) Minimum yaprak boyutu**: Bir yaprak düğümde bulunması gereken minimum kayıt sayısı
+
+**b) Minimum bölme boyutu**: Bir düğümün bölünebilmesi için içermesi gereken minimum kayıt sayısı
+
+**c) Maksimum derinlik**: Kök düğümden herhangi bir yaprak düğüme kadar olan maksimum adım sayısı
+
+**d) Maksimum yaprak sayısı**: Ağaçta bulunabilecek maksimum terminal düğüm sayısı
+
+**e) Minimum saflık artışı**: Bölme işleminin gerçekleşmesi için sağlanması gereken minimum saflık iyileşmesi
+
+### 4.2. Berry ve Linoff Kuralı
+
+Berry ve Linoff, yaprak düğümlerdeki hedef kayıt oranının toplam eğitim veri kümesinin **%0.25 ile %1.00** arasında olmasını önerir. Bu oran, aşırı uyum ve eksik uyum arasında denge kurmaya yardımcı olur.
+
+**Örnek**: 1000 kayıtlık bir eğitim veri kümesi için her yaprak düğümde idealinde 2.5 ile 10 arasında kayıt bulunmalıdır.
+
+- **Çok az kayıt (örn. 1 kayıt/yaprak)**: Aşırı uyum riski
+- **Çok fazla kayıt (örn. tüm kayıtlar tek yaprakta)**: Eksik uyum riski
+
+## 5. Budama (Pruning)
+
+Budama, aşırı uyumu önlemek ve modelin genelleme yeteneğini artırmak için kullanılan bir optimizasyon tekniğidir. Temel mantık, önce büyük ve karmaşık bir ağaç oluşturup sonra gereksiz dalları kaldırmaktır.
+
+### 5.1. Budama Türleri
+
+#### 5.1.1. Ön Budama (Pre-pruning / Forward Pruning)
+
+Ağaç oluşturulurken dalların büyümesi kontrol edilir. Belirli kriterlere uymayan bölmeler engellenir.
+
+**Avantajları**:
+- Hesaplama açısından daha verimlidir
+- Gereksiz dal oluşumunu baştan engeller
+
+**Dezavantajları**:
+- Erken durdurma nedeniyle önemli dalların kaçırılması riski (horizon effect)
+
+**Yöntemler**:
+- Ki-kare testleri
+- Minimum bilgi kazancı eşiği
+- Çoklu karşılaştırma düzeltmeleri
+
+#### 5.1.2. Son Budama (Post-pruning / Backward Pruning)
+
+Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri doğru budanır.
+
+**Avantajları**:
+- Daha iyi sonuçlar verebilir
+- Horizon effect problemini önler
+
+**Dezavantajları**:
+- Hesaplama açısından daha maliyetlidir
+
+### 5.2. Budama Yöntemleri
+
+**a) Hatalı Tahmin Oranı Minimizasyonu**: Her alt ağaç için hata oranı hesaplanır ve en düşük orana sahip olan seçilir.
+
+**b) Doğrulama Veri Kümesi Yaklaşımı**: 
+- Veri eğitim ve doğrulama kümelerine ayrılır
+- Model eğitim verisiyle oluşturulur
+- Performans doğrulama verisiyle değerlendirilir
+- En iyi performansı gösteren alt ağaç seçilir
+
+**c) K-Katlı Çapraz Doğrulama**:
+- Veri k eşit katmana bölünür (tipik olarak k=10)
+- Model k-1 katmanla eğitilir, kalan katmanla test edilir
+- İşlem her katman için tekrarlanır
+- Ortalama hata hesaplanır ve en düşük hataya sahip model seçilir
+
+## 6. Popüler Karar Ağacı Algoritmaları
+
+### 6.1. ID3 (Iterative Dichotomiser 3, 1986)
+
+- Ross Quinlan tarafından geliştirilmiştir
+- Entropi ve bilgi kazancı kullanır
+- Sadece kategorik değişkenlerle çalışır
+- Budama yapmaz (aşırı uyum riski)
+
+### 6.2. C4.5 (1993) ve C5.0
+
+- ID3'ün geliştirilmiş versiyonudur
+- Hem kategorik hem sürekli değişkenlerle çalışır
+- Kazanç oranı kullanır (çok kategorili değişkenlere karşı ön yargıyı azaltır)
+- Budama destekler
+- Eksik değerleri işleyebilir
+- C5.0, C4.5'in daha hızlı ve verimli versiyonudur
+
+### 6.3. CART (Classification and Regression Trees)
+
+- Breiman ve arkadaşları tarafından geliştirilmiştir
+- Gini indeksi kullanır
+- Hem sınıflandırma hem regresyon için kullanılabilir
+- Her düğümde ikili (binary) bölme yapar
+- Maliyet-karmaşıklık budama kullanır
+
+### 6.4. CHAID (Chi-squared Automatic Interaction Detection)
+
+- Ki-kare testi kullanarak istatistiksel olarak anlamlı bölmeler yapar
+- Çoklu yollu bölme yapabilir (ikiden fazla dal)
+- Kategorik hedef değişkenler için uygundur
+- Örüntü tanıma uygulamalarında yaygındır
+
+## 7. Karar Ağaçlarının Avantajları ve Dezavantajları
+
+### 7.1. Avantajlar
+
+1. **Yorumlanabilirlik**: Karar süreçleri kolayca anlaşılabilir ve görselleştirilebilir
+2. **Veri ön işleme gereksinimsizliği**: Normalizasyon veya standardizasyon gerektirmez
+3. **Eksik değer toleransı**: Eksik verilerle çalışabilir
+4. **Hibrit veri desteği**: Hem kategorik hem sayısal değişkenlerle çalışır
+5. **Doğrusal olmayan ilişkileri yakalama**: Karmaşık etkileşimleri modelleyebilir
+6. **Öznitelik seçimi**: Önemli değişkenleri otomatik olarak belirler
+
+### 7.2. Dezavantajlar
+
+1. **Aşırı uyum eğilimi**: Karmaşık ağaçlar eğitim verilerine aşırı uyum sağlayabilir
+2. **Kararsızlık**: Verideki küçük değişiklikler farklı ağaç yapılarına yol açabilir
+3. **Ölçeklenebilirlik**: Çok büyük veri kümelerinde bellek ve performans sorunları yaşanabilir
+4. **Sınıf dengesizliği**: Dengesiz veri kümelerinde dominant sınıfa yanlılık gösterebilir
+5. **Optimal çözüm garantisi yok**: Açgözlü (greedy) algoritmalar yerel optimuma takılabilir
+
+## 8. Uygulama Alanları
+
+Karar ağaçları çeşitli alanlarda başarıyla uygulanmaktadır:
+
+- **Tıp**: Hastalık teşhisi, risk değerlendirmesi
+- **Finans**: Kredi skorlaması, risk analizi, dolandırıcılık tespiti
+- **Pazarlama**: Müşteri segmentasyonu, satın alma tahmini
+- **Üretim**: Kalite kontrol, hata teşhisi
+- **Eğitim**: Öğrenci performans tahmini
+- **Meteoroloji**: Hava durumu tahmini
+
+## 9. Model Değerlendirme
+
+Karar ağacı modelinin performansı çeşitli metriklerle değerlendirilir:
+
+- **Doğruluk (Accuracy)**: Doğru sınıflandırılan kayıtların oranı
+- **Hassasiyet (Precision)**: Pozitif tahmin edilen kayıtlar arasında gerçekten pozitif olanların oranı
+- **Duyarlılık (Recall/Sensitivity)**: Gerçek pozitif kayıtlar arasında doğru tahmin edilenlerin oranı
+- **F1-Skoru**: Hassasiyet ve duyarlılığın harmonik ortalaması
+- **Karmaşıklık Matrisi (Confusion Matrix)**: Tahminlerin detaylı gösterimi
+- **ROC Eğrisi ve AUC**: Model ayırt etme gücünün değerlendirilmesi
+
+## 10. Sonuç
+
+Karar ağaçları, makine öğrenmesinde güçlü ve esnek bir yöntemdir. Doğru parametreler ve budama teknikleriyle kullanıldığında, karmaşık sınıflandırma ve regresyon problemlerinde yüksek performans gösterebilir. Ancak, aşırı uyum riski ve kararsızlık gibi sınırlamaları göz önünde bulundurulmalıdır. Bu nedenle, pratikte genellikle ensemble yöntemleri (Random Forest, Gradient Boosting gibi) tercih edilir ve bu yöntemler birden fazla karar ağacını birleştirerek daha sağlam ve genellenebilir modeller oluşturur.
