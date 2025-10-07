@@ -561,8 +561,8 @@ Karar ağaçları, veri madenciliği ve makine öğrenmesinde yaygın olarak kul
 
 Karar ağaçlarının başlıca özellikleri şunlardır:
 
-- **Parametrik olmayan yapı**: Veriler hakkında önceden belirlenmiş bir dağılım varsayımı gerektirmez, bu nedenle karmaşık ve heterojen veri kümeleriyle etkin bir şekilde çalışabilir.
-    - *Örnek*: Bir bankanın kredi başvurularını değerlendirirken, başvuru sahiplerinin gelir, yaş, meslek gibi farklı ve karmaşık özelliklerini kullanarak kredi onayı için karar ağacı oluşturulabilir. Bu süreçte gelir dağılımının normal olup olmadığına dair bir varsayım gerekmez; karar ağacı, verinin doğal yapısına uygun şekilde bölme işlemini gerçekleştirir.
+- **Parametrik yapı (Lineer Regresyon):** Bu tür modeller, verinin belirli bir istatistiksel dağılıma (örneğin, normal dağılım) uyduğunu ve değişkenler arasında belirli bir fonksiyonel form (örneğin, doğrusal ilişki) olduğunu varsayar. Örneğin, bir evin fiyatını tahmin eden lineer regresyon modeli, metrekare ile fiyat arasında doğrusal bir ilişki olduğunu varsayar. Veri bu varsayımları karşılamıyorsa modelin performansı düşer.
+- **Karar Ağacı (Parametrik olmayan):** Buna karşılık karar ağacı, verinin altta yatan dağılımı hakkında bir varsayımda bulunmaz. Örneğin, bir hastanın hastalık riskini tahmin ederken, kan değerleri (sayısal) ve yaşam tarzı (kategorik) gibi farklı türdeki verileri bir arada kullanır. Model, "eğer kan basıncı > 140 VE sigara kullanıyor ise risk yüksek" gibi kuralları, verinin dağılımını varsaymadan doğrudan veriden öğrenir.
 - **Görsel anlaşılabilirlik**: Karar süreçleri ters çevrilmiş bir ağaç yapısında gösterildiğinden, model yorumlanabilirliği oldukça yüksektir.
 - **Hibrit veri desteği**: Hem kategorik hem de sayısal değişkenlerle çalışabilir.
 - **Doğrusal olmayan ilişkileri yakalama**: Değişkenler arasındaki karmaşık, doğrusal olmayan etkileşimleri modelleyebilir.
@@ -621,45 +621,83 @@ Dallar, düğümler arasındaki bağlantıları ve karar sonuçlarını temsil e
 
 ### 3.1. Bölme (Splitting)
 
-Bölme işlemi, karar ağacı oluşturmanın en kritik aşamasıdır. Amaç, her düğümde veriyi hedef değişken açısından daha homojen (saf) alt gruplara ayırmaktır.
+Karar ağacı oluşturmayı, popüler bir tahmin oyunu olan "Tahmin Et Kim?" oyununa benzetebiliriz. Elinizde bir sürü farklı karakter var ve en az soruyla doğru kişiyi bulmaya çalışıyorsunuz.
 
-**Bölme sürecinde izlenen adımlar**:
+En iyi strateji nedir? Öyle bir soru sormak istersiniz ki, karakterleri kabaca ikiye ayırsın. Örneğin, "Karakterin gözlüklü mü?" diye sormak iyi bir başlangıçtır. Bu soru, tüm karakterleri "gözlüklüler" ve "gözlüksüzler" olarak iki gruba ayırır. İşte karar ağacındaki **bölme (splitting)** işlemi tam olarak budur.
 
-1. Hedef değişkeni en iyi açıklayan girdi değişkeninin belirlenmesi
-2. Seçilen değişkenin optimal bölme noktasının bulunması
-3. Verinin bu noktaya göre alt gruplara ayrılması
-4. Sürecin alt düğümlerde tekrarlanması
+Her bölmedeki amaç, oluşturulan yeni grupları daha **saf** hale getirmektir. "Saf" bir grup, içindeki üyelerin neredeyse tamamının aynı sonuca sahip olduğu bir gruptur (örneğin, bir gruptaki herkesin "oyuna evet" demesi gibi). Karar ağacı, veriyi en iyi şekilde bölecek "soruyu" matematiksel olarak bulur ve bu işlemi, her bir dalın sonunda net bir karara varana kadar tekrarlar.
+
+**Bölme Algoritmasının Adımları:**
+
+1.  **En İyi Soruyu Bul (Öznitelik Seçimi):** Tüm değişkenler arasından, veri setini en saf alt gruplara ayıracak olan "en iyi soruyu" (özniteliği) seç. Bu seçim, entropi veya Gini indeksi gibi saflık ölçütleri kullanılarak yapılır.
+2.  **Bölünme Kuralını Belirle (Bölme Noktası):** Seçilen öznitelik için en uygun bölünme noktasını bul. Sayısal bir değişken için bu bir eşik değer (örn. `Yaş > 30`), kategorik bir değişken için ise bir kategori (örn. `Şehir = 'İstanbul'`) olabilir.
+3.  **Veriyi Parçala (Dallanma):** Belirlenen kurala göre veri setini iki veya daha fazla alt gruba (dala) ayır.
+4.  **Tekrarla (Özyinelemeli Süreç):** Her bir alt grup için, durdurma kriterlerinden biri karşılanana kadar (örneğin, gruptaki herkes aynı sınıfa ait olana kadar veya minimum yaprak boyutuna ulaşılana kadar) 1. adımdan itibaren süreci tekrarla.
 
 **Sayısal değişkenlerin işlenmesi**: Sürekli değişkenler, bölme işlemi öncesinde kategorilere veya aralıklara (binlere) ayrılır. Örneğin, yaş değişkeni "18-25", "26-35", "36+" gibi kategorilere dönüştürülebilir.
 
 ### 3.2. Saflık Ölçütleri (Purity Measures)
 
-Bir düğümün saflığı, o düğümdeki kayıtların hedef değişkenin belirli bir değerine ne kadar homojen dağıldığını gösterir. En iyi bölme değişkenini seçmek için çeşitli saflık metrikleri kullanılır:
+Karar ağacının en kritik adımı, veriyi en iyi şekilde bölecek "soruyu" (özniteliği) seçmektir. "En iyi" bölme, oluşturulan alt grupların (dalların) mümkün olduğunca **saf** olmasını sağlayan bölmedir. Saf bir grup, içindeki tüm üyelerin aynı sınıfa ait olduğu (örneğin, herkesin "Evet" dediği) bir gruptur.
 
-#### 3.2.1. Entropi (Entropy)
+Bu saflığı matematiksel olarak ölçmek ve en iyi bölmeyi objektif bir şekilde belirlemek için çeşitli metrikler kullanılır. Bu metrikler, bir düğümdeki "düzensizliği" veya "belirsizliği" ölçer ve algoritma, bu düzensizliği en çok azaltan bölmeyi tercih eder. En yaygın kullanılan saflık ölçütleri şunlardır:
 
-Entropi, bir düğümdeki düzensizlik veya belirsizlik miktarını ölçer. Bilgi teorisinden türetilmiş olup, ID3, C4.5 ve C5.0 algoritmaları tarafından kullanılır.
+Karar ağacının "en iyi soruyu" nasıl seçeceğini anlamak için iki popüler ölçüt kullanılır: **Gini İndeksi** ve **Entropi**. İkisi de temelde aynı amaca hizmet eder: Bir düğümdeki grupların ne kadar "karışık" veya "saf" olduğunu ölçmek.
 
-**Matematiksel ifade**:
-$$E(S) = -\sum_{i=1}^{n} p_i \log_2(p_i)$$
+Bir sepet dolusu kırmızı ve mavi topumuz olduğunu hayal edelim. Amacımız, topları renklerine göre en iyi şekilde ayıracak bir soru sormak.
 
-Burada $p_i$, düğümdeki i. sınıfın oranıdır. Entropi değeri 0 ile log₂(n) arasında değişir; 0 tamamen saf bir düğümü, yüksek değerler ise heterojen dağılımı gösterir.
+#### 3.2.1. Gini İndeksi: Yanlış Etiketleme Olasılığı
 
-**Bilgi Kazancı (Information Gain)**: Bir özniteğe göre bölme yapıldığında entropideki azalma miktarıdır ve en yüksek bilgi kazancına sahip öznitelik seçilir.
+Gini İndeksi, en basit haliyle şunu sorar: **"Bu sepetten rastgele bir top seçip rengini tahmin etsem ve sonra sepete geri koyup ikinci bir top seçsem, bu iki topun farklı renkte olma olasılığı nedir?"**
 
-#### 3.2.2. Gini İndeksi (Gini Index)
+-   **Saf Sepet (Düşük Gini Skoru):** Sepette sadece kırmızı toplar varsa, iki farklı renkte top çekme olasılığınız **0**'dır. Bu sepet mükemmel derecede saftır. Gini skoru **0**'dır.
+-   **Karışık Sepet (Yüksek Gini Skoru):** Sepette 50 kırmızı ve 50 mavi top varsa, sepet olabildiğince karışıktır. İki farklı renkte top çekme olasılığınız en yüksek seviyededir. Gini skoru **0.5**'e yakındır.
 
-Gini indeksi, CART ve SPRINT algoritmaları tarafından kullanılan bir safsızlık (impurity) ölçütüdür. Rastgele seçilen bir kaydın yanlış sınıflandırılma olasılığını temsil eder.
+**Algoritmanın Amacı:** Karar ağacı, her sorunun (örneğin, "Topun üzerinde çizgi var mı?") ardından oluşacak yeni sepetlerin ortalama Gini skorunu hesaplar. En düşük Gini skorunu, yani en saf yeni sepetleri oluşturan soruyu en iyi soru olarak seçer.
 
-**Matematiksel ifade**:
-$$Gini(S) = 1 - \sum_{i=1}^{n} p_i^2$$
+#### 3.2.2. Entropi: Belirsizlik ve Sürpriz Miktarı
 
-Gini indeksi 0 ile 1 arasında değişir; 0 tamamen homojen bir düğümü (saf), 1 ise tamamen heterojen bir dağılımı gösterir.
+Entropi, bir sepetteki "belirsizlik" veya "sürpriz" seviyesini ölçer.
+
+-   **Saf Sepet (Düşük Entropi):** Sepette sadece kırmızı toplar varsa, bir top çektiğinizde onun kırmızı geleceğini bilirsiniz. Hiçbir sürpriz yoktur. Belirsizlik **0**'dır. Entropi **0**'dır.
+-   **Karışık Sepet (Yüksek Entropi):** Sepette 50 kırmızı ve 50 mavi top varsa, bir top çektiğinizde hangi rengin geleceğini tahmin etmek çok zordur. Sürpriz ve belirsizlik en yüksek seviyededir. Entropi **1**'dir.
+
+**Algoritmanın Amacı:** Algoritma, Entropiyi doğrudan kullanmak yerine **Bilgi Kazancı (Information Gain)** denen bir kavramı kullanır. Bu, bir soru sorduktan sonra belirsizliğin ne kadar azaldığını ölçer. Karar ağacı, belirsizliği en çok azaltan, yani en fazla bilgiyi sağlayan soruyu seçer.
+
+#### Özetle Farkları
+
+| Özellik | Gini İndeksi | Entropi (Bilgi Kazancı ile) |
+| :--- | :--- | :--- |
+| **Sorduğu Soru** | "Yanlış etiketleme olasılığım ne kadar?" | "Ne kadar belirsizlik var?" |
+| **Odak Noktası** | Sınıflandırma hatası | Bilgi ve sürpriz |
+| **Hesaplama** | Daha hızlı (logaritma içermez) | Biraz daha yavaş (logaritma içerir) |
+
+Pratikte her iki yöntem de genellikle çok benzer sonuçlar verir. Ancak Gini İndeksi biraz daha hızlı hesaplandığı için birçok modern kütüphanede varsayılan seçenek olarak kullanılır.
 
 #### 3.2.3. Diğer Ölçütler
 
-- **Sınıflandırma Hatası**: En yaygın sınıfın oranının 1'den çıkarılmasıyla hesaplanır.
-- **Kazanç Oranı (Gain Ratio)**: Bilgi kazancının normalleştirilmiş halidir ve çok kategorili değişkenlere karşı ön yargıyı azaltır.
+#### 3.2.3. Kazanç Oranı (Gain Ratio): "Adil" Soru Sorma Sanatı
+
+Bilgi Kazancı (Entropi'ye dayalı) bazen çok "zeki" olmaya çalışırken bir tuzağa düşebilir. Ona, her biri farklı bir değere sahip olan bir "Müşteri ID'si" veya "İl Plaka Kodu" gibi bir değişken verirseniz, Bilgi Kazancı bunu en iyi soru zanneder. Neden? Çünkü her bir ID için tek kişilik, mükemmel derecede "saf" bir grup oluşturur. Ancak bu, bir şey öğrenmek değildir; bu sadece ezberlemektir. Bu soru, yeni bir müşteri geldiğinde hiçbir işe yaramaz.
+
+İşte **Kazanç Oranı (Gain Ratio)** burada devreye girer ve Bilgi Kazancı'nın bu tuzağa düşmesini engeller.
+
+Kazanç Oranı, bir sorunun ne kadar "bölücü" olduğunu da hesaba katar. Bir soruyu sorduktan sonra veri 50 farklı küçük parçaya ayrılıyorsa, Kazanç Oranı "Dur bakalım, bu soru çok fazla karmaşa yaratıyor" der ve o sorunun puanını düşürür.
+
+Basitçe şöyle düşünebiliriz:
+`Kazanç Oranı = (Sorunun Sağladığı Bilgi) / (Sorunun Yarattığı Karmaşa)`
+
+- **Sorunun Sağladığı Bilgi:** Bu, normal Bilgi Kazancı'dır.
+- **Sorunun Yarattığı Karmaşa (Bölünme Bilgisi):** Sorunun veriyi ne kadar çok parçaya ayırdığının bir ölçüsüdür. Çok fazla parça, yüksek ceza puanı demektir.
+
+Sonuç olarak Kazanç Oranı, hem iyi bilgi veren hem de veriyi makul sayıda, anlamlı gruplara ayıran **dengeli** soruları tercih eder. Bu sayede modelin ezber yapması yerine gerçekten öğrenmesi sağlanır.
+
+#### 3.2.4. Sınıflandırma Hatası (Classification Error)
+
+Bu en basit ölçüttür. Bir düğümdeki en popüler sınıfın ne kadar baskın olduğuna bakar.
+
+- **Örnek:** Bir grupta 8 "Evet" ve 2 "Hayır" varsa, en popüler sınıf "Evet"tir. Bu gruba gelen herkese "Evet" desek, 10'da 2 hata yaparız. Hata oranı %20'dir.
+- **Amaç:** Algoritma, bu hata oranını en aza indiren bölmeyi bulmaya çalışır.
 
 ## 4. Durdurma Kriterleri (Stopping Criteria)
 
@@ -677,18 +715,54 @@ Karar ağacının büyümesinin ne zaman durdurulacağı, model performansı aç
 
 **e) Minimum saflık artışı**: Bölme işleminin gerçekleşmesi için sağlanması gereken minimum saflık iyileşmesi
 
-### 4.2. Berry ve Linoff Kuralı
+### 4.2. Ağacı Ne Zaman Durdurmalı
 
-Berry ve Linoff, yaprak düğümlerdeki hedef kayıt oranının toplam eğitim veri kümesinin **%0.25 ile %1.00** arasında olmasını önerir. Bu oran, aşırı uyum ve eksik uyum arasında denge kurmaya yardımcı olur.
+Karar ağacının ne kadar büyüyeceğine karar vermek, bir sınava nasıl çalışacağınıza karar vermeye çok benzer.
 
-**Örnek**: 1000 kayıtlık bir eğitim veri kümesi için her yaprak düğümde idealinde 2.5 ile 10 arasında kayıt bulunmalıdır.
+-   **Aşırı Ezber (Aşırı Uyum - Overfitting):** Sadece kitaptaki örnek soruları ve cevaplarını harfi harfine ezberlediğinizi düşünün. Sınavda aynı sorular çıkarsa 100 alırsınız. Ama öğretmen biraz farklı bir soru sorduğunda cevap veremezsiniz. Çünkü konunun mantığını öğrenmediniz, sadece ezberlediniz. Bu, ağacın çok fazla dallanıp her bir yaprağında sadece 1-2 örnek bırakması gibidir. Model, veriyi "ezberlemiş" olur.
 
-- **Çok az kayıt (örn. 1 kayıt/yaprak)**: Aşırı uyum riski
-- **Çok fazla kayıt (örn. tüm kayıtlar tek yaprakta)**: Eksik uyum riski
+-   **Yetersiz Çalışma (Eksik Uyum - Underfitting):** Sadece konuların başlıklarını okuduğunuzu düşünün. Konu hakkında genel bir fikriniz olur ama hiçbir detayı bilmezsiniz. Bu da ağacın hiç dallanmaması, çok genel kalması gibidir. Model, hiçbir şey öğrenememiş olur.
+
+**Peki, en iyisi nedir?** Konunun mantığını anlamak ve her konuyla ilgili birkaç farklı örnek çözmektir. İşte **Berry ve Linoff Kuralı** bize bu "ideal çalışma" seviyesi için pratik bir tavsiye verir. Der ki: "Ağacın her bir karar yaprağında, ne tek bir örnek kalacak kadar detaya in, ne de yüzlerce örnek kalacak kadar genel kal. Veri setinin büyüklüğüne göre makul bir sayıda örnek bırak." Bu kural, modelin hem öğrenmesini hem de ezberlememesini sağlamak için bir denge noktası sunar.
+
+### 4.3. Model Karmaşıklığı ve Genelleme Yeteneği
+
+Karar ağacının büyümesini kontrol eden durdurma kriterleri, modelin **genelleme performansı** ile **karmaşıklığı** arasındaki dengeyi (Bias-Variance Tradeoff) yönetmek için kritik öneme sahiptir. Bu bağlamda, yaprak düğümlerdeki minimum örnek sayısı (`min_samples_leaf`) en etkili hiperparametrelerden biridir.
+
+-   **Aşırı Uyum (Overfitting):** Ağacın çok derinleşmesine izin verildiğinde, yaprak düğümler aşırı saf hale gelir ve eğitim setindeki gürültüyü veya aykırı değerleri modellemeye başlar. Bu durum, modelin eğitim verisinde yüksek başarı gösterip test verisinde (görülmemiş veri) düşük performans sergilemesine neden olur. Yapraklardaki örnek sayısının çok düşük olması (örn. 1) aşırı uyumun en temel göstergelerinden biridir.
+
+-   **Eksik Uyum (Underfitting):** Ağacın büyümesi çok erken durdurulursa, model verideki temel örüntüleri yakalayacak kadar karmaşıklaşamaz. Yaprak düğümlerin çok fazla ve heterojen örnek içermesi, modelin yetersiz öğrendiğini gösterir.
+
+**Berry ve Linoff Kuralı**, bu dengeyi kurmak için ampirik bir başlangıç noktası sunan bir **heuristiktir (sezgisel yöntem)**. Bu kurala göre, bir yaprak düğümdeki hedef kayıt sayısının, toplam eğitim veri setinin **%0.25 ile %1.00**'i arasında olması hedeflenir.
+
+**Örnek: Berry ve Linoff Kuralının Uygulanması**
+
+100.000 müşteriye ait bir veri setini analiz ederek hangi müşterilerin bir ürünü satın alacağını tahmin etmeye çalıştığımızı varsayalım. Modelin ne çok ezberci (aşırı uyum) ne de çok yüzeysel (eksik uyum) olmasını istemiyoruz. Berry ve Linoff kuralını kullanarak `min_samples_leaf` (bir yaprakta olması gereken minimum örnek sayısı) için ideal başlangıç aralığını belirleyebiliriz:
+
+-   **Alt Sınır (Ezberlemeyi Önleme):** Veri setinin %0.25'i. Bu, modelin çok fazla detaya inip gürültüyü ezberlemesini önlemek için bir "fren" görevi görür.
+    -   `100.000 * 0.0025 = 250 örnek`
+-   **Üst Sınır (Öğrenmeyi Sağlama):** Veri setinin %1.00'i. Bu ise modelin çok genel kalıp önemli örüntüleri kaçırmasını engeller.
+    -   `100.000 * 0.01 = 1.000 örnek`
+
+**Sonuç:** Bu durumda, `min_samples_leaf` hiperparametresini **250 ile 1.000 arasında** bir değerle başlatmak, modelin genelleme yeteneği ile öğrenme kapasitesi arasında iyi bir denge kurmak için mantıklı bir başlangıç noktasıdır.
+
+Aşağıdaki tablo, bu parametrenin etkisini özetlemektedir:
+
+| `min_samples_leaf` Değeri | Model Davranışı | Sonuç |
+| :--- | :--- | :--- |
+| **Düşük (örn. < 250)** | Çok karmaşık, gürültüyü ezberler | **Aşırı Uyum (Overfitting)** |
+| **İdeal Aralık (250 - 1000)** | Dengeli, anlamlı örüntüleri öğrenir | **İyi Genelleme** |
+| **Yüksek (örn. > 1000)** | Çok basit, önemli detayları kaçırır | **Eksik Uyum (Underfitting)** |
+
+Bu kuralın mutlak bir yasa olmadığını, ancak model optimizasyon sürecinde hangi parametre aralığında arama yapılması gerektiğine dair güçlü bir başlangıç noktası sunduğunu unutmamak önemlidir. Nihai en iyi değer, genellikle çapraz doğrulama (cross-validation) gibi tekniklerle bulunur.
 
 ## 5. Budama (Pruning)
 
-Budama, aşırı uyumu önlemek ve modelin genelleme yeteneğini artırmak için kullanılan bir optimizasyon tekniğidir. Temel mantık, önce büyük ve karmaşık bir ağaç oluşturup sonra gereksiz dalları kaldırmaktır.
+<div style="text-align: justify;">
+Bir bahçıvanın gül fidanını budadığını hayal edin. Eğer fidan çok fazla dallanırsa, çok sayıda küçük ve zayıf gül üretir. Bahçıvan, gereksiz dalları budayarak fidanın enerjisini daha az sayıda, ancak çok daha güçlü ve güzel güller yetiştirmeye odaklamasına yardımcı olur. Karar ağacı budaması da aynı şekilde çalışır. Çok fazla büyüyen ve karmaşıklaşan bir ağaç, eğitim verisinin bir uzmanı haline gelir; her küçük detayı ve hatta gürültüyü bile öğrenir (buna **aşırı uyum (overfitting)** denir). Bu "aşırı uzmanlaşmış" ağaç, yeni verilerle karşılaştığında kötü performans gösterir. Budama, en az faydalı olan dalları—yani çok az örneğe dayalı kararlar veren veya tahmin gücüne pek katkı sağlamayan dalları—keser. Sonuç, daha iyi ve daha genel tahminler yapan, daha basit ve sağlam bir ağaçtır.
+<br/><br/>
+Teknik açıdan budama, bir karar ağacının karmaşıklığını azaltmak ve böylece aşırı uyumu hafifletmek için tasarlanmış bir düzenlileştirme (regularization) tekniğidir. Tamamen büyümüş bir ağaç, eğitim setindeki gürültüyü ve özel durumları modellediği için genellikle yüksek varyansa (high variance) sahiptir. Budama, genellikle yanlılıkta (bias) hafif bir artış pahasına, ağaç yapısını basitleştirerek bu varyansı azaltır. Süreç, modelin görülmemiş veriler üzerindeki tahmin doğruluğuna ihmal edilebilir bir etkisi olan alt ağaçları belirlemeyi ve kaldırmayı içerir. Bu genellikle bir alt ağacın, o alt ağaçtaki örneklerin çoğunluk sınıfı tarafından belirlenen bir sınıf etiketine sahip bir yaprak düğümle değiştirilmesiyle gerçekleştirilir. Budama kararı, genelleme hatasını en aza indiren en uygun alt ağacı bulmayı amaçlayan bir doğrulama seti (validation set) üzerindeki performans metrikleri veya istatistiksel anlamlılık testleri tarafından yönlendirilir.
+</div>
 
 ### 5.1. Budama Türleri
 
