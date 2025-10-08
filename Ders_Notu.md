@@ -729,9 +729,9 @@ Her şeyden önce, tüm veri setimizin "kirliliğini" ölçmeliyiz. Bu, bizim re
 - "Hayır" (Tenis Oyna): 5
 
 Şimdi Gini formülümüzü uygulayalım:
-$$
-Gini(\text{Kök}) = 1 - [(\frac{9}{14})^2 + (\frac{5}{14})^2] = 1 - [0.413 + 0.128] = \mathbf{0.459}
-$$
+```
+Gini(Kök) = 1 - [ (9/14)² + (5/14)² ] = 1 - [ 0.413 + 0.128 ] = 0.459
+```
 Başlangıç kirliliğimiz 0.459. Amacımız, bu değeri en çok düşüren özniteliği bulmak.
 
 #### Adım 2: Her Bir Öznitelik İçin Gini Kazancını Hesaplama
@@ -794,18 +794,76 @@ graph TD
 
 Dikkat ederseniz, "Bulutlu" dalı saf bir yaprak düğüme dönüştü. Artık o dal için daha fazla soru sormamıza gerek yok.
 
-#### Adım 4: Özyinelemeli Süreç: Alt Düğümler İçin Tekrarlama
+#### Adım 4: Özyinelemeli Süreç: Alt Düğümleri Fethetmek
 
-Şimdi "Güneşli" ve "Yağmurlu" dalları için süreci tekrarlayacağız. "Güneşli" dalını ele alalım.
+Kök düğümümüzü belirledik ve 'Bulutlu' hava durumunun bizi doğrudan 'Evet' sonucuna götürdüğünü keşfettik. Ama macera burada bitmiyor. Algoritmamızın "özyinelemeli" doğası tam da bu noktada devreye giriyor. Şimdi, henüz saf olmayan "Güneşli" ve "Yağmurlu" dallarını, sanki her biri kendi başına yeni bir veri setiymiş gibi ele alacağız. Gelin "Güneşli" dalına odaklanalım.
 
-**Alt Veri Seti: Hava Durumu = Güneşli** (5 gözlem: 2 Evet, 3 Hayır)
-- Başlangıç Gini'miz artık bu alt kümenin Gini'si: $Gini(\text{Güneşli}) = 0.48$
-- Bu 5 gözlem için "Nem" ve "Rüzgar" özniteliklerinin Gini Kazançlarını hesaplarız.
-- Hesaplamalar sonucunda, bu alt küme için en iyi bölmenin **"Nem"** özniteliği olduğu bulunur.
-    - **Nem = Yüksek:** 3 gözlem (0 Evet, 3 Hayır) -> Gini = 0 (Saf!)
-    - **Nem = Normal:** 2 gözlem (2 Evet, 0 Hayır) -> Gini = 0 (Saf!)
+**Alt Problem: Hava Durumu = Güneşli**
 
-Bu, mükemmel bir bölmedir! "Güneşli" düğümünü "Nem"e göre böldüğümüzde, her iki dal da saf yapraklara ulaşır.
+Artık tüm veri setini unutup, sadece aşağıdaki 5 gözleme odaklanıyoruz:
+
+| Gün | Hava Durumu | Sıcaklık | Nem | Rüzgar | Tenis Oyna |
+| :-- | :--- | :--- | :--- | :--- | :--- |
+| D1 | Güneşli | Sıcak | Yüksek | Yok | Hayır |
+| D2 | Güneşli | Sıcak | Yüksek | Var | Hayır |
+| D8 | Güneşli | Ilık | Yüksek | Yok | Hayır |
+| D9 | Güneşli | Soğuk | Normal | Yok | Evet |
+| D11 | Güneşli | Ilık | Normal | Var | Evet |
+
+Bu 5 gözlemden oluşan mini veri setimizin başlangıç kirliliği, daha önce hesapladığımız gibi `Gini(Güneşli) = 0.48`. Görevimiz, bu 0.48'lik kirliliği sıfıra indirmek için en iyi soruyu bulmak. Kalan özniteliklerimiz: Sıcaklık, Nem ve Rüzgar.
+
+**A) Öznitelik: Nem (Güneşli günlerde)**
+
+1.  **Nem = Yüksek:** 3 gözlem (D1, D2, D8) -> 0 Evet, 3 Hayır
+    $Gini(\text{Yüksek}) = 1 - [(\frac{0}{3})^2 + (\frac{3}{3})^2] = 0$ (Mükemmel saflık!)
+2.  **Nem = Normal:** 2 gözlem (D9, D11) -> 2 Evet, 0 Hayır
+    $Gini(\text{Normal}) = 1 - [(\frac{2}{2})^2 + (\frac{0}{2})^2] = 0$ (Mükemmel saflık!)
+
+Ağırlıklı Gini ve Kazanç:
+$Gini_{Ağırlıklı}(\text{Nem}) = (\frac{3}{5}) \times 0 + (\frac{2}{5}) \times 0 = 0$
+$Gain(\text{Nem}) = 0.48 - 0 = \mathbf{0.48}$
+
+**B) Öznitelik: Rüzgar (Güneşli günlerde)**
+
+1.  **Rüzgar = Yok:** 3 gözlem (D1, D8, D9) -> 1 Evet, 2 Hayır
+    $Gini(\text{Yok}) = 1 - [(\frac{1}{3})^2 + (\frac{2}{3})^2] = 0.444$
+2.  **Rüzgar = Var:** 2 gözlem (D2, D11) -> 1 Evet, 1 Hayır
+    $Gini(\text{Var}) = 1 - [(\frac{1}{2})^2 + (\frac{1}{2})^2] = 0.5$
+
+Ağırlıklı Gini ve Kazanç:
+$Gini_{Ağırlıklı}(\text{Rüzgar}) = (\frac{3}{5}) \times 0.444 + (\frac{2}{5}) \times 0.5 = 0.466$
+$Gain(\text{Rüzgar}) = 0.48 - 0.466 = \mathbf{0.014}$
+
+**Karar Anı: "Güneşli" Dalı İçin En İyi Soru**
+
+Kazançları karşılaştıralım:
+- **Gain(Nem) = 0.48** (En Yüksek!)
+- Gain(Sıcaklık) = 0.28 (Hesaplandı)
+- Gain(Rüzgar) = 0.014
+
+Gördüğümüz gibi, **"Nem"** özniteliği `0.48`'lik kazançla ezici bir üstünlük sağlıyor. Bu, "Güneşli" günlerde tenis oynayıp oynamama kararını en iyi açıklayan faktörün nem oranı olduğu anlamına geliyor. Üstelik bu bölme o kadar mükemmel ki, her iki yeni dal da tamamen saf yapraklara dönüşüyor!
+
+Ağacımızın güncel hali:
+
+```mermaid
+graph TD
+    style Root fill:#ffeb3b,stroke:#333,stroke-width:2px
+    style LeafYes fill:#81c784,stroke:#333,stroke-width:2px
+    style LeafNo fill:#e57373,stroke:#333,stroke-width:2px
+    style Internal fill:#4fc3f7,stroke:#333,stroke-width:2px
+
+    Root["<b>Kök: Hava Durumu?</b>"]
+    Internal["<b>Güneşli -> Nem?</b>"]
+    LeafYes1["<b>Bulutlu -> Evet</b>"]
+    SubNode2["<b>Yağmurlu</b><br/>(Henüz Saf Değil)"]
+
+    Root -- "Güneşli" --> Internal
+    Root -- "Bulutlu" --> LeafYes1
+    Root -- "Yağmurlu" --> SubNode2
+
+    Internal -- "Yüksek" --> LeafNo["<b>Hayır</b>"]
+    Internal -- "Normal" --> LeafYes2["<b>Evet</b>"]
+```
 
 #### Adım 5: Ağacı Tamamlama
 
@@ -954,13 +1012,58 @@ Aşağıdaki tablo, bu parametrenin etkisini özetlemektedir:
 
 Bu kuralın mutlak bir yasa olmadığını, ancak model optimizasyon sürecinde hangi parametre aralığında arama yapılması gerektiğine dair güçlü bir başlangıç noktası sunduğunu unutmamak önemlidir. Nihai en iyi değer, genellikle çapraz doğrulama (cross-validation) gibi tekniklerle bulunur.
 
-## 5. Budama (Pruning)
+## 5. Budama (Pruning): Ağacı Basitleştirme Sanatı
 
-<div style="text-align: justify;">
-Bir bahçıvanın gül fidanını budadığını hayal edin. Eğer fidan çok fazla dallanırsa, çok sayıda küçük ve zayıf gül üretir. Bahçıvan, gereksiz dalları budayarak fidanın enerjisini daha az sayıda, ancak çok daha güçlü ve güzel güller yetiştirmeye odaklamasına yardımcı olur. Karar ağacı budaması da aynı şekilde çalışır. Çok fazla büyüyen ve karmaşıklaşan bir ağaç, eğitim verisinin bir uzmanı haline gelir; her küçük detayı ve hatta gürültüyü bile öğrenir (buna **aşırı uyum (overfitting)** denir). Bu "aşırı uzmanlaşmış" ağaç, yeni verilerle karşılaştığında kötü performans gösterir. Budama, en az faydalı olan dalları—yani çok az örneğe dayalı kararlar veren veya tahmin gücüne pek katkı sağlamayan dalları—keser. Sonuç, daha iyi ve daha genel tahminler yapan, daha basit ve sağlam bir ağaçtır.
-<br/><br/>
-Teknik açıdan budama, bir karar ağacının karmaşıklığını azaltmak ve böylece aşırı uyumu hafifletmek için tasarlanmış bir düzenlileştirme (regularization) tekniğidir. Tamamen büyümüş bir ağaç, eğitim setindeki gürültüyü ve özel durumları modellediği için genellikle yüksek varyansa (high variance) sahiptir. Budama, genellikle yanlılıkta (bias) hafif bir artış pahasına, ağaç yapısını basitleştirerek bu varyansı azaltır. Süreç, modelin görülmemiş veriler üzerindeki tahmin doğruluğuna ihmal edilebilir bir etkisi olan alt ağaçları belirlemeyi ve kaldırmayı içerir. Bu genellikle bir alt ağacın, o alt ağaçtaki örneklerin çoğunluk sınıfı tarafından belirlenen bir sınıf etiketine sahip bir yaprak düğümle değiştirilmesiyle gerçekleştirilir. Budama kararı, genelleme hatasını en aza indiren en uygun alt ağacı bulmayı amaçlayan bir doğrulama seti (validation set) üzerindeki performans metrikleri veya istatistiksel anlamlılık testleri tarafından yönlendirilir.
-</div>
+Bir bahçıvanın gül fidanını budaması gibi, karar ağacı **budaması (pruning)** da benzer bir felsefeyle çalışır. Kontrolsüzce büyüyen bir fidan, enerjisini çok sayıda küçük ve zayıf güle dağıtır. Usta bir bahçıvan ise gereksiz dalları keserek fidanın gücünü daha az sayıda, ancak daha gösterişli ve sağlıklı güller yetiştirmeye odaklar.
+
+Benzer şekilde, bir ağacın çok fazla büyümesine ve karmaşıklaşmasına izin verilirse, eğitim verisinin her detayını, hatta anlamsız gürültüleri bile ezberleyen bir "uzman" haline gelir. Bu duruma **aşırı uyum (overfitting)** denir. Bu "aşırı uzmanlaşmış" ağaç, eğitim verisinde mükemmel sonuçlar verse de, daha önce hiç görmediği yeni verilerle karşılaştığında şaşırtıcı derecede kötü performans gösterir.
+
+Budama, ağacın genelleme yeteneğine en az katkı sağlayan, yani çok az örneğe dayanan veya tahmin gücü zayıf olan dalları kesip atma işlemidir. Sonuç, daha basit, daha sağlam ve yeni verilere karşı daha iyi tahminler yapabilen bir ağaçtır.
+
+Bu süreç aşağıdaki diyagramda gösterilmiştir:
+
+```mermaid
+graph TD
+    subgraph "Budama (Pruning) Süreci"
+        direction LR
+        
+        subgraph "Önce: Aşırı Uyumlu Ağaç"
+            style A fill:#ffeb3b,stroke:#333,stroke-width:2px
+            style B fill:#4fc3f7,stroke:#333,stroke-width:2px
+            style D fill:#4fc3f7,stroke:#333,stroke-width:2px
+            style F fill:#4fc3f7,stroke:#333,stroke-width:2px
+            style C fill:#e57373,stroke:#333,stroke-width:2px
+            style E fill:#81c784,stroke:#333,stroke-width:2px
+            style H fill:#e57373,stroke:#333,stroke-width:2px
+            style G fill:#f06292,stroke:#b71c1c,stroke-width:2px,stroke-dasharray: 5 5
+
+            A["<b>Hava Durumu?</b>"] --> B{"<b>Nem?</b>"}
+            B -- "Yüksek" --> C["<b>Hayır</b>"]
+            B -- "Normal" --> D{"<b>Sıcaklık?</b>"}
+            D -- ">25C" --> E["<b>Evet</b>"]
+            D -- "<=25C" --> F{"<b>Gün=D11?</b>"}
+            F -- "Evet" --> G["<b>Evet</b><br/>(Gürültüyü Ezberledi)"]
+            F -- "Hayır" --> H["<b>Hayır</b>"]
+        end
+
+        subgraph "Sonra: Budanmış Ağaç"
+            style A2 fill:#ffeb3b,stroke:#333,stroke-width:2px
+            style B2 fill:#4fc3f7,stroke:#333,stroke-width:2px
+            style C2 fill:#e57373,stroke:#333,stroke-width:2px
+            style D2 fill:#9575cd,stroke:#311b92,stroke-width:2px
+
+            A2["<b>Hava Durumu?</b>"] --> B2{"<b>Nem?</b>"}
+            B2 -- "Yüksek" --> C2["<b>Hayır</b>"]
+            B2 -- "Normal" --> D2["<b>Evet</b><br/>(Genelleştirilmiş Karar)"]
+        end
+    end
+```
+
+Diyagramda görüldüğü gibi:
+-   **Aşırı Uyumlu Ağaç:** Model, `Gün=D11?` gibi bir soru sorarak çok fazla detaya inmiş ve sadece tek bir veri noktasına özel bir kural oluşturmuştur. Bu, öğrenme değil, ezberlemedir ve modelin genelleme yeteneğine zarar verir.
+-   **Budanmış Ağaç:** Genelleme yeteneğini bozan karmaşık dal (`Sıcaklık?` ve sonrası) budanmış, yerine o dala düşen verilerin çoğunluk sınıfını temsil eden tek bir yaprak düğüm (`Evet`) konulmuştur. Ağaç artık daha basit ve daha güçlüdür.
+
+Teknik açıdan budama, bir karar ağacının karmaşıklığını azaltmak için kullanılan bir **düzenlileştirme (regularization)** tekniğidir. Tamamen büyümüş bir ağaç, eğitim setindeki gürültüyü ve istisnaları modellediği için genellikle **yüksek varyansa (high variance)** sahiptir. Budama, modelin **yanlılığında (bias)** hafif bir artış pahasına, bu varyansı düşürerek daha dengeli bir model oluşturur. Amaç, görülmemiş veriler üzerinde en iyi performansı gösterecek, ne çok basit ne de çok karmaşık olan "altın oran"daki ağacı bulmaktır. Bu karar, genellikle bir doğrulama seti (validation set) üzerindeki performans metrikleri veya istatistiksel anlamlılık testleri ile verilir.
 
 ### 5.1. Budama Türleri
 
