@@ -4,12 +4,12 @@
 Tekirdağ Namık Kemal Üniversitesi  
 Çorlu Mühendislik Fakültesi  
 Bilgisayar Mühendisliği Bölümü  
-2022.v13-5  
+2025.v13-6  
 
 E-posta: erkanozhan@gmail.com / eozhan@nku.edu.tr  
 Tel: +90 282 250 23 84  
-
----
+Ofis: Çorlu Mühendislik Fakültesi, 4.Kat A-418 ---
+Görüşme Saatleri: Her hafta Perşembe 09:30-12:30 arası.
 
 ## Veri Nedir? (What is Data?)
 - **Dijital Veri**
