@@ -780,7 +780,7 @@ En yüksek Gini Kazancını **"Hava Durumu"** özniteliği sağladığı için, 
 graph TD
     style Root fill:#ffeb3b,stroke:#333,stroke-width:2px
     style LeafYes fill:#81c784,stroke:#333,stroke-width:2px
-    style SubNode fill:#4fc3f7,stroke:#333,stroke-width:2px
+    
 
     Root["<b>Kök Düğüm: Hava Durumu?</b><br/>Gini = 0.459<br/>(9 Evet, 5 Hayır)"]
     SubNode1["<b>Güneşli</b><br/>Gini = 0.48<br/>(2 Evet, 3 Hayır)"]
