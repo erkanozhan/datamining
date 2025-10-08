@@ -676,7 +676,9 @@ Pratikte her iki yöntem de genellikle çok benzer sonuçlar verir. Ancak Gini �
 
 #### 3.2.3. Diğer Ölçütler
 
-#### 3.2.3. Kazanç Oranı (Gain Ratio): "Adil" Soru Sorma Sanatı
+#### 3.2.3. Kazanç Oranı (Gain Ratio)
+
+#### 3.2.3. Kazanç Oranı (Gain Ratio)
 
 Bilgi Kazancı (Entropi'ye dayalı) bazen çok "zeki" olmaya çalışırken bir tuzağa düşebilir. Ona, her biri farklı bir değere sahip olan bir "Müşteri ID'si" veya "İl Plaka Kodu" gibi bir değişken verirseniz, Bilgi Kazancı bunu en iyi soru zanneder. Neden? Çünkü her bir ID için tek kişilik, mükemmel derecede "saf" bir grup oluşturur. Ancak bu, bir şey öğrenmek değildir; bu sadece ezberlemektir. Bu soru, yeni bir müşteri geldiğinde hiçbir işe yaramaz.
 
@@ -687,10 +689,58 @@ Kazanç Oranı, bir sorunun ne kadar "bölücü" olduğunu da hesaba katar. Bir 
 Basitçe şöyle düşünebiliriz:
 `Kazanç Oranı = (Sorunun Sağladığı Bilgi) / (Sorunun Yarattığı Karmaşa)`
 
-- **Sorunun Sağladığı Bilgi:** Bu, normal Bilgi Kazancı'dır.
-- **Sorunun Yarattığı Karmaşa (Bölünme Bilgisi):** Sorunun veriyi ne kadar çok parçaya ayırdığının bir ölçüsüdür. Çok fazla parça, yüksek ceza puanı demektir.
+-   **Sorunun Sağladığı Bilgi:** Bu, normal Bilgi Kazancı'dır.
+-   **Sorunun Yarattığı Karmaşa (Bölünme Bilgisi):** Sorunun veriyi ne kadar çok parçaya ayırdığının bir ölçüsüdür. Çok fazla parça, yüksek ceza puanı demektir.
 
 Sonuç olarak Kazanç Oranı, hem iyi bilgi veren hem de veriyi makul sayıda, anlamlı gruplara ayıran **dengeli** soruları tercih eder. Bu sayede modelin ezber yapması yerine gerçekten öğrenmesi sağlanır.
+
+```mermaid
+graph TD
+    subgraph "Bilgi Kazancı (Information Gain) ve Tuzağı"
+        A[Veri Kümesi] --> B{Öznitelik: Müşteri ID?}
+        B -- "ID1" --> C1["Saf Yaprak (1 Örnek)"]
+        B -- "ID2" --> C2["Saf Yaprak (1 Örnek)"]
+        B -- "..." --> Cn["Saf Yaprak (1 Örnek)"]
+
+        NoteB["<b>Bilgi Kazancı Yüksek</b><br/>(Her ID için mükemmel saflık)"]
+        B -.-> NoteB
+        NoteC1["<b>Ezberleme (Overfitting)</b><br/>Yeni ID'ler için işe yaramaz"]
+        C1 -.-> NoteC1
+        style B fill:#ffcccc,stroke:#cc0000,stroke-width:2px
+        style C1 fill:#ffcccc,stroke:#cc0000,stroke-width:1px
+        style C2 fill:#ffcccc,stroke:#cc0000,stroke-width:1px
+        style Cn fill:#ffcccc,stroke:#cc0000,stroke-width:1px
+        style NoteB fill:#fff59d,stroke:#333,stroke-width:1px
+        style NoteC1 fill:#fff59d,stroke:#333,stroke-width:1px
+        end
+
+        subgraph "Kazanç Oranı (Gain Ratio) Çözümü"
+        D[Veri Kümesi] --> E{Öznitelik Seçimi}
+        E -- "Hesapla" --> F["Bilgi Kazancı (Information Gain)"]
+        E -- "Hesapla" --> G["Bölünme Bilgisi (Split Information)<br/>(Dallanma Karmaşası)"]
+        F & G --> H["Kazanç Oranı = Bilgi Kazancı / Bölünme Bilgisi"]
+        H -- "Tercih Edilen Öznitelik" --> I{"Dengeli Bölme<br/>(Örn: Yaş > 30?)"}
+        I -- "Evet" --> J[Anlamlı Alt Grup 1]
+        I -- "Hayır" --> K[Anlamlı Alt Grup 2]
+        
+        NoteF["Müşteri ID gibi çok değerli<br/>öznitelikler için yüksek"]
+        F -.-> NoteF
+        NoteG["Müşteri ID gibi çok değerli<br/>öznitelikler için çok yüksek<br/>(Çok fazla dal = Yüksek ceza)"]
+        G -.-> NoteG
+        NoteH["Bölünme Bilgisi, çok dallanan<br/>öznitelikleri cezalandırır<br/>ve Bilgi Kazancı'nı dengeler."]
+        H -.-> NoteH
+        NoteI["Hem bilgi kazancı yüksek<br/>hem de makul sayıda dal<br/>(Gerçek öğrenme, ezberleme değil)"]
+        I -.-> NoteI
+
+        style NoteF fill:#fff59d,stroke:#333,stroke-width:1px
+        style NoteG fill:#fff59d,stroke:#333,stroke-width:1px
+        style NoteH fill:#fff59d,stroke:#333,stroke-width:1px
+        style NoteI fill:#fff59d,stroke:#333,stroke-width:1px
+        style E fill:#ccffcc,stroke:#009900,stroke-width:2px
+        style H fill:#ccffcc,stroke:#009900,stroke-width:2px
+        style I fill:#ccffcc,stroke:#009900,stroke-width:2px
+    end
+```
 
 #### 3.2.4. Sınıflandırma Hatası (Classification Error)
 
