@@ -1305,64 +1305,47 @@ Bu tabloya ilk baktığımızda, aslında bir mağazanın geçmiş müşteri kay
 Sorumuz şu: **Bu yeni müşteri bilgisayar satın alır mı, almaz mı?**
 
 İşte Naive Bayes bu noktada bir olasılık oyunu oynayarak bize en mantıklı tahmini sunuyor. Adım adım gidelim:
+Gençler,
 
-#### **Adım 1: Genel Duruma Bakalım (Önsel Olasılık)**
+Yeni müşterinin sahip olduğu dört ipucu (genç, gelir = orta, öğrenci = evet, kredi = kötü) için veriden elde ettiğimiz olasılıklar şunlar:
 
-Dedektifimiz, daha yeni müşterinin detaylarına inmeden önce genel arşive bir göz atar. "Geçmişte mağazaya gelenlerin ne kadarı bilgisayar aldı, ne kadarı almadı?" diye sorar.
+- Önsel olasılıklar:
+    - P(evet) = 9/14 ≈ 0.643
+    - P(hayır) = 5/14 ≈ 0.357
 
-*   Toplam **14** müşteri kaydımız var.
-*   Bunlardan **9** tanesi bilgisayar almış (`evet`).
-*   Bunlardan **5** tanesi bilgisayar almamış (`hayır`).
+- Koşullu olasılıklar:
+    - Yaş = genç:
+        - P(genç | evet) = 2/9 ≈ 0.222
+        - P(genç | hayır) = 3/5 = 0.600
+    - Gelir = orta:
+        - P(orta | evet) = 4/9 ≈ 0.444
+        - P(orta | hayır) = 2/5 = 0.400
+    - Öğrenci = evet:
+        - P(öğrenci | evet) = 6/9 = 0.667
+        - P(öğrenci | hayır) = 1/5 = 0.200
+    - Kredi = kötü:
+        - P(kötü | evet) = 6/9 = 0.667
+        - P(kötü | hayır) = 2/5 = 0.400
 
-Bu bize temel bir oran verir:
-*   Bilgisayar alma olasılığı: **P(evet) = 9/14 ≈ %64**
-*   Bilgisayar almama olasılığı: **P(hayır) = 5/14 ≈ %36**
+Bu ipuçlarını Naive Bayes yaklaşımıyla birleştiriyoruz. Her sınıf için puan (score) = P(sınıf) × Π P(özellik | sınıf).
 
-Demek ki genel eğilim, insanların bilgisayar alması yönünde. Bu, bizim başlangıç noktamız.
+- "Evet" takımı:
+    - Score = (9/14) × (2/9) × (4/9) × (6/9) × (6/9)
+    - Yaklaşık = 0.643 × 0.222 × 0.444 × 0.667 × 0.667 ≈ 0.028
 
-#### **Adım 2: İpuçlarını Değerlendirelim (Koşullu Olasılık)**
-
-Şimdi yeni müşterimizin özelliklerini, yani ipuçlarını masaya yatıralım ve her birini iki ayrı senaryo için değerlendirelim: "Bilgisayar Alanlar" ve "Bilgisayar Almayanlar".
-
-**İpucu 1: "Genç" olması**
-*   Bilgisayar alan **9** kişiden kaçı "genç"? Tabloya bakıyoruz: **2** kişi.
-    *   Yani, bilgisayar alan birinin genç olma olasılığı: **P(genç | evet) = 2/9**
-*   Bilgisayar almayan **5** kişiden kaçı "genç"? Tabloya bakıyoruz: **3** kişi.
-    *   Yani, bilgisayar almayan birinin genç olma olasılığı: **P(genç | hayır) = 3/5**
-
-**İpucu 2: "Orta" gelirli olması**
-*   Bilgisayar alan **9** kişiden kaçının geliri "orta"? **4** kişi.
-    *   Olasılık: **P(orta | evet) = 4/9**
-*   Bilgisayar almayan **5** kişiden kaçının geliri "orta"? **2** kişi.
-    *   Olasılık: **P(orta | hayır) = 2/5**
-
-Bu şekilde slaytta gösterildiği gibi diğer tüm ipuçları için de olasılıkları hesaplarız: öğrenci olması ve kredisinin kötü olması.
-
-#### **Adım 3: Kanıtları Birleştirelim ve Karar Verelim**
-
-İşte yöntemin "naive" (saf) olarak adlandırıldığı kısım burası. Algoritma, bu ipuçlarının (yaş, gelir vb.) birbirinden tamamen bağımsız olduğunu varsayar. Yani bir kişinin genç olmasının, gelir durumunu etkilemediğini düşünür. Bu gerçek hayatta her zaman doğru olmasa da, bu basitleştirme harika sonuçlar verir.
-
-Şimdi iki takımın ("Evet" takımı ve "Hayır" takımı) puanlarını hesaplayalım. Her takımın puanı, kendi başlangıç olasılığı ile ipuçlarından gelen olasılıkların çarpımıyla bulunur.
-
-**"EVET" Takımının Skoru:**
-*   (Başlangıç Olasılığı) x (Genç Olma) x (Orta Gelir) x (Öğrenci Olma) x (Kötü Kredi)
-*   P(evet) x P(genç|evet) x P(orta|evet) x P(öğrenci|evet) x P(kötü|evet)
-*   (9/14) x (2/9) x (4/9) x (6/9) x (6/9)
-*   0.643 x 0.222 x 0.444 x 0.667 x 0.667 ≈ **0.028**
-
-**"HAYIR" Takımının Skoru:**
-*   P(hayır) x P(genç|hayır) x P(orta|hayır) x P(öğrenci|hayır) x P(kötü|hayır)
-*   (5/14) x (3/5) x (2/5) x (1/5) x (2/5)
-*   0.357 x 0.600 x 0.400 x 0.200 x 0.400 ≈ **0.0068**
+- "Hayır" takımı:
+    - Score = (5/14) × (3/5) × (2/5) × (1/5) × (2/5)
+    - Yaklaşık = 0.357 × 0.600 × 0.400 × 0.200 × 0.400 ≈ 0.0068
 
 **Karar Anı:**
 "EVET" takımının skoru (**0.028**), "HAYIR" takımının skorundan (**0.0068**) çok daha yüksek.
 Bu durumda dedektifimiz, yani Naive Bayes algoritmamız, eldeki tüm ipuçlarını değerlendirdiğinde bu yeni müşterinin **bilgisayar alma olasılığının daha yüksek** olduğuna karar verir.
 
----
-### **Daha Akademik Bir Bakış Açısıyla**
+- Bu hesaplama, özelliklerin sınıf verildiğinde koşullu bağımsız olduğunu varsayar; gerçek hayatta tam doğru olmayabilir ama çoğu durumda işe yarar.
+- Birden çok özellik olduğunda çarpımlar çok küçük değerlere düşebilir; uygulamada log-olasılık kullanılır:
+    - score_c = log P(c) + Σ log P(x_i | c); büyük olan skoru seçmek yeterlidir.
 
-Şimdi bu sezgisel yaklaşımı biraz daha akademik bir dille ve slaytlardaki formüllerle ifade edelim.
+---
 
 Naive Bayes sınıflandırıcısı, temelini olasılık teorisindeki **Bayes Teoremi**'nden alır. Teorem bize, bir hipotezin olasılığını yeni kanıtlar ışığında nasıl güncelleyeceğimizi söyler. Formülümüz şöyledir:
 
@@ -1381,54 +1364,88 @@ Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, .
 
 `P(X|C) = P(x_1|C) * P(x_2|C) * ... * P(x_n|C)`
 
-Bu, slaytlarda `Π` (pi) notasyonu ile gösterilen çarpım işlemidir.
+### Laplace Smoothing ve Sayısal Kararlılık
 
-**Örnek Üzerinden Uygulama:**
+Gençler, şimdi Naive Bayes'in en zarif hilelerinden birine, ama aynı zamanda en kritik savunma mekanizmasına geliyoruz. Düşünün ki, modelimiz 'bilgisayar alır' diyen müşteriler arasında hiç 'geliri=düşük' olan birini görmemiş. Yeni bir müşteri geliyor, tüm özellikleri 'evet' demeye çok yatkın ama geliri düşük. Formülümüzdeki `P(gelir=düşük | evet)` terimi ne olur? Sıfır. Ve matematikte sıfır, çarpma işleminde acımasız bir yok edicidir. Diğer tüm kanıtlar ne kadar güçlü olursa olsun, o tek bir sıfır bütün skoru sıfırlar ve 'evet' ihtimalini tamamen ortadan kaldırır. Bu adil mi? Elbette değil. Bu, modelin tecrübesizliğinden kaynaklanan bir aşırı özgüven sorunudur.
 
-**1. Önsel Olasılıkların (P(C)) Hesaplanması:**
-*   `P(C₁ = evet) = 9/14 = 0.643`
-*   `P(C₂ = hayır) = 5/14 = 0.357`
+İşte bu sorunu çözmek için **Laplace Düzeltmesi (Laplace Smoothing)** dediğimiz zekice bir yöntem kullanıyoruz. Yaptığımız şey çok basit: Her bir ihtimale, sanki onu daha önce en az bir kez görmüşüz gibi davranıyoruz. Yani, her bir sayıma görünmez bir `+1` ekliyoruz. Bu, hiçbir olasılığın sıfır olmamasını garanti altına alan küçük bir sigortadır. Elbette, paya bir ekliyorsak, paydayı da adil bir şekilde ayarlamamız gerekir. Bu yüzden paydaya da o özellikteki toplam kategori sayısını ekleriz. Böylece modelimiz, daha önce hiç karşılaşmadığı bir duruma 'imkansız' demek yerine, 'düşük bir ihtimal ama olabilir' demeyi öğrenir.
 
-**2. Koşullu Olasılıkların (P(X|C)) Hesaplanması:**
-Yeni veri `X = (yas=genç, gelir=orta, ogrencimi=evet, kredibilite=kotu)` için, bağımsızlık varsayımı altında olabilirlikleri hesaplarız:
+Bu yaklaşım, sadece pratik bir hile değil, aynı zamanda sağlam bir teorik temele de dayanır. Teknik olarak, **sıfır frekans problemi** olarak bilinen bu durum, olasılıkları doğrudan gözlem frekanslarından tahmin ettiğimizde ortaya çıkar. Laplace düzeltmesi, her olası sonuca küçük bir önsel olasılık atayarak bu sorunu çözer. Formülü `P = (sayım + 1) / (N + K)` olarak ifade ederiz. Burada `N` o sınıftaki toplam gözlem sayısı, `K` ise o özellikteki toplam benzersiz değer sayısıdır (örneğin, 'gelir' için 'düşük', 'orta', 'yüksek' olmak üzere K=3). Bu yöntem, modelin eğitim verisinde görmediği olaylara karşı daha esnek ve dayanıklı olmasını sağlar, yani genelleme yeteneğini artırır.
 
-*   **`C₁=evet` sınıfı için:**
-    `P(X|evet) = P(yas=genç|evet) × P(gelir=orta|evet) × P(öğrenci=evet|evet) × P(kredi=kötü|evet)`
-    `P(X|evet) = (2/9) × (4/9) × (6/9) × (6/9) = 0.222 × 0.444 × 0.667 × 0.667 = 0.044` (Slayt 43)
+Sonuç olarak, elimizdeki ipuçları ve basit varsayımlarla yapılan hesaplama yeni müşterinin satın alma olasılığının daha yüksek olduğunu gösteriyor.
 
-*   **`C₂=hayır` sınıfı için:**
-    `P(X|hayır) = P(yas=genç|hayır) × P(gelir=orta|hayır) × P(öğrenci=evet|hayır) × P(kredi=kötü|hayır)`
-    `P(X|hayır) = (3/5) × (2/5) × (1/5) × (2/5) = 0.600 × 0.400 × 0.200 × 0.400 = 0.019` (Slayt 43)
-
-**3. Sınıflandırma (Karşılaştırma):**
-`P(X)` terimini göz ardı ederek, `P(X|C) * P(C)` değerini her sınıf için karşılaştırırız:
-
-*   `P(X|evet) * P(evet) = 0.044 * 0.643 ≈ 0.0283`
-*   `P(X|hayır) * P(hayır) = 0.019 * 0.357 ≈ 0.0068`
-
-Sonuç olarak `0.0283 > 0.0068` olduğundan, modelimiz `X` verisini `bilgisayar_alimi = evet` olarak sınıflandırır.
-
+## Örnek Uygulama: SMS Spam Tespiti Naive Bayes ile
 Gençler,
 
-Bir özellik için P(x)=0 olursa (ör. eğitim verisinde o kelime hiç görülmemişse), Naive Bayes’in sınıf olasılığına olan çarpımda o terim tüm çarpımı sıfıra indirir — yani o sınıf için posterior olasılık sıfır olur. Bu, modelin yeni veya nadir görülen örüntüleri “hiç şansı yok” diye cezalandırmasına yol açar; aslında diğer güçlü kanıtlar olsa bile tek bir sıfır tüm kararı yok eder.
+Aşağıda SMS spam örneğini Weka ile adım adım, önce uygulamada yapılacak temel işler sonra dikkat edilmesi gereken teknik ayrıntılar şeklinde açıklıyorum. Her adımı sırasıyla uygulayın; gerektiğinde küçük ayarlarla deney yapın.
 
-Basit çözüm: Laplace (add‑1) smoothing. Kategorik/multinomial durumda her sayımı (count) 1 ekleyip normalizasyonu yeniden yaparsınız:
-P_smoothed = (count + 1) / (N + K)
-burada N sınıfa ait toplam gözlem, K özellik değerlerinin (ör. sözlük boyutu) sayısıdır. Böylece hiç görülmeyen değerlerin olasılığı sıfır olmaz, küçük ama pozitif olur. Ayrıca pratikte çarpımlar çok küçük değerlere düşer; o yüzden log‑olasılık kullanılır (çarpma → toplam), sayısal taşma/alt akışı önlenir.
+1) Veri edinme ve açma
+- Veri kaynağı: https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip  
+- İki yol:
+    - Hızlı yol: Weka Explorer → Preprocess → Open URL... ile ZIP adresini deneyin. (Bazı Weka sürümleri ZIP içeriğini otomatik açmayabilir.)
+    - Güvenli yol: ZIP'i indirin, açın ve içindeki SMSSpamCollection dosyasını alın. Bu dosya genelde her satırda "label<TAB>message" formatındadır. Gerekirse CSV/ARFF’e dönüştürün (Weka Explorer’da Open file... ile CSV yüklenebilir).
+- Dosyayı açarken sınıf (label) sütununun nominal (spam/ham) olduğundan emin olun.
 
-Daha teknik notlar:
-- Sürekli özelliklerde (Gaussian NB) P(x)=0 nadiren tam sıfır olur ama varyans çok küçükse olasılık etkilenir; küçük bir varyans eşiği veya sınıf başına varyans düzenlemesi (variance smoothing) kullanmak gerekir.
-- Çok yüksek boyutlu kelime temelli modellerde log‑olasılık + Laplace en yaygın ve etkili kombinasyondur.
-- Laplace tek seçenektir; bazı durumlarda Lidstone (add‑α) daha ince ayar imkânı verir (α∈(0,1) gibi).
+2) Metni sayısallaştırma (ön işlem)
+- Preprocess sekmesinde StringToWordVector filtresini seçin.
+- Önemli ayarlar:
+    - lowerCaseTokens = True (Küçük harfe çevir)
+    - outputWordCounts = True (kelime frekanslarını kullan) — NaiveBayesMultinomial ile genelde tercih edilir.
+    - wordsToKeep = 1000–5000 (ilk deneme için 1000 iyi bir başlangıç)
+    - useStoplist = True (standart stop-word listesi)
+    - stemmer = PorterStemmer (isteğe bağlı; kelime çeşitlemesini azaltır)
+    - tokenizer: WordTokenizer veya NGramTokenizer (tek kelime ile başlayın; gerekirse 2-gram deneyin)
+    - TF/IDF: önce sayılarla çalışın; TF-IDF kullanımı farklı davranış verebilir (deneyin).
+- Apply ile filtreyi uyguladıktan sonra veri setiniz artık birçok sayısal öznitelikten oluşacaktır. Sınıf özniteliğinin (spam/ham) korunup korunmadığını kontrol edin.
 
-Weka ile uygulama (metin/sözlük tabanlı örnek için hızlı adımlar):
-1. Weka Explorer → Preprocess → Open file (ARFF veya CSV; metin sütunu string türünde olsun).
-2. String alanını kelime vektörüne çevirmek için Filters → unsupervised.attribute.StringToWordVector seçin. Önerilen ayarlar: TF/IDF gerektiğinde açık, lowerCaseTokens = true, wordsToKeep = (ör. 10000), uygun tokenizasyon. Apply ile dönüştürün.
-3. Classify sekmesi → Choose → weka.classifiers.bayes.NaiveBayesMultinomial (metin için uygun). Seçeneklerde -L (use Laplace) aktif olduğundan emin olun.
-4. Evaluation: Test options altında 10‑fold cross‑validation seçin ve Start. Sonuçlarda doğruluk, F1, confusion matrix ve sınıf dağılımını inceleyin.
-5. Karşılaştırma için weka.classifiers.bayes.NaiveBayes (normal NB) ile deneyin; sayısal özellik varsa NaiveBayes’in “useKernelEstimator” veya “useSupervisedDiscretization” seçeneklerini deneyerek sıfır/çok küçük yoğunluk problemlerini hafifletin.
-6. Model davranışını anlamak için Classify → More options → Output predictions ve output distribution aktif edilerek örnek bazlı olasılıklar incelenebilir.
+3) Sınıflandırıcı seçimi ve eğitim
+- Classify sekmesine geçin.
+- Choose -> weka.classifiers.bayes.NaiveBayesMultinomial seçin (metin frekansları için uygun).
+- Test options: 10-fold cross-validation seçin (varsayılan olarak stratified olur). Random seed = 1 gibi sabit bir değer kullanın.
+- Start ile eğitimi başlatın.
 
-Pratik tavsiye: Smoothing parametresini ve StringToWordVector ayarlarını çapraz doğrulama ile ayarlayın; çok agresif temizleme nadir fakat ayırt edici kelimeleri yok edebilir, çok gevşek ayar ise gürültüyü arttırır.
+4) Sonuçları okuma ve yorumlama
+- Confusion matrix: dört hücreyi okuyun (True Negatives, False Positives, False Negatives, True Positives). 
+    - False Positive = normal mesajın (ham) yanlışlıkla spam işaretlenmesi — kullanıcı açısından daha maliyetli olabilir.
+    - False Negative = spam’in kaçması — güvenlik/başarı açısından önemli.
+- Raporta Accuracy, Precision, Recall, F1 ve ROC AUC değerlerine bakın.
+    - Spam tespitte genelde Precision (etiketlenen spam’lerin gerçekten spam olma oranı) ile Recall arasında tercih/denge gerekir; kullanım senaryonuza göre öncelik belirleyin.
+- Eğer sınıflar dengesizse (genelde ham çok daha fazladır), accuracy yanıltıcı olabilir; Precision/Recall ve AUC tercih edin.
 
-Kısa özet: P(x)=0 model kararını tek taraflı yok eder — Laplace/add‑α smoothing ve log‑olasılık kullanımı bu problemi etkili ve basitçe çözer. Weka’da NaiveBayesMultinomial + Laplace + StringToWordVector ile metin örneklerini deneyip farkı görebilirsiniz.
+5) Basit iyileştirmeler ve pratik kontroller
+- Eğer çok fazla false positive görürseniz:
+    - threshold veya maliyet matrisi uygulamayı düşünün (Weka’da CostSensitiveClassifier ya da resampling).
+    - sınıf ağırlıklarını değiştirin veya yanlış sınıf cezalarını ayarlayın.
+- Daha iyi performans için deneyler:
+    - wordsToKeep’i değiştirin (1000 → 3000).
+    - n-gram (1 vs 2-gram) deneyin.
+    - stemming ve stoplist varyasyonlarını test edin.
+    - outputWordCounts yerine boolean (present/absent) ile karşılaştırın.
+    - TF-IDF’yi deneyin; bazı durumlarda Multinomial yerine Bernoulli/naive bayes versiyonları farklı sonuç verir.
+
+6) Teknik notlar (ince ayar ve nedenleri)
+- Neden NaiveBayesMultinomial? Kelime frekanslarını (counts) direkt modelleyen formülü içerir; metin verilerinde sıklıkla daha stabil ve hızlıdır.
+- Smoothing (Laplace): Çok nadir görülen kelimeler veya hiç görülmeyen kelimeler için sıfır olasılığı engelleyen düzeltme gereklidir; Multinomial uygulamalar genelde smoothing içerir.
+- Log-olasılık: Gerçek uygulamalarda P(X|C) çarpımları çok küçük sayılar üretir; algoritma iç hesaplamalarda log-probabilities ile çalışır (numerik kararlılık).
+- Tokenizasyon ve özellik uzayı: Hangi tokenizasyonu kullandığınız ve kaç kelime tuttuğunuz model kapasitesini doğrudan etkiler. Çok geniş sözlük → daha yüksek varyans; çok dar → yüksek bias.
+- Özellik seçimi: Bilgi kazancı (InfoGain) veya chi-square ile öznitelik seçimi yaparak gürültüyü azaltmak performansı artırabilir.
+- Değerlendirme güvenilirliği: 10-fold CV iyi bir başlangıçtır; model tuning (hiperparametre araması) yaparken iç içe (nested) CV veya ayrı doğrulama kümesi kullanın.
+
+7) Hızlı kontrol listesi (uygulamaya başlamadan önce)
+- Dosyayı düzgün yüklediniz mi? (label ve message doğru kolonlarda)
+- Sınıf etiketi nominal mi?
+- StringToWordVector’da outputWordCounts ve lowerCaseTokens doğru mu?
+- Classify bölümünde NaiveBayesMultinomial seçili mi?
+- 10-fold CV ile değerlendirme yaptınız mı?
+- Confusion matrix’i ve Precision/Recall/F1’i incelediniz mi?
+
+Öneri: Her ayar değişikliğinden sonra yalnızca bir parametreyi değiştirip sonucu karşılaştırın. Böylece hangi değişikliğin etkili olduğunu açıkça görürsünüz.
+
+Kısa örnek deney sırası (pratik):
+1. Orijinal pipeline ile temel sonuç alın (wordsToKeep=1000, unigrams, stemmer on).
+2. wordsToKeep=3000 ile tekrar çalıştırın; değişim kaydedin.
+3. Unigrams → unigrams+2‑grams ile tekrar çalıştırın.
+4. outputWordCounts = False (sadece var/yok) ile tekrar karşılaştırın.
+5. En iyi sonuç veren kombinasyonda bilgi kazancı ile üst 500 özelliği seçip tekrar test edin.
+
+Bu adımları takip ederek Weka’da SMS spam sınıflandırmasını hem uygulamalı hem de bilinçli bir şekilde deneyimleyebilirsiniz. Her adımda sonuçları kaydedin ve küçük değişikliklerin etkisini not edin; model iyileştirme sistematik, ölçülebilir denemelerle yapılır.
