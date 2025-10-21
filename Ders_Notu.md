@@ -1188,3 +1188,247 @@ Karar ağacı modelinin performansı çeşitli metriklerle değerlendirilir:
 
 Karar ağaçları, makine öğrenmesinde güçlü ve esnek bir yöntemdir. Doğru parametreler ve budama teknikleriyle kullanıldığında, karmaşık sınıflandırma ve regresyon problemlerinde yüksek performans gösterebilir. Ancak, aşırı uyum riski ve kararsızlık gibi sınırlamaları göz önünde bulundurulmalıdır. Bu nedenle, pratikte genellikle ensemble yöntemleri (Random Forest, Gradient Boosting gibi) tercih edilir ve bu yöntemler birden fazla karar ağacını birleştirerek daha sağlam ve genellenebilir modeller oluşturur.
 
+
+Naive Bayes'i, slaytlardaki örnek üzerinden adım adım inceleyelim.
+
+---
+
+# Olasılık Temelli Tahminler: Naive Bayes Sınıflandırıcısı
+
+Merhaba gençler. Bugün, elimizdeki verilerden yola çıkarak geleceğe yönelik akıllı tahminler yapmamızı sağlayan bir yöntemden bahsedeceğiz: **Naive Bayes Sınıflandırıcısı**. Adındaki "naive" kelimesi sizi yanıltmasın, kendisi oldukça güçlü bir tekniktir. Tıpkı bir dedektifin elindeki ipuçlarını birleştirerek bir sonuca varması gibi çalışır.
+### Naive Bayes — Keşfi ve Temelleri
+
+Gençler,
+
+Kısa tarihçe:
+- Temel fikir Bayes teoremiyle başlar (Thomas Bayes, 18. yy.). Laplace bu fikri genelleştirdi. Makine öğrenmesi bağlamında “Naive Bayes” adı, koşullu bağımsızlık (naive = saf) varsayımından gelir; basit ama pratik bir sınıflandırma yöntemi olarak e-postada spam tespiti, metin sınıflandırma vb. alanlarda yaygın kullanıldı.
+
+ 
+- Elinizde geçmiş örnekler var; her sınıf için bir “profil” çıkarıyorsunuz (ör. spam ve değil). Yeni bir örneğe bakınca, bu örneğin her özelliğinin o sınıf altında görülme olasılığını çarpıyorsunuz ve en yüksek olasılık veren sınıfı seçiyorsunuz. Özelliklerin birbirinden bağımsız olduğunu varsayar; bu gerçek hayatta her zaman doğru değil ama çoğu pratik problemde yeterince işe yarıyor.
+
+Matematiksel temeli
+
+Temel Bayes bağıntısı:
+$$
+\displaystyle P(C \mid X) = \frac{P(X \mid C)\,P(C)}{P(X)}
+$$
+
+- P(C | X): Posterior — X gözlemi verildiğinde C sınıfında olma olasılığı (aranan değer).
+- P(X | C): Likelihood — eğer sınıf C doğruysa X gözlemini elde etme olasılığı.
+- P(C): Prior — sınıf C'nin önsel olasılığı (veri kümesindeki frekansla tahmin edilir).
+- P(X): Evidence — X gözleminin toplam olasılığı (tüm sınıflara göre normalize eder; sınıfları karşılaştırırken sabittir, genelde ihmal edilir).
+
+$$
+\displaystyle P(X \mid C) \;=\; \prod_{i=1}^{n} P(x_i \mid C)
+$$
+
+- x_i: X gözleminin i'inci bileşeni (özelliği). Yani X = (x_1, ..., x_n).
+- Ürün (∏): Koşullu bağımsızlık varsayımı altında
+    $$P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)\,.$$
+- Hesaplama notu: Sayısal stabilite için genellikle log alınır:
+    $$\text{score}_c=\log P(C=c)+\sum_{i=1}^{n}\log P(x_i\mid C=c)\,.$$
+
+Sınıflandırma karar kuralı (özellikle P(X) ihmal edilince):
+$$
+\displaystyle \hat{C} = \arg\max_{c}\; P(C=c)\,\prod_{i=1}^{n} P(x_i \mid C=c)
+$$
+
+- argmax_c: En yüksek skoru veren sınıfı seç.
+
+Sayısal stabilite ve uygulamada yaygın form:
+
+$$
+\displaystyle \text{score}_c \;=\; \log P(C=c) \;+\; \sum_{i=1}^{n} \log P(x_i \mid C=c)
+$$
+
+Gençler,
+
+ Birden fazla küçük olasılığı (ör. pek çok kelime için P( kelime | sınıf )) birbirleriyle çarptığınızda ortaya çıkan sayı bilgisayarın ondalık gösterim aralığının çok altına düşebilir — buna "alt akış" (underflow) denir. Bu durumda çarpım sıfıra yuvarlanır ve bilgiler kaybolur. Log almak bu sorunu çözer: çarpma işlemi toplamaya dönüşür (log(a·b)=log a + log b), böylece çok küçük çarpımlar yerine makul büyüklükte sayılarla toplama yaparsınız ve sayısal kararlılığı korursunuz. Ayrıca argmax ile sınıflandırma yapıyorsanız, hangi sınıfın skoru daha büyük olduğunu bulmak için log almamız sonucu değiştirmez; çarpımların log'larını toplamak yeterlidir.
+
+Bilgisayarlarda kayan nokta (floating-point) aritmetiği sınırlı dinamik aralığa sahiptir; örneğin 10^(-300) civarındaki değerler güvenli olsa da 10^(-1000) gibi değerler sıfıra yuvarlanır. Naive Bayes'te çok sayıda bağımsız özellik için P(X|C)=∏i P(xi|C) hesaplanırken bu durum sık meydana gelir. Log-olasılık kullanmak şöyle avantajlar sağlar:
+- Sayısal kararlılık: Üstel küçüklükler yerine log'ların toplamı tutulur, alt/üst akış riski çok azalır.
+- Hesaplama verimliliği: Çarpma yerine toplama yapıldığı için log işlemi ile sayısal hata birikimi azalır; argmax için P(X) (normalizasyon) atılabilir.
+- İfade kolaylığı: Skor = log P(C) + Σ_i log P(x_i | C) formu hem anlaşılır hem de doğrudan uygulanır. Sürekli özelliklerde Gaussian varsayımı varsa, log-normalizasyon terimleri log'a alınınca kareli terimler ortaya çıkar ve hesaplama daha stabildir.
+
+Normalizasyon gerektiğinde (ör. gerçek posteriyorları elde etmek isterseniz), log-sum-exp tekniği kullanılır:
+log Σ_j exp(s_j) = m + log Σ_j exp(s_j − m),
+burada m = max_j s_j. Bu küçük bir öteleme ile exp(·) sırasında oluşabilecek taşma/alt akışı engeller.
+
+- Hangi log tabanını kullandığınız argmax açısından önemli değildir; genellikle doğal log (ln) tercih edilir.
+- Laplace (add‑1) smoothing ile hesaplanan frekanslar da log alındıktan sonra doğrudan toplanır.
+- Çift hassasiyet (double) kullanmak yardımcıdır ama binlerce özelliğin çarpımı için log yine gereklidir.
+
+Özetle: Log-olasılık hem sayısal açıdan güvenli hem de matematiksel olarak doğal bir yaklaşımdır; Naive Bayes ve benzeri modellerde standard uygulamadır.
+
+3) Pratik notlar ve uygulama detayları
+- Olasılık tahmini: Kategorik özelliklerde frekans temelli (say/total). Hiç görülmeyen değerler için Laplace (add-1) smoothing kullanılır: P = (count + 1) / (N + K).
+- Sürekli özellikler: Genellikle her sınıf için Gaussian (normal) dağılım varsayılır; P(x_i|C) ~ N(μ_{C,i}, σ_{C,i}^2).
+- Bağımsızlık varsayımı gerçekçi değilse bile yöntem hâlâ güçlü olabilir; metin verilerinde özelliklerin (kelime varlığı) kısmi bağımsızlığı nedeniyle özellikle etkilidir.
+- Dezavantajlar: Çok güçlü bağımlılıklar varsa performans düşer; özellik seçimi veya birleştirme gerekebilir.
+- Performans ölçümü: Çapraz doğrulama, doğruluk, hassasiyet/duyarlılık, F1 gibi metriklerle değerlendirilir.
+
+Sonuç: Yorumlaması kolay, hızlı ve az veri ile çalışabilen bir yöntemdir. Öğrencilerin dikkat etmesi gereken ana nokta, bağımsızlık varsayımının güçlü bir varsayım olduğudur; uygulamada bunu akılda tutup gerekirse özellik mühendisliği ve smoothing yöntemleri kullanılır.
+
+## Örnek Uygulama: Bilgisayar Satın Alma Tahmini
+Slaytlardaki örneğimiz üzerinden gidelim. Bir bilgisayar mağazasının elinde geçmiş müşterilerine ait bir tablo var. Bu tabloda müşterilerin yaşı, geliri, öğrenci olup olmadığı ve kredi notu gibi bilgiler ile en sonunda bilgisayar alıp almadıkları (`evet` ya da `hayır`) yazıyor.
+
+### Bilgisayar Satın Alma Veri Seti
+
+| yas | gelir | ogrencimi | kredibilite | bilgisayar_alimi |
+| :--- | :--- | :--- | :--- | :--- |
+| genc | yuksek | hayir | kotu | hayir |
+| genc | yuksek | hayir | iyi | hayir |
+| orta_yasli | yuksek | hayir | kotu | evet |
+| yasli | orta | hayir | kotu | evet |
+| yasli | dusuk | evet | kotu | evet |
+| yasli | dusuk | evet | iyi | hayir |
+| orta_yasli | dusuk | evet | iyi | evet |
+| genc | orta | hayir | kotu | hayir |
+| genc | dusuk | evet | kotu | evet |
+| yasli | orta | evet | kotu | evet |
+| genc | orta | evet | iyi | evet |
+| orta_yasli | orta | hayir | iyi | evet |
+| orta_yasli | yuksek | evet | kotu | evet |
+| yasli | orta | hayir | iyi | hayir |
+
+---
+
+Bu tabloya ilk baktığımızda, aslında bir mağazanın geçmiş müşteri kayıtlarını görüyoruz. Her bir satır, mağazaya gelmiş farklı bir kişiyi temsil ediyor. Sütunlar ise o kişiye ait bildiğimiz özellikleri ve en sonunda ne yaptığı bilgisini bize veriyor. `bilgisayar_alimi` sütunu bizim için "sonuç" veya "hedef" sütunudur. Amacımız, diğer sütunlardaki bilgilere bakarak bu sonuç sütununu tahmin etmektir. İşte bir önceki derste yaptığımız olasılık hesaplamalarının tamamı, bu tablodaki "evet" ve "hayır"ları, "genç" ve "yaşlı"ları sayarak yapıldı. Bu tablo, algoritmamızın tecrübe kazandığı, öğrendiği bir nevi ders kitabıdır.
+
+
+**Görevimiz:** Mağazaya yeni bir müşteri geliyor. Bu kişinin özelliklerini biliyoruz:
+*   **Yaş:** Genç
+*   **Gelir:** Orta
+*   **Öğrenci mi?:** Evet
+*   **Kredibilite:** Kötü
+
+Sorumuz şu: **Bu yeni müşteri bilgisayar satın alır mı, almaz mı?**
+
+İşte Naive Bayes bu noktada bir olasılık oyunu oynayarak bize en mantıklı tahmini sunuyor. Adım adım gidelim:
+
+#### **Adım 1: Genel Duruma Bakalım (Önsel Olasılık)**
+
+Dedektifimiz, daha yeni müşterinin detaylarına inmeden önce genel arşive bir göz atar. "Geçmişte mağazaya gelenlerin ne kadarı bilgisayar aldı, ne kadarı almadı?" diye sorar.
+
+*   Toplam **14** müşteri kaydımız var.
+*   Bunlardan **9** tanesi bilgisayar almış (`evet`).
+*   Bunlardan **5** tanesi bilgisayar almamış (`hayır`).
+
+Bu bize temel bir oran verir:
+*   Bilgisayar alma olasılığı: **P(evet) = 9/14 ≈ %64**
+*   Bilgisayar almama olasılığı: **P(hayır) = 5/14 ≈ %36**
+
+Demek ki genel eğilim, insanların bilgisayar alması yönünde. Bu, bizim başlangıç noktamız.
+
+#### **Adım 2: İpuçlarını Değerlendirelim (Koşullu Olasılık)**
+
+Şimdi yeni müşterimizin özelliklerini, yani ipuçlarını masaya yatıralım ve her birini iki ayrı senaryo için değerlendirelim: "Bilgisayar Alanlar" ve "Bilgisayar Almayanlar".
+
+**İpucu 1: "Genç" olması**
+*   Bilgisayar alan **9** kişiden kaçı "genç"? Tabloya bakıyoruz: **2** kişi.
+    *   Yani, bilgisayar alan birinin genç olma olasılığı: **P(genç | evet) = 2/9**
+*   Bilgisayar almayan **5** kişiden kaçı "genç"? Tabloya bakıyoruz: **3** kişi.
+    *   Yani, bilgisayar almayan birinin genç olma olasılığı: **P(genç | hayır) = 3/5**
+
+**İpucu 2: "Orta" gelirli olması**
+*   Bilgisayar alan **9** kişiden kaçının geliri "orta"? **4** kişi.
+    *   Olasılık: **P(orta | evet) = 4/9**
+*   Bilgisayar almayan **5** kişiden kaçının geliri "orta"? **2** kişi.
+    *   Olasılık: **P(orta | hayır) = 2/5**
+
+Bu şekilde slaytta gösterildiği gibi diğer tüm ipuçları için de olasılıkları hesaplarız: öğrenci olması ve kredisinin kötü olması.
+
+#### **Adım 3: Kanıtları Birleştirelim ve Karar Verelim**
+
+İşte yöntemin "naive" (saf) olarak adlandırıldığı kısım burası. Algoritma, bu ipuçlarının (yaş, gelir vb.) birbirinden tamamen bağımsız olduğunu varsayar. Yani bir kişinin genç olmasının, gelir durumunu etkilemediğini düşünür. Bu gerçek hayatta her zaman doğru olmasa da, bu basitleştirme harika sonuçlar verir.
+
+Şimdi iki takımın ("Evet" takımı ve "Hayır" takımı) puanlarını hesaplayalım. Her takımın puanı, kendi başlangıç olasılığı ile ipuçlarından gelen olasılıkların çarpımıyla bulunur.
+
+**"EVET" Takımının Skoru:**
+*   (Başlangıç Olasılığı) x (Genç Olma) x (Orta Gelir) x (Öğrenci Olma) x (Kötü Kredi)
+*   P(evet) x P(genç|evet) x P(orta|evet) x P(öğrenci|evet) x P(kötü|evet)
+*   (9/14) x (2/9) x (4/9) x (6/9) x (6/9)
+*   0.643 x 0.222 x 0.444 x 0.667 x 0.667 ≈ **0.028**
+
+**"HAYIR" Takımının Skoru:**
+*   P(hayır) x P(genç|hayır) x P(orta|hayır) x P(öğrenci|hayır) x P(kötü|hayır)
+*   (5/14) x (3/5) x (2/5) x (1/5) x (2/5)
+*   0.357 x 0.600 x 0.400 x 0.200 x 0.400 ≈ **0.0068**
+
+**Karar Anı:**
+"EVET" takımının skoru (**0.028**), "HAYIR" takımının skorundan (**0.0068**) çok daha yüksek.
+Bu durumda dedektifimiz, yani Naive Bayes algoritmamız, eldeki tüm ipuçlarını değerlendirdiğinde bu yeni müşterinin **bilgisayar alma olasılığının daha yüksek** olduğuna karar verir.
+
+---
+### **Daha Akademik Bir Bakış Açısıyla**
+
+Şimdi bu sezgisel yaklaşımı biraz daha akademik bir dille ve slaytlardaki formüllerle ifade edelim.
+
+Naive Bayes sınıflandırıcısı, temelini olasılık teorisindeki **Bayes Teoremi**'nden alır. Teorem bize, bir hipotezin olasılığını yeni kanıtlar ışığında nasıl güncelleyeceğimizi söyler. Formülümüz şöyledir:
+
+`P(C|X) = [ P(X|C) * P(C) ] / P(X)`
+
+Bu formüldeki terimleri bizim örneğimize uyarlayalım:
+*   `C`: Sınıf (yani `bilgisayar_alimi=evet` veya `bilgisayar_alimi=hayır`).
+*   `X`: Gözlemlenen veri, yani yeni müşterinin özellikleri `(genç, orta, evet, kötü)`.
+*   `P(C|X)`: **Sonsal Olasılık (Posterior Probability):** Aradığımız şey budur. `X` verisi verildiğinde bu verinin `C` sınıfına ait olma olasılığı.
+*   `P(C)`: **Önsel Olasılık (Prior Probability):** Herhangi bir veri görmeden önce `C` sınıfının genel olasılığı. (Adım 1'de hesapladığımız 9/14 ve 5/14 değerleri).
+*   `P(X|C)`: **Olabilirlik (Likelihood):** `C` sınıfı doğruysa, `X` verisini gözlemleme olasılığımız.
+*   `P(X)`: **Kanıt Olasılığı (Evidence):** `X` verisini gözlemlemenin genel olasılığı. Bu değer, tüm sınıflar için sabittir, bu yüzden sınıflandırma yaparken karşılaştırma amacıyla genellikle ihmal edilebilir. Bizim için önemli olan `P(X|C) * P(C)` çarpımını maksimize etmektir.
+
+**"Naive" (Saf) Varsayım:**
+Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, ..., x_n`) sınıf verildiğinde **koşullu olarak bağımsız** olduğunu varsaymasıdır. Bu, `P(X|C)` terimini basitleştirmemizi sağlar:
+
+`P(X|C) = P(x_1|C) * P(x_2|C) * ... * P(x_n|C)`
+
+Bu, slaytlarda `Π` (pi) notasyonu ile gösterilen çarpım işlemidir.
+
+**Örnek Üzerinden Uygulama:**
+
+**1. Önsel Olasılıkların (P(C)) Hesaplanması:**
+*   `P(C₁ = evet) = 9/14 = 0.643`
+*   `P(C₂ = hayır) = 5/14 = 0.357`
+
+**2. Koşullu Olasılıkların (P(X|C)) Hesaplanması:**
+Yeni veri `X = (yas=genç, gelir=orta, ogrencimi=evet, kredibilite=kotu)` için, bağımsızlık varsayımı altında olabilirlikleri hesaplarız:
+
+*   **`C₁=evet` sınıfı için:**
+    `P(X|evet) = P(yas=genç|evet) × P(gelir=orta|evet) × P(öğrenci=evet|evet) × P(kredi=kötü|evet)`
+    `P(X|evet) = (2/9) × (4/9) × (6/9) × (6/9) = 0.222 × 0.444 × 0.667 × 0.667 = 0.044` (Slayt 43)
+
+*   **`C₂=hayır` sınıfı için:**
+    `P(X|hayır) = P(yas=genç|hayır) × P(gelir=orta|hayır) × P(öğrenci=evet|hayır) × P(kredi=kötü|hayır)`
+    `P(X|hayır) = (3/5) × (2/5) × (1/5) × (2/5) = 0.600 × 0.400 × 0.200 × 0.400 = 0.019` (Slayt 43)
+
+**3. Sınıflandırma (Karşılaştırma):**
+`P(X)` terimini göz ardı ederek, `P(X|C) * P(C)` değerini her sınıf için karşılaştırırız:
+
+*   `P(X|evet) * P(evet) = 0.044 * 0.643 ≈ 0.0283`
+*   `P(X|hayır) * P(hayır) = 0.019 * 0.357 ≈ 0.0068`
+
+Sonuç olarak `0.0283 > 0.0068` olduğundan, modelimiz `X` verisini `bilgisayar_alimi = evet` olarak sınıflandırır.
+
+Gençler,
+
+Bir özellik için P(x)=0 olursa (ör. eğitim verisinde o kelime hiç görülmemişse), Naive Bayes’in sınıf olasılığına olan çarpımda o terim tüm çarpımı sıfıra indirir — yani o sınıf için posterior olasılık sıfır olur. Bu, modelin yeni veya nadir görülen örüntüleri “hiç şansı yok” diye cezalandırmasına yol açar; aslında diğer güçlü kanıtlar olsa bile tek bir sıfır tüm kararı yok eder.
+
+Basit çözüm: Laplace (add‑1) smoothing. Kategorik/multinomial durumda her sayımı (count) 1 ekleyip normalizasyonu yeniden yaparsınız:
+P_smoothed = (count + 1) / (N + K)
+burada N sınıfa ait toplam gözlem, K özellik değerlerinin (ör. sözlük boyutu) sayısıdır. Böylece hiç görülmeyen değerlerin olasılığı sıfır olmaz, küçük ama pozitif olur. Ayrıca pratikte çarpımlar çok küçük değerlere düşer; o yüzden log‑olasılık kullanılır (çarpma → toplam), sayısal taşma/alt akışı önlenir.
+
+Daha teknik notlar:
+- Sürekli özelliklerde (Gaussian NB) P(x)=0 nadiren tam sıfır olur ama varyans çok küçükse olasılık etkilenir; küçük bir varyans eşiği veya sınıf başına varyans düzenlemesi (variance smoothing) kullanmak gerekir.
+- Çok yüksek boyutlu kelime temelli modellerde log‑olasılık + Laplace en yaygın ve etkili kombinasyondur.
+- Laplace tek seçenektir; bazı durumlarda Lidstone (add‑α) daha ince ayar imkânı verir (α∈(0,1) gibi).
+
+Weka ile uygulama (metin/sözlük tabanlı örnek için hızlı adımlar):
+1. Weka Explorer → Preprocess → Open file (ARFF veya CSV; metin sütunu string türünde olsun).
+2. String alanını kelime vektörüne çevirmek için Filters → unsupervised.attribute.StringToWordVector seçin. Önerilen ayarlar: TF/IDF gerektiğinde açık, lowerCaseTokens = true, wordsToKeep = (ör. 10000), uygun tokenizasyon. Apply ile dönüştürün.
+3. Classify sekmesi → Choose → weka.classifiers.bayes.NaiveBayesMultinomial (metin için uygun). Seçeneklerde -L (use Laplace) aktif olduğundan emin olun.
+4. Evaluation: Test options altında 10‑fold cross‑validation seçin ve Start. Sonuçlarda doğruluk, F1, confusion matrix ve sınıf dağılımını inceleyin.
+5. Karşılaştırma için weka.classifiers.bayes.NaiveBayes (normal NB) ile deneyin; sayısal özellik varsa NaiveBayes’in “useKernelEstimator” veya “useSupervisedDiscretization” seçeneklerini deneyerek sıfır/çok küçük yoğunluk problemlerini hafifletin.
+6. Model davranışını anlamak için Classify → More options → Output predictions ve output distribution aktif edilerek örnek bazlı olasılıklar incelenebilir.
+
+Pratik tavsiye: Smoothing parametresini ve StringToWordVector ayarlarını çapraz doğrulama ile ayarlayın; çok agresif temizleme nadir fakat ayırt edici kelimeleri yok edebilir, çok gevşek ayar ise gürültüyü arttırır.
+
+Kısa özet: P(x)=0 model kararını tek taraflı yok eder — Laplace/add‑α smoothing ve log‑olasılık kullanımı bu problemi etkili ve basitçe çözer. Weka’da NaiveBayesMultinomial + Laplace + StringToWordVector ile metin örneklerini deneyip farkı görebilirsiniz.
