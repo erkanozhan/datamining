@@ -1,0 +1,15 @@
+yas,gelir,ogrencimi,kredibilite,bilgisayar_alimi
+genc,yuksek,hayir,kotu,hayir
+genc,yuksek,hayir,iyi,hayir
+orta_yasli,yuksek,hayir,kotu,evet
+yasli,orta,hayir,kotu,evet
+yasli,dusuk,evet,kotu,evet
+yasli,dusuk,evet,iyi,hayir
+orta_yasli,dusuk,evet,iyi,evet
+genc,orta,hayir,kotu,hayir
+genc,dusuk,evet,kotu,evet
+yasli,orta,evet,kotu,evet
+genc,orta,evet,iyi,evet
+orta_yasli,orta,hayir,iyi,evet
+orta_yasli,yuksek,evet,kotu,evet
+yasli,orta,hayir,iyi,hayir
