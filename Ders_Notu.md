@@ -1349,7 +1349,7 @@ Bu durumda dedektifimiz, yani Naive Bayes algoritmamız, eldeki tüm ipuçların
 
 Naive Bayes sınıflandırıcısı, temelini olasılık teorisindeki **Bayes Teoremi**'nden alır. Teorem bize, bir hipotezin olasılığını yeni kanıtlar ışığında nasıl güncelleyeceğimizi söyler. Formülümüz şöyledir:
 
-`P(C|X) = [ P(X|C) * P(C) ] / P(X)`
+$P(C\mid X)=\dfrac{P(X\mid C)\,P(C)}{P(X)}$
 
 Bu formüldeki terimleri bizim örneğimize uyarlayalım:
 *   `C`: Sınıf (yani `bilgisayar_alimi=evet` veya `bilgisayar_alimi=hayır`).
@@ -1361,8 +1361,7 @@ Bu formüldeki terimleri bizim örneğimize uyarlayalım:
 
 **"Naive" (Saf) Varsayım:**
 Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, ..., x_n`) sınıf verildiğinde **koşullu olarak bağımsız** olduğunu varsaymasıdır. Bu, `P(X|C)` terimini basitleştirmemizi sağlar:
-
-`P(X|C) = P(x_1|C) * P(x_2|C) * ... * P(x_n|C)`
+$$P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)$$
 
 ### Laplace Smoothing ve Sayısal Kararlılık
 
