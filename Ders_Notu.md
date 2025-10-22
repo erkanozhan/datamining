@@ -1563,40 +1563,38 @@ Birkaç örnek:
 Weka'da birliktelik kuralı analizi yapmak için verinin özel bir formatta olması gerekir. ARFF (Attribute-Relation File Format) dosyası oluşturacağız.
 
 ### ARFF Dosyası Oluşturma
-
-Bir metin editörü açın ve aşağıdaki yapıyı oluşturun:
-
+Bir metin editörü açın ve aşağıdaki yapıyı oluşturun. Verilerde bulunmayan ögeler için Weka'daki "eksik değer" karşılığı olan `?` (soru işareti) kullanılmıştır.
 ```arff
 @relation market_basket
 
-@attribute M {0, 1}
-@attribute O {0, 1}
-@attribute N {0, 1}
-@attribute K {0, 1}
-@attribute E {0, 1}
-@attribute Y {0, 1}
-@attribute D {0, 1}
-@attribute A {0, 1}
-@attribute U {0, 1}
-@attribute C {0, 1}
-@attribute I {0, 1}
+@attribute M {1, '?'}
+@attribute O {1, '?'}
+@attribute N {1, '?'}
+@attribute K {1, '?'}
+@attribute E {1, '?'}
+@attribute Y {1, '?'}
+@attribute D {1, '?'}
+@attribute A {1, '?'}
+@attribute U {1, '?'}
+@attribute C {1, '?'}
+@attribute I {1, '?'}
 
 @data
-1,1,1,1,1,1,0,0,0,0,0
-0,1,1,1,1,1,1,0,0,0,0
-1,0,0,1,1,0,0,1,0,0,0
-1,0,0,0,0,1,0,0,1,1,0
-0,1,0,1,1,0,0,0,0,1,1
+1,1,1,1,1,1,?,?,?,?,?
+?,1,1,1,1,1,1,?,?,?,?
+1,?,?,1,1,?,?,1,?,?,?
+1,?,?,1,?,1,?,?,1,1,?
+?,1,?,1,1,?,?,?,?,1,1
 ```
 
-Her öge (harf) bir öznitelik (attribute) olarak tanımlanır. Değerler ikili (binary): 1 varsa o öge işlemde var, 0 ise yok.
+Her öge (harf) bir öznitelik (attribute) olarak tanımlanır. Değerler ikili (binary): 1 varsa o öge işlemde var, `?` ise yok.
 
 **Veri satırlarının açıklaması:**
-- İlk satır (T1): M=1, O=1, N=1, K=1, E=1, Y=1, diğerleri=0
-- İkinci satır (T2): O=1, N=1, K=1, E=1, Y=1, D=1, diğerleri=0
-- Üçüncü satır (T3): M=1, K=1, E=1, A=1, diğerleri=0
-- Dördüncü satır (T4): M=1, Y=1, U=1, C=1, diğerleri=0
-- Beşinci satır (T5): O=1, K=1, E=1, C=1, I=1, diğerleri=0
+- İlk satır (T1): M, O, N, K, E, Y ögeleri var. D, A, U, C, I ögeleri yok.
+- İkinci satır (T2): O, N, K, E, Y, D ögeleri var. M, A, U, C, I ögeleri yok.
+- Üçüncü satır (T3): M, K, E, A ögeleri var. O, N, Y, D, U, C, I ögeleri yok.
+- Dördüncü satır (T4): M, K, Y, U, C ögeleri var. O, N, E, D, A, I ögeleri yok.
+- Beşinci satır (T5): O, K, E, C, I ögeleri var. M, N, Y, D, A, U ögeleri yok.
 
 Bu dosyayı `market_data.arff` adıyla kaydedin.
 
@@ -1745,15 +1743,51 @@ Best rules found:
 **Kural 7:** E ve O birlikte 3 işlemde var. Bu 3 işlemde K de kesinlikle var. Güven: 1.0.
 
 **Önemli gözlem:** K, E ve O ögeleri çok güçlü bir ilişki içinde. O görüldüğünde hem K hem E kesinlikle var. K ve E de neredeyse her zaman birlikte görünüyor. Bu üç öge arasında güçlü bir birliktelik var.
+## Lift Değeri: Kuralların Gerçek Anlamını Keşfetmek
 
-## Lift Değeri
+Gençler, birliktelik kurallarını incelerken sadece "destek" ve "güven" değerlerine bakmak bazen yanıltıcı olabilir. Bir kuralın gerçekten ilginç olup olmadığını anlamak için daha derin bir ölçüte ihtiyacımız var: **Lift değeri**.
 
-Lift, bir kuralın ne kadar anlamlı olduğunu ölçer. Lift > 1 ise, sol taraftaki ögeler sağ taraftaki ögeyi tahmin etmekte faydalıdır.
+Düşünün ki, bir markette "ekmek alanların %80'i süt de alır" gibi bir kural buldunuz. Bu kulağa güçlü geliyor, değil mi? Ama ya markete gelen herkesin zaten %90'ı süt alıyorsa? Bu durumda, ekmek almanın süt alma olasılığını artırdığını söylemek pek de doğru olmaz. İşte Lift değeri tam da bu noktada devreye girer ve bir kuralın rastlantısal bir durumdan mı ibaret olduğunu yoksa gerçekten anlamlı bir ilişkiyi mi gösterdiğini ortaya koyar.
 
-Lift hesabı:
-```
-Lift = Güven / (Sağ tarafın desteği)
-```
+### Lift Değeri Ne Anlatır? (Sezgisel Bakış)
+
+Lift, bir kuralın sol tarafındaki ögelerin (antecedent) sağ tarafındaki ögeyi (consequent) tahmin etme gücünün, sağ taraftaki ögenin tek başına görülme olasılığına göre ne kadar arttığını gösterir. Basitçe ifade etmek gerekirse:
+
+*   **Lift > 1:** Kuralın sol tarafındaki ögeler, sağ taraftaki ögenin görülme olasılığını **artırır**. Bu, kuralın rastlantısal olmaktan öte, gerçek bir ilişkiyi yansıttığını gösterir. Ne kadar büyükse, ilişki o kadar güçlüdür.
+*   **Lift = 1:** Kuralın sol tarafındaki ögeler ile sağ taraftaki öge arasında **bağımsız bir ilişki** vardır. Yani, sol tarafın varlığı, sağ tarafın görülme olasılığını ne artırır ne de azaltır.
+*   **Lift < 1:** Kuralın sol tarafındaki ögeler, sağ taraftaki ögenin görülme olasılığını **azaltır**. Bu, ögeler arasında negatif bir ilişki olduğunu, yani sol tarafın varlığının sağ tarafın yokluğunu işaret edebileceğini gösterir.
+
+### Lift Değeri Nasıl Hesaplanır? (Daha Detaylı Bakış)
+
+Lift değeri, bir kuralın güvenini, kuralın sağ tarafındaki ögenin (consequent) genel desteğine bölerek hesaplanır.
+
+Matematiksel olarak, bir $A \rightarrow B$ kuralı için Lift değeri şu formülle ifade edilir:
+
+$$
+\text{Lift}(A \rightarrow B) = \frac{\text{Confidence}(A \rightarrow B)}{\text{Support}(B)} = \frac{P(B|A)}{P(B)}
+$$
+
+Burada:
+*   `Confidence(A → B)`: $A$ ögesi görüldüğünde $B$ ögesinin de görülme olasılığıdır. Yani, $P(B|A)$.
+*   `Support(B)`: $B$ ögesinin tüm veri setinde tek başına görülme olasılığıdır. Yani, $P(B)$.
+
+Bu formül, $A$ ögesinin varlığında $B$'nin görülme olasılığının, $B$'nin genel görülme olasılığına oranını verir. Eğer bu oran 1'den büyükse, $A$'nın varlığı $B$'nin görülme olasılığını artırıyor demektir.
+
+**Örnek Üzerinden Yorumlama:**
+
+Daha önce bulduğumuz `K=1 E=1 ==> Y=1` kuralını ele alalım:
+*   `Confidence(K=1, E=1 → Y=1)`: 0.75 (K ve E birlikte görüldüğünde, Y'nin de olma olasılığı %75)
+*   `Support(Y=1)`: 3/5 = 0.6 (Y ögesinin tüm işlemlerde görülme olasılığı %60)
+
+Şimdi Lift değerini hesaplayalım:
+$$
+\text{Lift}(K=1, E=1 \rightarrow Y=1) = \frac{0.75}{0.6} = 1.25
+$$
+
+Bu 1.25 değeri bize ne söylüyor?
+K ve E ögeleri birlikte görüldüğünde, Y ögesinin görülme olasılığı, Y'nin genel görülme olasılığından %25 daha yüksektir. Bu, K ve E'nin birlikte varlığının Y'nin satın alınmasını **pozitif yönde etkilediğini** gösteren anlamlı bir ilişkidir. Eğer Lift değeri 1'in altında olsaydı, bu kuralın pek de işe yaramadığını, hatta negatif bir ilişki olduğunu düşünebilirdik.
+
+Lift değeri, birliktelik kurallarının iş dünyasındaki gerçek değerini anlamak için kritik bir ölçüttür.
 
 Örneğin:
 - Kural: K=1, E=1 → Y=1
