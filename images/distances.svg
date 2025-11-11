@@ -1,0 +1,346 @@
+<svg width="100%" height="500" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tanımlamalar ve Gradyanlar -->
+  <defs>
+    <!-- Gölge efekti -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="1" dy="1" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Ok başları -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666"/>
+    </marker>
+    
+    <!-- Gradyanlar -->
+    <linearGradient id="euclideanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0077b6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00b4d8;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="manhattanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d62828;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f77f00;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Stil Tanımlamaları -->
+  <style>
+    .label { font-family: 'Segoe UI', 'Arial', sans-serif; font-size: 12px; fill: #333; }
+    .title { font-family: 'Segoe UI', 'Arial', sans-serif; font-size: 14px; font-weight: bold; }
+    .main-title { font-family: 'Segoe UI', 'Arial', sans-serif; font-size: 20px; font-weight: bold; fill: #222; }
+    .formula { font-family: 'Consolas', 'Courier New', monospace; font-size: 10px; fill: #555; }
+    .axis { stroke: #333; stroke-width: 1.5; }
+    .grid { stroke: #e0e0e0; stroke-width: 0.5; opacity: 0.6; }
+    .euclidean { stroke: #0077b6; stroke-width: 2.5; fill: none; opacity: 0.9; }
+    .manhattan { stroke: #d62828; stroke-width: 2.5; fill: none; opacity: 0.9; }
+    .minkowski { stroke: #f77f00; stroke-width: 2.5; fill: none; stroke-dasharray: 8,4; opacity: 0.9; }
+    .chebyshev { stroke: #2a9d8f; stroke-width: 2.5; fill: none; opacity: 0.2; fill: #2a9d8f; }
+    .helper { stroke: #888; stroke-width: 1; stroke-dasharray: 3,2; opacity: 0.7; }
+    .point { fill: #003049; stroke: white; stroke-width: 1.5; }
+    .legend-box { fill: white; stroke: #ccc; stroke-width: 1; rx: 8; opacity: 0.95; }
+    
+    /* Animasyonlar */
+    
+    /* Öklid animasyonu - düz çizgi çizimi */
+    @keyframes drawEuclidean {
+      from { 
+        stroke-dasharray: 150;
+        stroke-dashoffset: 150;
+      }
+      to { 
+        stroke-dasharray: 150;
+        stroke-dashoffset: 0;
+      }
+    }
+    
+    /* Manhattan animasyonu - adım adım ilerleme */
+    @keyframes drawManhattan {
+      0% { 
+        stroke-dasharray: 240;
+        stroke-dashoffset: 240;
+      }
+      50% {
+        stroke-dasharray: 240;
+        stroke-dashoffset: 120;
+      }
+      100% { 
+        stroke-dasharray: 240;
+        stroke-dashoffset: 0;
+      }
+    }
+    
+    /* Minkowski animasyonu - eğri çizim */
+    @keyframes drawMinkowski {
+      from { 
+        stroke-dasharray: 180;
+        stroke-dashoffset: 180;
+        opacity: 0.3;
+      }
+      to { 
+        stroke-dasharray: 180;
+        stroke-dashoffset: 0;
+        opacity: 0.9;
+      }
+    }
+    
+    /* Chebyshev animasyonu - kare genişleme */
+    @keyframes expandChebyshev {
+      0% { 
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 0.15;
+        transform: scale(1.05);
+      }
+      100% { 
+        opacity: 0.2;
+        transform: scale(1);
+      }
+    }
+    
+    /* Nokta animasyonu */
+    @keyframes pulse {
+      0%, 100% { r: 5; opacity: 1; }
+      50% { r: 7; opacity: 0.8; }
+    }
+    
+    .euclidean-animated {
+      animation: drawEuclidean 3s ease-in-out infinite;
+    }
+    
+    .manhattan-animated {
+      animation: drawManhattan 3s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    
+    .minkowski-animated {
+      animation: drawMinkowski 3s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    
+    .chebyshev-animated {
+      animation: expandChebyshev 3s ease-in-out infinite;
+      animation-delay: 1.5s;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    
+    .point-animated {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    /* Hover efektleri */
+    .interactive:hover { 
+      opacity: 1; 
+      cursor: pointer; 
+      filter: brightness(1.2);
+      transition: all 0.3s ease;
+    }
+    
+    .metric-line:hover {
+      stroke-width: 3.5;
+      transition: stroke-width 0.3s ease;
+    }
+  </style>
+
+  <!-- Arka Plan -->
+  <rect width="600" height="500" fill="url(#bgGrad)"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fdfbfb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ebedee;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Başlık -->
+  <text x="300" y="30" class="main-title" text-anchor="middle">
+    Uzaklık Metrikleri
+  </text>
+  <text x="300" y="50" class="label" text-anchor="middle" opacity="0.7">
+    Farklı p değerleri için Minkowski uzaklık ailesi
+  </text>
+
+  <!-- Koordinat Sistemi Grubu -->
+  <g transform="translate(60, 80)">
+    
+    <!-- Izgara -->
+    <g class="grid">
+      <path d="M 0 0 L 0 240 M 40 0 L 40 240 M 80 0 L 80 240 M 120 0 L 120 240 M 160 0 L 160 240 M 200 0 L 200 240 M 240 0 L 240 240 M 280 0 L 280 240"/>
+      <path d="M 0 0 L 280 0 M 0 40 L 280 40 M 0 80 L 280 80 M 0 120 L 280 120 M 0 160 L 280 160 M 0 200 L 280 200 M 0 240 L 280 240"/>
+    </g>
+    
+    <!-- Eksenler -->
+    <g class="axis">
+      <line x1="0" y1="240" x2="290" y2="240" marker-end="url(#arrowhead)"/>
+      <line x1="0" y1="240" x2="0" y2="-10" marker-end="url(#arrowhead)"/>
+      
+      <!-- Eksen etiketleri -->
+      <text x="295" y="245" class="label" font-weight="bold">X Ekseni</text>
+      <text x="-5" y="-15" class="label" font-weight="bold" text-anchor="middle">Y Ekseni</text>
+      
+      <!-- Eksen değerleri -->
+      <g class="label" font-size="10" opacity="0.7">
+        <text x="0" y="255" text-anchor="middle">0</text>
+        <text x="40" y="255" text-anchor="middle">1</text>
+        <text x="80" y="255" text-anchor="middle">2</text>
+        <text x="120" y="255" text-anchor="middle">3</text>
+        <text x="160" y="255" text-anchor="middle">4</text>
+        <text x="200" y="255" text-anchor="middle">5</text>
+        <text x="240" y="255" text-anchor="middle">6</text>
+        
+        <text x="-10" y="245" text-anchor="end">0</text>
+        <text x="-10" y="205" text-anchor="end">1</text>
+        <text x="-10" y="165" text-anchor="end">2</text>
+        <text x="-10" y="125" text-anchor="end">3</text>
+        <text x="-10" y="85" text-anchor="end">4</text>
+        <text x="-10" y="45" text-anchor="end">5</text>
+      </g>
+    </g>
+
+    <!-- Chebyshev Karesi (önce çizilmeli, arkada kalması için) -->
+    <rect x="80" y="80" width="120" height="80" 
+          class="chebyshev chebyshev-animated" 
+          filter="url(#shadow)"/>
+    
+    <!-- Yardımcı Çizgiler -->
+    <g class="helper">
+      <line x1="80" y1="160" x2="200" y2="160"/>
+      <line x1="200" y1="160" x2="200" y2="80"/>
+      
+      <!-- Boyut etiketleri -->
+      <rect x="130" y="165" width="40" height="18" fill="white" opacity="0.9" rx="2"/>
+      <text x="150" y="178" class="label" text-anchor="middle" font-weight="bold">Δx = 3</text>
+      
+      <rect x="205" y="110" width="40" height="18" fill="white" opacity="0.9" rx="2"/>
+      <text x="225" y="123" class="label" text-anchor="middle" font-weight="bold">Δy = 2</text>
+    </g>
+    
+    <!-- Manhattan Uzaklığı (L şeklinde) -->
+    <polyline points="80,160 200,160 200,80" 
+              class="manhattan manhattan-animated metric-line" 
+              filter="url(#shadow)"/>
+    
+    <!-- Minkowski uzaklığı (p=3, eğri) -->
+    <path d="M 80 160 Q 150 140, 200 80" 
+          class="minkowski minkowski-animated metric-line" 
+          filter="url(#shadow)"/>
+    
+    <!-- Öklid Uzaklığı (düz çizgi) -->
+    <line x1="80" y1="160" x2="200" y2="80" 
+          class="euclidean euclidean-animated metric-line" 
+          filter="url(#shadow)"/>
+    
+    <!-- Uzaklık değerleri -->
+    <g font-weight="bold" font-size="11">
+      <rect x="115" y="108" width="35" height="16" fill="white" opacity="0.9" rx="2"/>
+      <text x="133" y="119" class="label" fill="#0077b6" text-anchor="middle">3.61</text>
+      
+      <rect x="135" y="140" width="30" height="16" fill="white" opacity="0.9" rx="2"/>
+      <text x="150" y="151" class="label" fill="#d62828" text-anchor="middle">5</text>
+      
+      <rect x="155" y="115" width="30" height="16" fill="white" opacity="0.9" rx="2"/>
+      <text x="170" y="126" class="label" fill="#f77f00" text-anchor="middle">3.27</text>
+      
+      <rect x="135" y="85" width="30" height="16" fill="white" opacity="0.9" rx="2"/>
+      <text x="150" y="96" class="label" fill="#2a9d8f" text-anchor="middle">3</text>
+    </g>
+    
+    <!-- Noktalar -->
+    <g filter="url(#shadow)">
+      <circle cx="80" cy="160" r="5" class="point point-animated interactive"/>
+      <text x="80" y="185" class="label" font-weight="bold" text-anchor="middle">A(2,2)</text>
+      
+      <circle cx="200" cy="80" r="5" class="point point-animated interactive"/>
+      <text x="200" y="70" class="label" font-weight="bold" text-anchor="middle">B(5,4)</text>
+    </g>
+  </g>
+
+  <!-- Açıklama Kutusu (Legend) -->
+  <g transform="translate(380, 100)">
+    <rect x="0" y="0" width="200" height="280" class="legend-box" filter="url(#shadow)"/>
+    
+    <text x="100" y="25" class="title" text-anchor="middle" font-size="16">
+      Metrik Türleri
+    </text>
+    
+    <!-- Öklid -->
+    <g transform="translate(10, 45)">
+      <line x1="0" y1="0" x2="30" y2="0" class="euclidean" stroke-width="3"/>
+      <text x="35" y="4" class="label" font-weight="bold">Öklid (p=2)</text>
+      <text x="0" y="18" class="formula">d = √(Δx² + Δy²)</text>
+      <text x="0" y="30" class="label" font-size="10" opacity="0.7">Kuş uçuşu mesafe</text>
+    </g>
+    
+    <!-- Manhattan -->
+    <g transform="translate(10, 90)">
+      <line x1="0" y1="0" x2="30" y2="0" class="manhattan" stroke-width="3"/>
+      <text x="35" y="4" class="label" font-weight="bold">Manhattan (p=1)</text>
+      <text x="0" y="18" class="formula">d = |Δx| + |Δy|</text>
+      <text x="0" y="30" class="label" font-size="10" opacity="0.7">Şehir blokları mesafesi</text>
+    </g>
+    
+    <!-- Minkowski -->
+    <g transform="translate(10, 135)">
+      <line x1="0" y1="0" x2="30" y2="0" class="minkowski" stroke-width="3"/>
+      <text x="35" y="4" class="label" font-weight="bold">Minkowski (p=3)</text>
+      <text x="0" y="18" class="formula">d = (|Δx|³ + |Δy|³)^(1/3)</text>
+      <text x="0" y="30" class="label" font-size="10" opacity="0.7">Genel formül (p≥1)</text>
+    </g>
+    
+    <!-- Chebyshev -->
+    <g transform="translate(10, 180)">
+      <rect x="0" y="-5" width="30" height="10" class="chebyshev" opacity="0.3"/>
+      <text x="35" y="4" class="label" font-weight="bold">Chebyshev (p→∞)</text>
+      <text x="0" y="18" class="formula">d = max(|Δx|, |Δy|)</text>
+      <text x="0" y="30" class="label" font-size="10" opacity="0.7">Satranç tahtası mesafesi</text>
+      <text x="0" y="42" class="label" font-size="10" opacity="0.7">Kral hamlesi sayısı</text>
+    </g>
+    
+    <!-- Genel formül -->
+    <g transform="translate(10, 235)">
+      <rect x="-5" y="-5" width="180" height="35" fill="#f0f0f0" rx="5" opacity="0.5"/>
+      <text x="85" y="5" class="label" font-size="11" text-anchor="middle" font-weight="bold">
+        Minkowski Genel Formül:
+      </text>
+      <text x="85" y="20" class="formula" text-anchor="middle">
+        d = (Σ|xi - yi|^p)^(1/p)
+      </text>
+    </g>
+  </g>
+
+  <!-- Alt Bilgi Paneli -->
+  <g transform="translate(60, 350)">
+    <rect x="0" y="0" width="480" height="120" fill="white" stroke="#ddd" rx="8" opacity="0.95"/>
+    
+    <text x="15" y="25" class="title" font-size="14">Chebyshev Uzaklığı Açıklaması:</text>
+    
+    <text x="15" y="45" class="label">
+      <tspan font-weight="bold">Chebyshev uzaklığı (L∞ normu)</tspan>, iki nokta arasındaki maksimum koordinat farkını ölçer.
+    </text>
+    
+    <text x="15" y="62" class="label">
+      Örnekte: max(|5-2|, |4-2|) = max(3, 2) = 3 birim. Yeşil kare bu mesafeyi gösterir.
+    </text>
+    
+    <text x="15" y="79" class="label">
+      <tspan font-weight="bold">Kullanım alanları:</tspan> Satranç (kral hamlesi), sınırsız hareket, görüntü işleme, maksimum hata ölçümü.
+    </text>
+    
+    <text x="15" y="96" class="label">
+      <tspan font-weight="bold">Özellik:</tspan> p→∞ limitinde Minkowski uzaklığı Chebyshev'e yakınsar. Her eksen eşit önemde.
+    </text>
+    
+    <text x="15" y="113" class="label" opacity="0.7" font-style="italic">
+      Not: Animasyonlar farklı metriklerin hesaplama mantığını göstermektedir.
+    </text>
+  </g>
+</svg>

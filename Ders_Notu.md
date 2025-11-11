@@ -168,7 +168,7 @@ KDD sürecinin nihai hedefi, sadece herhangi bir örüntü bulmak değil, aşağ
 
 Veri madenciliği, sıklıkla KDD süreciyle eş anlamlı olarak kullanılsa da, metodolojik olarak KDD'nin yalnızca bir adımıdır; ancak en merkezi adımıdır. KDD, veriden bilgiye ulaşmayı hedefleyen bütünsel bir metodoloji iken, veri madenciliği bu sürecin içerisinde belirli algoritmalar kullanarak örüntülerin fiilen çıkarıldığı analitik aşamayı temsil eder. Kısacası, KDD "bilgi keşfi"nin stratejik yol haritasını çizerken, veri madenciliği bu haritadaki en önemli "keşif" eylemidir.
 
-### Efor Dağılımı ve Geleneksel Yöntemlerin Rolü
+### Geleneksel Yöntemlerin Rolü
 Uygulamada, bir KDD projesinde harcanan zaman ve eforun büyük bir kısmı—genellikle %80'e varan bir oranı—veri madenciliği adımından önceki hazırlık aşamalarına (veri seçimi, ön işleme ve dönüşüm) ayrılır. Bunun temel nedeni, gerçek dünya verilerinin genellikle "kirli" (eksik, gürültülü, tutarsız) olmasıdır. Veri madenciliği algoritmalarının başarısı, doğrudan girdi verisinin kalitesine bağlıdır. "Çöp girer, çöp çıkar" (Garbage In, Garbage Out) prensibi, bu aşamanın kritik önemini vurgular.
 
 KDD sürecinin başlangıcında, genellikle standart veritabanı sorgulama dilleri (SQL) ve Çevrimiçi Analitik İşleme (OLAP) araçları ile bir ön analiz yapılır. Bu araçlar, veritabanında açıkça var olan bilgileri özetlemek, filtrelemek ve raporlamak için son derece güçlüdür. Ancak bu geleneksel yöntemler, verinin derinliklerindeki örtük, daha önce bilinmeyen ve tahmine dayalı ilişkileri ortaya çıkarmada yetersiz kalır. İşte bu noktada veri madenciliği devreye girer ve SQL'in cevaplayamadığı sorulara odaklanır:
@@ -1444,95 +1444,6 @@ Bu yaklaşım, sadece pratik bir hile değil, aynı zamanda sağlam bir teorik t
 
 Sonuç olarak, elimizdeki ipuçları ve basit varsayımlarla yapılan hesaplama yeni müşterinin satın alma olasılığının daha yüksek olduğunu gösteriyor.
 
-## Örnek Uygulama: SMS Spam Tespiti Naive Bayes ile
-Gençler,
-
-Aşağıda SMS spam örneğini Weka ile adım adım, önce uygulamada yapılacak temel işler sonra dikkat edilmesi gereken teknik ayrıntılar şeklinde açıklıyorum. Her adımı sırasıyla uygulayın; gerektiğinde küçük ayarlarla deney yapın.
-
-1) Veri edinme ve açma
-- Veri kaynağı: https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip  
-- İki yol:
-    - Hızlı yol: Weka Explorer → Preprocess → Open URL... ile ZIP adresini deneyin. (Bazı Weka sürümleri ZIP içeriğini otomatik açmayabilir.)
-    - Güvenli yol: ZIP'i indirin, açın ve içindeki SMSSpamCollection dosyasını alın. Bu dosya genelde her satırda "label<TAB>message" formatındadır. Gerekirse CSV/ARFF’e dönüştürün (Weka Explorer’da Open file... ile CSV yüklenebilir).
-- Dosyayı açarken sınıf (label) sütununun nominal (spam/ham) olduğundan emin olun.
-
-2) Metni sayısallaştırma (ön işlem)
-- Preprocess sekmesinde StringToWordVector filtresini seçin.
-- Önemli ayarlar:
-    - lowerCaseTokens = True (Küçük harfe çevir)
-    - outputWordCounts = True (kelime frekanslarını kullan) — NaiveBayesMultinomial ile genelde tercih edilir.
-    - wordsToKeep = 1000–5000 (ilk deneme için 1000 iyi bir başlangıç)
-    - useStoplist = True (standart stop-word listesi)
-    - stemmer = PorterStemmer (isteğe bağlı; kelime çeşitlemesini azaltır)
-    - tokenizer: WordTokenizer veya NGramTokenizer (tek kelime ile başlayın; gerekirse 2-gram deneyin)
-    - TF/IDF: önce sayılarla çalışın; TF-IDF kullanımı farklı davranış verebilir (deneyin).
-- Apply ile filtreyi uyguladıktan sonra veri setiniz artık birçok sayısal öznitelikten oluşacaktır. Sınıf özniteliğinin (spam/ham) korunup korunmadığını kontrol edin.
-
-3) Sınıflandırıcı seçimi ve eğitim
-- Classify sekmesine geçin.
-- Choose -> weka.classifiers.bayes.NaiveBayesMultinomial seçin (metin frekansları için uygun).
-- Test options: 10-fold cross-validation seçin (varsayılan olarak stratified olur). Random seed = 1 gibi sabit bir değer kullanın.
-- Start ile eğitimi başlatın.
-
-4) Sonuçları okuma ve yorumlama
-- Confusion matrix: dört hücreyi okuyun (True Negatives, False Positives, False Negatives, True Positives). 
-    - False Positive = normal mesajın (ham) yanlışlıkla spam işaretlenmesi — kullanıcı açısından daha maliyetli olabilir.
-    - False Negative = spam’in kaçması — güvenlik/başarı açısından önemli.
-- Raporta Accuracy, Precision, Recall, F1 ve ROC AUC değerlerine bakın.
-    - Spam tespitte genelde Precision (etiketlenen spam’lerin gerçekten spam olma oranı) ile Recall arasında tercih/denge gerekir; kullanım senaryonuza göre öncelik belirleyin.
-- Eğer sınıflar dengesizse (genelde ham çok daha fazladır), accuracy yanıltıcı olabilir; Precision/Recall ve AUC tercih edin.
-
-5) Basit iyileştirmeler ve pratik kontroller
-- Eğer çok fazla false positive görürseniz:
-    - threshold veya maliyet matrisi uygulamayı düşünün (Weka’da CostSensitiveClassifier ya da resampling).
-    - sınıf ağırlıklarını değiştirin veya yanlış sınıf cezalarını ayarlayın.
-- Daha iyi performans için deneyler:
-    - wordsToKeep’i değiştirin (1000 → 3000).
-    - n-gram (1 vs 2-gram) deneyin.
-    - stemming ve stoplist varyasyonlarını test edin.
-    - outputWordCounts yerine boolean (present/absent) ile karşılaştırın.
-    - TF-IDF’yi deneyin; bazı durumlarda Multinomial yerine Bernoulli/naive bayes versiyonları farklı sonuç verir.
-
-6) Teknik notlar (ince ayar ve nedenleri)
-- Neden NaiveBayesMultinomial? Kelime frekanslarını (counts) direkt modelleyen formülü içerir; metin verilerinde sıklıkla daha stabil ve hızlıdır.
-- Smoothing (Laplace): Çok nadir görülen kelimeler veya hiç görülmeyen kelimeler için sıfır olasılığı engelleyen düzeltme gereklidir; Multinomial uygulamalar genelde smoothing içerir.
-- Log-olasılık: Gerçek uygulamalarda P(X|C) çarpımları çok küçük sayılar üretir; algoritma iç hesaplamalarda log-probabilities ile çalışır (numerik kararlılık).
-- Tokenizasyon ve özellik uzayı: Hangi tokenizasyonu kullandığınız ve kaç kelime tuttuğunuz model kapasitesini doğrudan etkiler. Çok geniş sözlük → daha yüksek varyans; çok dar → yüksek bias.
-- Özellik seçimi: Bilgi kazancı (InfoGain) veya chi-square ile öznitelik seçimi yaparak gürültüyü azaltmak performansı artırabilir.
-- Değerlendirme güvenilirliği: 10-fold CV iyi bir başlangıçtır; model tuning (hiperparametre araması) yaparken iç içe (nested) CV veya ayrı doğrulama kümesi kullanın.
-
-7) Hızlı kontrol listesi (uygulamaya başlamadan önce)
-- Dosyayı düzgün yüklediniz mi? (label ve message doğru kolonlarda)
-- Sınıf etiketi nominal mi?
-- StringToWordVector’da outputWordCounts ve lowerCaseTokens doğru mu?
-- Classify bölümünde NaiveBayesMultinomial seçili mi?
-- 10-fold CV ile değerlendirme yaptınız mı?
-- Confusion matrix’i ve Precision/Recall/F1’i incelediniz mi?
-
-Not: Her ayar değişikliğinden sonra yalnızca bir parametreyi değiştirip sonucu karşılaştırın. Böylece hangi değişikliğin etkili olduğunu açıkça görürsünüz.
-
-Kısa örnek deney sırası (pratik):
-1. Orijinal pipeline ile temel sonuç alın (wordsToKeep=1000, unigrams, stemmer on).
-2. wordsToKeep=3000 ile tekrar çalıştırın; değişim kaydedin.
-3. Unigrams → unigrams+2‑grams ile tekrar çalıştırın.
-4. outputWordCounts = False (sadece var/yok) ile tekrar karşılaştırın.
-5. En iyi sonuç veren kombinasyonda bilgi kazancı ile üst 500 özelliği seçip tekrar test edin.
-
-Bu adımları takip ederek Weka’da SMS spam sınıflandırmasını hem uygulamalı hem de bilinçli bir şekilde deneyimleyebilirsiniz. Her adımda sonuçları kaydedin ve küçük değişikliklerin etkisini not edin; model iyileştirme sistematik, ölçülebilir denemelerle yapılır.
-
-
-# Weka ile Naive Bayes Sınıflandırması: Adım Adım Uygulama
-Bu bölümde, Weka kullanarak Naive Bayes sınıflandırıcısını nasıl uygulayacağınızı adım adım anlatacağım. Örnek veri seti olarak `araclarvekaza.csv` dosyasını kullanacağız. Bu dosya, araçların çeşitli özelliklerini ve kaza durumlarını içeren bir veri setidir.
-### 1. Weka'yı Başlatma ve Veri Setini Yükleme
-İlk olarak, Weka Explorer'ı başlatın ve veri setimizi yükleyelim.
-*   **Weka Explorer'ı Açma:** Weka'yı başlatın ve "Explorer" seçeneğini tıklayın.
-*   **Veri Setini Yükleme:** "Preprocess" sekmesine gidin   ve "Open file..." butonuna tıklayarak `araclarvekaza.csv` dosyasını seçin. Dosya yüklendikten sonra, Weka veri setinin özniteliklerini ve örnek sayısını gösterecektir. 
-*   **Sınıf Özniteliğini Belirleme:** Veri setindeki hedef özniteliği (örneğin, "kaza_durumu") sınıf özniteliği olarak ayarlayın. Bunu yapmak için, "Class" açılır menüsünden ilgili özniteliği seçin.
-*   **Veri Setini İnceleme:** Veri setindeki özniteliklerin türlerini (nominal, sayısal vb.) ve eksik değerleri kontrol edin. Gerekirse, eksik değerleri doldurabilir veya ilgili öznitelikleri kaldırabilirsiniz.
-*  **Öznitelik Türlerini Doğrulama:** Naive Bayes algoritması, nominal ve sayısal özniteliklerle çalışabilir. Ancak, nominal özniteliklerin doğru şekilde tanımlandığından emin olun. Gerekirse, sayısal öznitelikleri nominal hale getirmek için "Discretize" filtresini kullanabilirsiniz.
-*  **Veri Setini Bölme:** Modeli eğitmek ve test etmek için veri setini eğitim ve test setlerine bölebilirsiniz. Weka'da bu işlemi "Percentage Split" seçeneği ile yapabilirsiniz (örneğin, %70 eğitim, %30 test).
-
-Veri Madenciliği-Birliktelik Kuralları(Association Rules)
 
 
 # Weka ile Birliktelik Kuralı Madenciliği
@@ -1834,7 +1745,7 @@ Weka'da sonuçları farklı formatlarda kaydedebilirsiniz:
 2. **Save result buffer** seçin
 3. Bir metin dosyası olarak kaydedin
 
-## Pratik İpuçları
+## İpuçları
 
 1. **Veri Hazırlığı:** Gerçek uygulamalarda veriniz CSV formatında olabilir. Bu durumda Excel veya bir Python betiği ile ARFF formatına dönüştürmeniz veya Weka'nın csv loader'ını kullanmanız gerekebilir.
 
@@ -1879,3 +1790,886 @@ Birliktelik kuralı madenciliği, hangi ögelerin birlikte sık görüldüğün�
 5. Lift değerine bakarak kuralın anlamlılığını değerlendirin
 
 Bu yöntem market sepeti analizinden metin madenciliğine, web analizi'nden biyoinformatiğe kadar birçok alanda kullanılır.
+
+
+## Veri Madenciliği - Kümeleme (Clustering) Analizi
+
+Gençler, şimdi veri madenciliğinin en temel ve sezgisel konularından birine, **Kümeleme Analizi**'ne odaklanacağız. Elimizde büyük bir veri yığını olduğunu düşünün. Bu yığının içinde, birbirine benzeyen ancak henüz tanımlanmamış gruplar olabilir. Kümeleme analizi, tam da bu noktada devreye girer.
+
+Bu analizin öncelikli amacı, bir araştırma sonucunda elde edilen gözlemleri veya veri noktalarını, aralarındaki **benzerlikleri** temel alarak iki veya daha fazla doğal gruba ayırmaktır. Buradaki kritik nokta, bu grupların önceden tanımlanmamış olmasıdır; yani bir sınıflandırma problemindeki gibi "etiketli" veriye ihtiyacımız yoktur. Algoritma, verinin kendi iç yapısını keşfederek bu grupları oluşturur.
+
+Peki, bu gruplama bize ne sağlar? Kümeleme analizi sonucunda elde edilen bu bölünmeler, nesnelerin veya olayların altında yatan yapıları hakkında **varsayımlar oluşturmamızı** sağlar. Örneğin, bir müşteri veri setini kümelediğimizde, ortaya çıkan her bir grup (küme), belirli demografik özelliklere veya satın alma davranışlarına sahip farklı bir müşteri segmentini temsil edebilir. Bu segmentleri inceleyerek, daha önce fark etmediğimiz pazar değerlerini veya müşteri profillerini keşfedebiliriz. Bu, genellikle **keşifsel (exploratory)** bir yaklaşımdır; yani verinin bize ne anlattığını anlamaya çalışırız.
+
+Ayrıca, kümeleme analizi sadece keşifsel amaçlar için değil, aynı zamanda **kanıtlayıcı (confirmatory)** amaçlar için de kullanılabilir. Eğer belirli bir hipotezimiz varsa (örneğin, "müşterilerimiz aslında üç ana gruba ayrılıyor olmalı"), kümeleme algoritmalarını kullanarak bu hipotezin veri tarafından desteklenip desteklenmediğini test edebiliriz. Bu sayede, teorik beklentilerimiz ile ampirik veriler arasındaki uyumu değerlendirme fırsatı buluruz.
+
+Özetle, kümeleme analizi, karmaşık veri setlerini daha anlamlı ve yönetilebilir parçalara ayırarak, verinin içindeki gizli yapıları ortaya çıkarmamıza ve bu yapılar üzerinden yeni bilgiler edinmemize olanak tanıyan güçlü bir araçtır.
+Kümeleme analizine başlamadan önce, bu keşifsel yolculuğumuzun sağlam temeller üzerine inşa edildiğinden emin olmak için bazı temel sorulara yanıt bulmamız gerekir. Bu sorular, hem analizin yönünü belirleyecek hem de elde edeceğimiz sonuçların anlamlılığını doğrudan etkileyecektir.
+
+1.  **Araştırmanın Ana Hatları Belirli mi? (Amacımız ve Beklentilerimiz Neler?)**
+    Kümeleme, etiketlenmemiş verilerdeki gizli yapıları ortaya çıkarmayı hedefler. Ancak bu, tamamen amaçsız bir keşif olduğu anlamına gelmez. Hangi tür grupları aradığımız, bu gruplardan ne gibi içgörüler elde etmeyi umduğumuz, hatta hangi özelliklerin bu gruplamada önemli olabileceğine dair önsezilerimiz, analiz sürecini şekillendirir. Örneğin, müşteri segmentasyonu yapıyorsak, "satın alma davranışlarına göre mi, yoksa demografik özelliklere göre mi gruplama yapmalıyız?" sorusu, hangi veri özniteliklerine odaklanacağımızı belirler. Bu ön belirleme, hem veri hazırlığı hem de algoritma seçimi için bir rehber görevi görür.
+
+2.  **Gözlemlerin Benzerlik Ölçümü Nasıl Olmalı? (Hangi Uzaklık Metriğini Kullanacağız?)**
+    Kümeleme algoritmalarının temelinde, veri noktaları arasındaki "benzerlik" veya "uzaklık" kavramı yatar. Ancak "benzerlik" evrensel bir kavram değildir; farklı veri türleri ve problem bağlamları için farklı şekillerde tanımlanır. İki veri noktasının birbirine ne kadar yakın olduğunu ölçmek için kullanılan bu matematiksel fonksiyonlara **uzaklık metrikleri** denir. Örneğin, sayısal veriler için en yaygın kullanılanlardan biri **Öklid uzaklığı**dır; bu, iki nokta arasındaki düz çizgi mesafesini ölçer. Ancak metin verileri gibi yüksek boyutlu ve seyrek verilerde **kosinüs benzerliği** gibi metrikler, vektörler arasındaki açıyı ölçerek yönsel benzerliği yakalamada daha etkili olabilir. Doğru metriği seçmek, kümelerin doğal yapısını doğru bir şekilde yansıtabilmek için kritik öneme sahiptir.
+
+3.  **Verilerin Standartları Olmalı mı? (Öznitelik Ölçeklendirmesi Gerekli mi?)**
+    Çoğu kümeleme algoritması, uzaklık hesaplamalarına dayanır. Eğer veri setimizdeki öznitelikler (değişkenler) farklı ölçeklere sahipse, yani bir öznitelik çok büyük değerler alırken diğeri çok küçük değerler alıyorsa, büyük ölçekli öznitelikler uzaklık hesaplamalarına orantısız bir şekilde etki edebilir. Örneğin, "yaş" (0-100) ve "yıllık gelir" (10.000-1.000.000) gibi iki özniteliği düşünün. Gelirdeki küçük bir değişim bile yaştaki büyük bir değişimden daha fazla etki yaratabilir. Bu durumu önlemek için verilerin **ölçeklendirilmesi (scaling)** veya **normalleştirilmesi (normalization)** gerekebilir. Bu işlem, tüm özniteliklerin benzer bir aralığa (örneğin 0-1 arasına) veya benzer bir istatistiksel dağılıma (ortalama 0, standart sapma 1) sahip olmasını sağlayarak, her özniteliğin kümeleme sürecine eşit katkıda bulunmasını temin eder.
+
+4.  **Elimdeki Veriyi Kaç Kümeye Ayırırsam Optimal Dağılımı Elde Ederim? (Optimal Küme Sayısı 'k' Nasıl Belirlenir?)**
+    Birçok kümeleme algoritması (özellikle K-Means gibi), analize başlamadan önce kaç adet küme oluşturulacağını (`k` değeri) bizden ister. Ancak bu `k` değerini önceden bilmek genellikle zordur. Veri setinin doğal yapısını en iyi yansıtan küme sayısını bulmak için çeşitli yöntemler kullanılır. **Dirsek yöntemi (Elbow Method)** ve **Siluet katsayısı (Silhouette Score)** gibi istatistiksel yaklaşımlar, farklı `k` değerleri için kümeleme kalitesini değerlendirerek bize bir fikir verebilir. Bununla birlikte, alan bilgisi ve iş hedefleri de optimal `k` değerinin belirlenmesinde önemli bir rol oynar. Bazen istatistiksel olarak "en iyi" görünen `k` değeri, iş açısından en anlamlı `k` değeri olmayabilir.
+
+Bu sorulara verilen yanıtlar, kümeleme analizinin başarısı için temel bir çerçeve oluşturur. Kümeleme sonuçlarının kalitesi, kümeler içinde yüksek derecede **homojenlik** (yani, aynı kümedeki veri noktalarının birbirine çok benzemesi) ve kümeler arasında ise yüksek derecede **heterojenlik** (yani, farklı kümelerdeki veri noktalarının birbirinden belirgin şekilde farklı olması) göstermelidir. Bu denge, elde edilen kümelerin hem iç tutarlılığını hem de ayırt ediciliğini garanti eder.
+
+## Benzerlik ve Uzaklık Ölçütleri: Kümelerin Temel Taşı
+
+Kümeleme analizinin kalbinde, gözlemlediğimiz bireylerin veya nesnelerin birbirine ne kadar benzediğini ya da birbirinden ne kadar farklı olduğunu belirleme ihtiyacı yatar. Bu, kümelerin oluşumunu sağlayan temel prensiptir. Bir kümeleme algoritması, veri noktalarını bir araya getirirken, aslında aralarındaki **benzerlikleri** veya **uzaklıkları** hesaplar. Bu hesaplamalar, kümelerin içindeki homojenliği ve kümeler arasındaki heterojenliği sağlamak için kritik öneme sahiptir.
+
+Peki, iki veri nesnesinin birbirine ne kadar benzediğini veya ne kadar uzak olduğunu nasıl ölçeriz? Bu sorunun cevabı, elimizdeki verinin türüne ve problemimizin doğasına göre değişir. "Benzerlik" kavramı, evrensel bir tanıma sahip değildir; farklı bağlamlarda farklı şekillerde yorumlanabilir. Bu nedenle, doğru **benzerlik ölçütü (similarity measure)** veya **uzaklık metriği (distance metric)** seçimi, kümeleme analizinin başarısı için hayati öneme sahiptir.
+
+### Veri Türlerine Göre Benzerlik ve Uzaklık
+
+Veri setimizdeki öznitelikler (değişkenler) farklı türlerde olabilir. Her veri türü için uygun bir ölçüm yöntemi bulunur:
+
+1.  **Kategorik (Nominal) Veriler İçin:**
+    Eğer özniteliklerimiz "renk" (kırmızı, mavi, yeşil) veya "cinsiyet" (erkek, kadın) gibi kategorik değerler alıyorsa, iki nesnenin benzerliğini, sahip oldukları ortak kategorik değerlerin sayısına bakarak belirleyebiliriz.
+    *   **Basit Eşleşme Katsayısı (Simple Matching Coefficient):** İki nesne arasındaki eşleşen öznitelik sayısını, toplam öznitelik sayısına bölerek basit bir benzerlik oranı elde ederiz. Örneğin, iki müşterinin "medeni durumu" ve "eğitim seviyesi" gibi özelliklerinin kaç tanesinin aynı olduğuna bakmak gibi.
+    *   **Jaccard Katsayısı:** Özellikle ikili (binary) verilerde veya seyrek veri setlerinde (örneğin, market sepeti analizinde hangi ürünlerin birlikte alındığı) kullanılır. İki nesnenin ortak olarak sahip olduğu pozitif öznitelik sayısını, en az birinde pozitif olan özniteliklerin toplam sayısına bölerek benzerliği ölçer.
+
+2.  **Sayısal (Metrik) Veriler İçin:**
+    Özniteliklerimiz "yaş", "gelir", "sıcaklık" gibi sayısal değerler alıyorsa, benzerlik genellikle geometrik uzaklık kavramlarıyla ifade edilir.
+    *   **Öklid Uzaklığı (Euclidean Distance):** En yaygın kullanılan uzaklık metriğidir. İki nokta arasındaki düz çizgi mesafesini ölçer. İki boyutlu bir grafikte iki nokta arasındaki cetvelle ölçtüğümüz mesafe gibi düşünebilirsiniz. Daha fazla boyutta da bu mantık geçerlidir.
+    *   **Manhattan Uzaklığı (Manhattan Distance / City Block Distance):** "Şehir bloğu uzaklığı" olarak da bilinir. İki nokta arasındaki mesafeyi, sadece yatay ve dikey hareketlerle katedilen toplam yol olarak hesaplar. Bir şehirdeki bloklar arasında hareket ederken köşeleri dönerek ilerlemek gibi düşünebilirsiniz.
+    *   **Minkowski Uzaklığı:** Öklid ve Manhattan uzaklıklarını kapsayan genelleştirilmiş bir formüldür. Parametresi değiştirilerek farklı uzaklık ölçümleri elde edilebilir.
+
+3.  **Karma Veriler İçin:**
+    Gerçek dünya veri setleri genellikle hem kategorik hem de sayısal öznitelikler içerir. Bu durumda, her öznitelik türü için uygun uzaklık ölçütleri ayrı ayrı hesaplanır ve ardından bu ölçütler birleştirilerek genel bir uzaklık değeri elde edilir.
+
+Doğru uzaklık veya benzerlik ölçütünü seçmek, kümelerin kalitesini ve elde edilen içgörülerin anlamlılığını doğrudan etkiler. Yanlış bir ölçüt, verinin doğal yapısını bozarak anlamsız kümelere yol açabilir. Bu nedenle, veri setimizin yapısını ve analiz amacımızı iyi anlamak, bu kritik kararı verirken bize yol gösterecektir.
+
+
+***
+
+### Veri Madenciliği ve Kümeleme Analizi: Benzerliklerin Hesaplanması
+
+Kümeleme analizinin temel adımlarından biri, veri setindeki gözlemlerin (bu örnekte müşterilerin) birbirlerine ne kadar benzediğini veya ne kadar uzak olduğunu ölçmektir. Elimizdeki veri seti, kategorik değişkenler içerdiğinden, benzerliği tespit etmek için özel bir yöntem kullanmamız gerekir. Bu derste, eşleşen özelliklerin sayılmasına dayalı basit bir yöntemi inceleyeceğiz.
+
+Yöntemin temel prensibi şudur: İki müşteri karşılaştırılırken, her bir özellik (değişken) için tercihleri kontrol edilir. Eğer iki müşterinin bir özellik için tercihi **aynı ise 1**, **farklı ise 0** puanı verilir. İki müşteri arasındaki toplam benzerlik skoru, tüm özelliklerden aldıkları puanların toplanmasıyla bulunur. En yüksek toplam puana sahip olan çift, birbirine en çok benzeyen çift olarak kabul edilir.
+
+#### İncelenecek Veri Seti
+
+Analize başlamadan önce, 5 müşterinin otomobil tercihlerini içeren veri tablosunu tekrar hatırlayalım:
+
+| Kişiler (Müşteri) | Model | Ülke | Renk |
+| :--- | :---: | :--: | :--: |
+| **1** | 2 | 2 | 3 |
+| **2** | 2 | 1 | 4 |
+| **3** | 1 | 1 | 2 |
+| **4** | 3 | 1 | 1 |
+| **5** | 3 | 2 | 3 |
+
+Bu tabloda 5 müşteri olduğundan, ikili olarak toplam C(5,2) = 10 farklı müşteri çifti ilişkisi bulunmaktadır. Şimdi her bir çift için benzerlik skorlarını hesaplayalım.
+
+#### Benzerlik Skorlarının Hesaplanması (S)
+
+Her bir `S_ij` değeri, i numaralı müşteri ile j numaralı müşteri arasındaki benzerlik skorunu ifade etmektedir.
+
+*   **Müşteri 1 ve 2 (S₁₂):**
+    *   Model: 2 vs 2 → **1** (Aynı)
+    *   Ülke: 2 vs 1 → **0** (Farklı)
+    *   Renk: 3 vs 4 → **0** (Farklı)
+    *   **S₁₂ = 1 + 0 + 0 = 1**
+
+*   **Müşteri 1 ve 3 (S₁₃):**
+    *   Model: 2 vs 1 → **0** (Farklı)
+    *   Ülke: 2 vs 1 → **0** (Farklı)
+    *   Renk: 3 vs 2 → **0** (Farklı)
+    *   **S₁₃ = 0 + 0 + 0 = 0**
+
+*   **Müşteri 1 ve 4 (S₁₄):**
+    *   Model: 2 vs 3 → **0** (Farklı)
+    *   Ülke: 2 vs 1 → **0** (Farklı)
+    *   Renk: 3 vs 1 → **0** (Farklı)
+    *   **S₁₄ = 0 + 0 + 0 = 0**
+
+*   **Müşteri 1 ve 5 (S₁₅):**
+    *   Model: 2 vs 3 → **0** (Farklı)
+    *   Ülke: 2 vs 2 → **1** (Aynı)
+    *   Renk: 3 vs 3 → **1** (Aynı)
+    *   **S₁₅ = 0 + 1 + 1 = 2**
+
+*   **Müşteri 2 ve 3 (S₂₃):**
+    *   Model: 2 vs 1 → **0** (Farklı)
+    *   Ülke: 1 vs 1 → **1** (Aynı)
+    *   Renk: 4 vs 2 → **0** (Farklı)
+    *   **S₂₃ = 0 + 1 + 0 = 1**
+
+*   **Müşteri 2 ve 4 (S₂₄):**
+    *   Model: 2 vs 3 → **0** (Farklı)
+    *   Ülke: 1 vs 1 → **1** (Aynı)
+    *   Renk: 4 vs 1 → **0** (Farklı)
+    *   **S₂₄ = 0 + 1 + 0 = 1**
+
+*   **Müşteri 2 ve 5 (S₂₅):**
+    *   Model: 2 vs 3 → **0** (Farklı)
+    *   Ülke: 1 vs 2 → **0** (Farklı)
+    *   Renk: 4 vs 3 → **0** (Farklı)
+    *   **S₂₅ = 0 + 0 + 0 = 0**
+
+*   **Müşteri 3 ve 4 (S₃₄):**
+    *   Model: 1 vs 3 → **0** (Farklı)
+    *   Ülke: 1 vs 1 → **1** (Aynı)
+    *   Renk: 2 vs 1 → **0** (Farklı)
+    *   **S₃₄ = 0 + 1 + 0 = 1**
+
+*   **Müşteri 3 ve 5 (S₃₅):**
+    *   Model: 1 vs 3 → **0** (Farklı)
+    *   Ülke: 1 vs 2 → **0** (Farklı)
+    *   Renk: 2 vs 3 → **0** (Farklı)
+    *   **S₃₅ = 0 + 0 + 0 = 0**
+
+*   **Müşteri 4 ve 5 (S₄₅):**
+    *   Model: 3 vs 3 → **1** (Aynı)
+    *   Ülke: 1 vs 2 → **0** (Farklı)
+    *   Renk: 1 vs 3 → **0** (Farklı)
+    *   **S₄₅ = 1 + 0 + 0 = 1**
+
+---
+
+### Sonuç ve Yorum
+
+Hesaplamalar sonucunda en yüksek benzerlik skorunun **S₁₅ = 2** olduğunu görüyoruz. Bu, veri setimizdeki birbirine en çok benzeyen çiftin **1. ve 5. müşteriler** olduğu anlamına gelir. Bu iki müşteri, 3 özellikten 2'sinde aynı tercihi yapmıştır.
+
+Diğer yandan, skoru 1 olan (S₁₂, S₂₃, S₂₄, S₃₄, S₄₅) ve skoru 0 olan (S₁₃, S₁₄, S₂₅, S₃₅) çiftler de bulunmaktadır.
+
+Bu yöntem, en benzer çifti net bir şekilde ortaya koyar. Ancak, bu skorların mutlak eşleşme sayılarını göstermesi nedeniyle bir zayıflığı vardır. Örneğin, skoru "1" olan tüm çiftler aynı derecede mi benzerdir? Bu skor, toplam özellik sayısına oranlanmadığı için (yani 1/3 gibi bir değere dönüştürülmediği için) farklı veri setleri arasında veya farklı sayıda özelliğe sahip durumlarda karşılaştırma yapmayı zorlaştırır. Bu yüzden, en çok benzeyen çifti bulmak için etkili olsa da, diğer benzerlikler hakkında derinlemesine ve göreceli yorumlar yapmak daha güçtür.
+
+Şimdi de ağırlıklandırma yöntemini kullanarak analizi derinleştirelim.
+
+***
+
+### Veri Madenciliği ve Kümeleme Analizi: Ağırlıklandırılmış Benzerlik Hesabı
+
+Önceki yöntemde her bir özelliğe (Model, Ülke, Renk) eşit önem vermiştik. Ancak, bazı durumlarda bu yaklaşım yeterli olmayabilir. Örneğin, daha fazla seçeneği olan bir değişkendeki eşleşme, daha az seçeneği olan bir değişkendeki eşleşmeden daha anlamlı veya daha nadir bir durumu ifade ediyor olabilir.
+
+Gözlemler arasındaki benzerliği daha net ve hassas bir şekilde ifade edebilmek için her bir özelliğe bir "ağırlık" atayabiliriz. Bu örnekte, her bir değişkenin sahip olduğu kategori (ölçek) sayısını o değişkenin ağırlığı olarak kabul edeceğiz. Bu yaklaşım, daha fazla alternatife sahip bir özellikteki eşleşmenin, benzerlik skoruna daha fazla katkı yapmasını sağlar.
+
+#### Ağırlıkların Belirlenmesi
+
+*   **Model Değişkeni:** 3 farklı seçeneği var (Klasik, Spor, Aile). **Ağırlık = 3**
+*   **Ülke Değişkeni:** 2 farklı seçeneği var (Japonya, Fransa). **Ağırlık = 2**
+*   **Renk Değişkeni:** 4 farklı seçeneği var (Mavi, Beyaz, Kırmızı, Siyah). **Ağırlık = 4**
+
+Hesaplama yöntemi aynı kalacak (eşleşme için 1, farklılık için 0), ancak bu sefer bulunan 0 veya 1 değerleri, ilgili değişkenin ağırlık değeri ile çarpılacaktır.
+
+**Formül:** `Ağırlıklı Skor = (Eşleşme_Model * 3) + (Eşleşme_Ülke * 2) + (Eşleşme_Renk * 4)`
+
+#### Ağırlıklandırılmış Benzerlik Skorlarının Hesaplanması
+
+Şimdi tüm müşteri çiftleri için bu yeni yönteme göre skorları tekrar hesaplayalım.
+
+*   **S₁₂:** (1 × 3) + (0 × 2) + (0 × 4) = 3 + 0 + 0 = **3**
+*   **S₁₃:** (0 × 3) + (0 × 2) + (0 × 4) = 0 + 0 + 0 = **0**
+*   **S₁₄:** (0 × 3) + (0 × 2) + (0 × 4) = 0 + 0 + 0 = **0**
+*   **S₁₅:** (0 × 3) + (1 × 2) + (1 × 4) = 0 + 2 + 4 = **6**
+*   **S₂₃:** (0 × 3) + (1 × 2) + (0 × 4) = 0 + 2 + 0 = **2**
+*   **S₂₄:** (0 × 3) + (1 × 2) + (0 × 4) = 0 + 2 + 0 = **2**
+*   **S₂₅:** (0 × 3) + (0 × 2) + (0 × 4) = 0 + 0 + 0 = **0**
+*   **S₃₄:** (0 × 3) + (1 × 2) + (0 × 4) = 0 + 2 + 0 = **2**
+*   **S₃₅:** (0 × 3) + (0 × 2) + (0 × 4) = 0 + 0 + 0 = **0**
+*   **S₄₅:** (1 × 3) + (0 × 2) + (0 × 4) = 3 + 0 + 0 = **3**
+
+---
+
+### Sonuçların Değerlendirilmesi ve Karşılaştırılması
+
+Yeni hesaplamalarımıza göre, **en yüksek skoru (6) alan 1. ve 5. müşteriler**, yine en çok benzeyen çift olarak öne çıkmaktadır. Ağırlıklandırma, bu çiftin benzerliğinin ne kadar güçlü olduğunu daha da belirginleştirmiştir.
+
+Ancak daha önemli bir sonuç, önceki yöntemde ortaya çıkan belirsizliğin giderilmesidir:
+
+*   **Ağırlıksız Yöntemde:** S₁₂, S₂₃, S₂₄, S₃₄ ve S₄₅ çiftlerinin hepsi **1** skorunu almıştı. Bu durum, bu beş çiftin hepsinin eşit derecede benzer olduğu gibi bir izlenim yaratıyordu ve aralarında bir önceliklendirme yapmak mümkün değildi.
+*   **Ağırlıklı Yöntemde:** Bu durum netleşmiştir.
+    *   **S₁₂** ve **S₄₅** çiftleri **3** puan almıştır. Bu çiftler, 3 seçenekli "Model" değişkeninde eşleşmiştir.
+    *   **S₂₃**, **S₂₄** ve **S₃₄** çiftleri ise **2** puan almıştır. Bu çiftler ise sadece 2 seçenekli "Ülke" değişkeninde eşleşmiştir.
+
+Bu yeni sonuçlara göre, **1. ve 2. müşteriler** ile **4. ve 5. müşterilerin** benzerliklerinin, diğer üç çifte göre daha anlamlı olduğu söylenebilir. Çünkü eşleşme sağladıkları "Model" değişkeni, "Ülke" değişkenine göre daha fazla kategori içerdiğinden, bu eşleşme daha ayırt edici kabul edilmiştir.
+
+Kısacası, ağırlıklandırma yapmak, benzerlik ölçümlerine daha hassas bir bakış açısı kazandırmış ve gruplar arasındaki benzerlik derecelerini daha net bir şekilde ayrıştırmamızı sağlamıştır.
+
+
+Gençler, önceki bölümde, tamamen kategorik değişkenlerden oluşan bir veri setinde gözlemler arasındaki benzerliği, basit eşleşme katsayısı gibi yöntemlerle nasıl ölçebileceğimizi incelemiştik. Bu yaklaşım, iki gözlemin belirli bir özellik için aynı kategoriye sahip olup olmadığını sayarak bir benzerlik skoru elde etmemizi sağlıyordu. Ancak, gerçek dünya veri setleri nadiren bu kadar homojen olur. **Çoğu zaman, hem kategorik hem de sayısal (metrik) değişkenleri bir arada barındıran karmaşık yapılarla karşılaşırız.
+
+Şimdi düşünelim ki, otomobil tercihleri tablomuzdaki 'Model', 'Ülke' ve 'Renk' gibi kategorik özelliklerin yanına, 'Yıllık Gelir' veya 'Yaş' gibi sayısal bir değişken ekledik. Bu durumda, basit eşleşme katsayısı yöntemimiz yetersiz kalır. Çünkü 'Gelir' gibi sürekli bir değişken için 'aynı' veya 'farklı' demenin ötesinde, 'ne kadar farklı' olduklarını ölçmemiz gerekir. İki kişinin gelirinin 50.000 TL ile 51.000 TL olması ile 50.000 TL ile 500.000 TL olması arasındaki farkı, sadece 'farklı' diyerek göz ardı edemeyiz. Bu, benzerlik ölçümümüzün hassasiyetini ve anlamlılığını ciddi şekilde düşürür.
+
+İşte bu tür karmaşık veri yapıları için, özellikle sayısal değişkenlerin farklılıklarını daha anlamlı bir şekilde değerlendirebilmek adına yeni yaklaşımlara ihtiyacımız doğar. Bu noktada, gözlemler arasındaki 'uzaklığı' veya 'farklılığı' ölçmeye odaklanan iki temel yöntem devreye girer: **Mutlak Sapmalar Yöntemi** ve **Farklar Karesi Toplamı Yöntemi**.
+
+### Mutlak Sapmalar Yöntemi
+
+**Mutlak Sapmalar Yöntemi**, adından da anlaşılacağı gibi, iki gözlem arasındaki her bir sayısal özelliğin farkının mutlak değerini alarak bu farkları toplar. Yani, 'A' ve 'B' gibi iki gözlemimiz ve 'X', 'Y', 'Z' gibi sayısal özelliklerimiz varsa, her bir özellik için `|A_X - B_X|`, `|A_Y - B_Y|`, `|A_Z - B_Z|` gibi mutlak farkları hesaplarız. Ardından bu mutlak farkları toplayarak iki gözlem arasındaki toplam sapmayı elde ederiz. Bu yöntem, her bir özelliğin farkını doğrudan yansıtır ve büyük farkların etkisini doğrusal bir şekilde hesaba katar. Örneğin, bir kişinin geliri 50.000, diğerinin 60.000 ise fark 10.000'dir. Başka bir çiftte 100.000 ve 110.000 ise yine fark 10.000'dir. Her iki durumda da bu 10.000'lik fark, toplam sapma skoruna eşit ağırlıkta katkıda bulunur. Bu yöntem, özellikle aykırı değerlerin (outlier) etkisini daha az hissettirmek istediğimiz durumlarda tercih edilebilir, çünkü farkları karelemek gibi bir amplifikasyon yapmaz.
+
+### Farklar Karesi Toplamı Yöntemi
+
+Diğer bir önemli yaklaşım ise **Farklar Karesi Toplamı Yöntemi**'dir. Bu yöntemde, her bir sayısal özelliğin farkı alındıktan sonra, bu farkın karesi hesaplanır ve ardından tüm özellikler için bu kareler toplanır. Yani, `(A_X - B_X)² + (A_Y - B_Y)² + (A_Z - B_Z)²` şeklinde bir hesaplama yaparız. Bu yöntem, aslında **Öklid uzaklığının karesi** olarak da bilinen bir ölçümdür. Kare alma işlemi, küçük farkları daha küçük, büyük farkları ise orantısal olarak çok daha büyük hale getirir. Örneğin, 1 birimlik bir farkın karesi 1 iken, 10 birimlik bir farkın karesi 100 olur. Bu durum, büyük sapmaların toplam uzaklık skoruna çok daha baskın bir şekilde etki etmesine neden olur. Dolayısıyla, bu yöntem, gözlemler arasındaki belirgin farklılıkları vurgulamak istediğimizde veya aykırı değerlerin kümeleme üzerindeki etkisini artırmak istediğimizde daha uygun olabilir.
+
+Her iki yöntem de sayısal değişkenler için uzaklık ölçümü sunar. Seçimimiz, veri setimizin özelliklerine ve analizden beklentilerimize bağlıdır. Mutlak sapmalar, farkları doğrusal olarak ele alırken, farklar karesi toplamı, büyük farklara daha fazla ağırlık vererek onları daha belirgin hale getirir. Bu yöntemler, kümeleme analizinde gözlemler arasındaki gerçek farklılıkları daha doğru bir şekilde yansıtmamızı sağlayarak, daha anlamlı küme yapıları elde etmemize olanak tanır.
+
+### Neden farklar karesi alırız? Sadece farkları toplasak yetmez mi?
+
+Veri analizinde, özellikle iki veri seti arasındaki "uzaklığı" veya "hatayı" ölçerken, farkların karesini almak standart bir yaklaşımdır. Peki, neden farkların mutlak değerlerini toplamakla yetinmeyip, karesini alma zahmetine giriyoruz? Bu sorunun cevabı, ölçümün hassasiyeti ve büyük hatalara verdiği önemde yatmaktadır.
+
+Bu durumu, sunulan iki örnek üzerinden inceleyelim.
+
+---
+
+#### **Örnek 1**
+
+*   **Veri Setleri:** `(5, 7, 9)` ve `(1, 4, 3)`
+*   **Mutlak Farklar:**
+    *   `|5 - 1| = 4`
+    *   `|7 - 4| = 3`
+    *   `|9 - 3| = 6`
+*   **Farkların Toplamı:** `4 + 3 + 6 = 13`
+*   **Farkların Kareleri Toplamı:** `4² + 3² + 6² = 16 + 9 + 36 = 61`
+
+#### **Örnek 2**
+
+*   **Veri Setleri:** `(12, 2, 4)` ve `(1, 1, 3)`
+*   **Mutlak Farklar:**
+    *   `|12 - 1| = 11`
+    *   `|2 - 1| = 1`
+    *   `|4 - 3| = 1`
+*   **Farkların Toplamı:** `11 + 1 + 1 = 13`
+*   **Farkların Kareleri Toplamı:** `11² + 1² + 1² = 121 + 1 + 1 = 123`
+
+---
+
+### Sonuç
+
+Dikkat edilmesi gereken en önemli nokta, her iki örnekte de **Farkların Toplamı**'nın `13` olmasıdır. Eğer ölçütümüz sadece bu toplam olsaydı, iki durumdaki veri setlerinin birbirinden "eşit uzaklıkta" olduğu gibi yanıltıcı bir sonuca varırdık.
+
+Ancak **Farkların Kareleri Toplamı**'na baktığımızda gerçek durum ortaya çıkar:
+
+1.  **Birinci Örnekte Sonuç: 61**
+2.  **İkinci Örnekte Sonuç: 123**
+
+Bu sonuçlar, ikinci durumdaki veri setleri arasındaki toplam farkın, birinciye göre çok daha anlamlı ve büyük olduğunu gösterir.
+
+#### Neden Bu Fark Oluşuyor?
+
+Farkların karesini almanın temel işlevi, **büyük farkları orantısal olarak daha fazla cezalandırmaktır.**
+
+*   İkinci örnekteki `11` birimlik tek bir büyük sapma, karesi alındığında (`121`) toplam skoru neredeyse tek başına belirler. Bu, sistemin bu büyük hatayı ne kadar ciddiye aldığını gösterir.
+*   Birinci örnekteki daha dengeli ve küçük farklar (`4, 3, 6`), kareleri alındığında toplam skoru daha makul bir seviyede tutar.
+
+Kısacası, farkların karesini almak;
+*   **Büyük hatalara ve aykırı değerlere karşı duyarlılığı artırır.** Birçok analizde, tek bir büyük hata, çok sayıda küçük hatadan daha sorunludur.
+*   **Farkların dağılımı hakkında daha fazla bilgi sunar.** Sadece mutlak toplam, farkların nasıl dağıldığını gizlerken; kareler toplamı, büyük sapmaların varlığını hemen belli eder.
+*   Negatif ve pozitif farkların birbirini götürmesini engeller ve tüm hataları pozitif bir değer olarak hesaba katar.
+
+Bu sebeplerle, Öklid mesafesi, en küçük kareler yöntemi gibi istatistik ve makine öğrenmesinin temelini oluşturan birçok yöntemde, farkların karesi kullanılır.
+
+
+Harika bir noktaya değindiniz. Önceki derste tartıştığımız "farkların karesini almak" meselesi, aslında şimdi ele alacağımız sayısal uzaklık ölçümlerinin tam kalbinde yer alıyor. Kümeleme analizi, özünde, veri noktalarını "benzerliklerine" göre gruplama sanatıdır ve bu benzerliğin matematiksel ifadesi de genellikle "mesafe" veya "uzaklık" kavramıyla ölçülür. İki nokta birbirine ne kadar "yakınsa", o kadar benzer kabul edilir.
+
+Peki, bu "yakınlığı" nasıl ölçeriz? İşte burada, amaca ve verinin yapısına göre seçebileceğimiz farklı metrikler devreye giriyor.
+
+***
+
+### Sayısal Verilerde Uzaklık Ölçümleri
+
+Kümeleme algoritmaları, veri noktaları (gözlemler) arasındaki mesafeleri hesaplayarak işe başlar. En yakın olanları aynı kümeye dahil etme eğilimindedirler. Bu süreçte en yaygın olarak kullanılan üç temel uzaklık ölçüsünü inceleyelim.
+
+#### 1. Öklid Uzaklığı (Euclidean Distance)
+
+Bu, hepimizin sezgisel olarak bildiği, en temel ve en yaygın kullanılan uzaklık ölçüsüdür. İki nokta arasındaki **"kuş uçuşu"** mesafeyi ifade eder. Düz bir çizgi çektiğinizde o çizginin uzunluğu ne ise, Öklid uzaklığı da odur.
+
+Geometriden hatırlayacağınız Pisagor teoremine dayanır. İki boyutlu bir düzlemde A(x₁, y₁) ve B(x₂, y₂) noktaları arasındaki mesafe şu şekilde hesaplanır:
+
+`Mesafe = √[(x₂ - x₁)² + (y₂ - y₁)²]`
+
+Bu formülü, veri setimizdeki 'p' adet özelliğe (boyuta) genelleyebiliriz. A ve B gibi iki müşteri ve onların 'p' adet özelliği (örneğin yaş, gelir, harcama miktarı...) olduğunu düşünelim:
+
+**`Öklid(A, B) = √[ (a₁ - b₁)² + (a₂ - b₂)² + ... + (aₚ - bₚ)² ]`**
+
+Şimdi önceki dersle bağlantı kuracağımız yere geldik. Formülün içindeki `(a - b)²` ifadesi, tam olarak **farkların karesidir**.
+
+**Sayısal Örnekler:**
+
+*   **2 Boyutlu Örnek:** A(1, 2) ve B(4, 6) noktaları arasındaki Öklid uzaklığı:
+    `Öklid(A, B) = √[ (4 - 1)² + (6 - 2)² ]`
+    `= √[ (3)² + (4)² ]`
+    `= √[ 9 + 16 ]`
+    `= √25 = 5`
+
+*   **3 Boyutlu Örnek:** A(1, 2, 3) ve B(4, 6, 7) noktaları arasındaki Öklid uzaklığı:
+    `Öklid(A, B) = √[ (4 - 1)² + (6 - 2)² + (7 - 3)² ]`
+    `= √[ (3)² + (4)² + (4)² ]`
+    `= √[ 9 + 16 + 16 ]`
+    `= √41 ≈ 6.40`
+
+*   **Neden Önemli?** Öklid uzaklığı, büyük farklara karşı oldukça hassastır. Bir özellikteki büyük bir fark, karesi alındığı için toplam mesafeyi ciddi şekilde artırır. Bu, aykırı değerlerin (outlier) kümeleme sonuçlarını önemli ölçüde etkileyebileceği anlamına gelir. Verileriniz yoğun ve küresel bir dağılıma sahipse genellikle çok iyi sonuçlar verir.
+
+#### 2. Manhattan veya City-Block Uzaklığı
+
+İsmini, Manhattan gibi ızgara planlı bir şehirde bir yerden bir yere gitme probleminden alır. Binaların içinden geçemeyeceğiniz için, caddeler ve sokaklar boyunca yatay ve dikey olarak hareket etmek zorundasınızdır. Bu yüzden "şehir bloku" veya "taksimetre" uzaklığı olarak da bilinir.
+
+Bu metrik, iki nokta arasındaki farkların **mutlak değerlerini** toplar.
+
+İki boyutlu bir düzlemde A(x₁, y₁) ve B(x₂, y₂) noktaları için:
+
+`Mesafe = |x₂ - x₁| + |y₂ - y₁|`
+
+'p' adet özelliğe sahip A ve B müşterileri için formül şöyledir:
+
+**`Manhattan(A, B) = |a₁ - b₁| + |a₂ - b₂| + ... + |aₚ - bₚ|`**
+
+**Sayısal Örnekler:**
+
+*   **2 Boyutlu Örnek:** A(1, 2) ve B(4, 6) noktaları arasındaki Manhattan uzaklığı:
+    `Manhattan(A, B) = |4 - 1| + |6 - 2|`
+    `= 3 + 4 = 7`
+
+*   **3 Boyutlu Örnek:** A(1, 2, 3) ve B(4, 6, 7) noktaları arasındaki Manhattan uzaklığı:
+    `Manhattan(A, B) = |4 - 1| + |6 - 2| + |7 - 3|`
+    `= 3 + 4 + 4 = 11`
+
+*   **Neden Önemli?** Bu yöntem, farkların karesini almadığı için Öklid uzaklığına göre aykırı değerlere karşı **daha dayanıklıdır (robust)**. Bir özellikteki büyük bir fark, toplam mesafeyi Öklid'deki kadar dramatik bir şekilde artırmaz. Özellikle, özellikler arasındaki "köşegen" bir hareketin anlamlı olmadığı durumlarda (örneğin, bir eksen yaş, diğer eksen alışveriş adedi ise bu ikisi arasında doğrudan bir geçiş anlamsızdır) veya çok yüksek boyutlu veri setlerinde tercih edilebilir.
+
+#### 3. Minkowski Uzaklığı
+
+Minkowski uzaklığı, aslında bir "üst metrik" veya "genelleştirilmiş" bir formüldür. Öklid ve Manhattan uzaklıklarını özel durumlar olarak içinde barındırır.
+
+Formülü şu şekildedir:
+
+**`Minkowski(A, B) = [ (|a₁ - b₁|)ᵖ + (|a₂ - b₂|)ᵖ + ... + (|aₚ - bₚ|)ᵖ ]¹/ᵖ`**
+
+Buradaki **'p'** parametresi, metriğin davranışını kontrol eden kilit noktadır.
+
+*   **Eğer p = 1 ise:**
+    `[ |a₁ - b₁|¹ + ... ]¹/¹ = |a₁ - b₁| + ...`
+    Formül, **Manhattan Uzaklığı**'na dönüşür.
+
+*   **Eğer p = 2 ise:**
+    `[ |a₁ - b₁|² + ... ]¹/² = √[ (a₁ - b₁)² + ... ]`
+    Formül, **Öklid Uzaklığı**'na dönüşür.
+
+**Sayısal Örnek (p=3 için):**
+
+*   **2 Boyutlu Örnek (p=3):** A(1, 2) ve B(4, 6) noktaları arasındaki Minkowski uzaklığı (p=3):
+    `Minkowski(A, B) = [ (|4 - 1|)³ + (|6 - 2|)³ ]¹/³`
+    `= [ (3)³ + (4)³ ]¹/³`
+    `= [ 27 + 64 ]¹/³`
+    `= [ 91 ]¹/³ ≈ 4.50`
+
+*   **Neden Önemli?** Minkowski uzaklığı, bize esneklik kazandırır. `p` parametresini değiştirerek, büyük farklara ne kadar önem vereceğimizi ayarlayabiliriz. `p` değeri arttıkça, en büyük farkın toplam mesafe üzerindeki etkisi de o kadar artar. Bu, analizcinin problemine en uygun uzaklık ölçüsünü deneyerek bulmasına olanak tanır.
+
+### Özetle
+
+*   **Öklid (p=2):** En yaygın, sezgisel "düz çizgi" mesafesi. Aykırı değerlere duyarlıdır.
+*   **Manhattan (p=1):** "Şehir blokları" mesafesi. Aykırı değerlere daha dayanıklıdır.
+*   **Minkowski:** Diğer ikisini de içeren genel bir çerçeve. `p` parametresi ile esneklik sağlar.
+
+Doğru uzaklık metriğini seçmek, kümeleme analizinin kalitesini doğrudan etkileyen kritik bir karardır ve verinin doğasına bağlıdır.
+
+![Uzaklık Metriği Seçimi](images/distances.svg)
+
+
+Harika, şimdiye kadar veriler arasındaki benzerliği veya uzaklığı nasıl ölçebileceğimizi ele aldık. Artık elimizde bir "cetvel" var. Bir sonraki mantıksal adım, bu cetveli kullanarak veri noktalarını anlamlı gruplara, yani kümelere ayıracak stratejileri, yani algoritmaları incelemektir.
+
+Literatürde bu işi yapan çok sayıda kümeleme algoritması mevcuttur. Her birinin kendine özgü güçlü ve zayıf yönleri vardır. Ancak bu algoritmaları daha iyi anlamak için onları temel yaklaşımlarına göre sınıflandırabiliriz. Tıpkı biyolojide canlıları sınıflandırdığımız gibi, burada da algoritmaları felsefelerine göre ayırıyoruz.
+
+***
+
+### Veri Madenciliği ve Kümeleme Analizi: Kümeleme Yöntemleri
+
+Kümeleme algoritmaları, temel çalışma prensiplerine göre iki ana sınıfa ayrılır: **Hiyerarşik** ve **Hiyerarşik Olmayan** yöntemler. Bu ayrım, kümeleme sürecine nasıl yaklaştıklarının en temel farklılığını yansıtır.
+
+Aşağıdaki şema, bu sınıflandırmayı ve alt dallarını göstermektedir:
+```mermaid
+graph TD
+    A[Kümeleme Yaklaşımları] --> B(Hiyerarşik)
+    A --> C(Hiyerarşik Olmayan)
+
+    B --> B1(Yığışımsal<br>Agglomerative)
+    B --> B2(Bölücü<br>Divisive)
+
+    C --> C1(Ayırma)
+    C --> C2(Yoğunluk-tabanlı)
+    C --> C3(Izgara-tabanlı)
+```
+
+---
+
+### 1. Hiyerarşik Kümeleme
+
+Bu yaklaşımın ana fikri, tek bir kümeleme sonucu üretmek yerine, bir dizi iç içe geçmiş kümeden oluşan bir **hiyerarşi** veya bir **ağaç yapısı (dendrogram)** oluşturmaktır. Başlangıçta kaç küme olması gerektiğini belirtmenize gerek yoktur. Algoritma size tüm olası küme birleşimlerini bir ağaç olarak sunar, siz de bu ağacı istediğiniz seviyeden "keserek" küme sayısını belirlersiniz.
+
+Bu yaklaşımın iki temel stratejisi vardır:
+
+*   **a) Yığışımsal (Agglomerative) / Birleştirici:** Bu, "aşağıdan yukarıya" (bottom-up) bir yaklaşımdır.
+    1.  **Başlangıç:** Her bir veri noktası tek başına bir küme olarak kabul edilir. (N veri noktası varsa, N küme vardır.)
+    2.  **İterasyon:** Her adımda, birbirine en yakın olan iki küme bulunur ve birleştirilir.
+    3.  **Bitiş:** Tüm veri noktaları tek bir büyük kümede birleşene kadar bu birleştirme işlemi devam eder.
+
+*   **b) Bölücü (Divisive):** Bu, "yukarıdan aşağıya" (top-down) bir yaklaşımdır ve daha nadir kullanılır.
+    1.  **Başlangıç:** Tüm veri noktaları tek bir kümenin içindedir.
+    2.  **İterasyon:** Her adımda, mevcut bir küme, içindeki noktalar birbirine en az benzeyecek şekilde ikiye bölünür.
+    3.  **Bitiş:** Her veri noktası tek başına bir küme olana kadar bu bölme işlemi devam eder.
+
+Hiyerarşik yöntemler, verinin yapısı hakkında zengin bir görsel bilgi sunar ancak büyük veri setlerinde hesaplama maliyetleri yüksek olabilir.
+
+---
+
+### 2. Hiyerarşik Olmayan Kümeleme
+
+Bu yaklaşımda amaç, veri setini önceden belirlenmiş **'K' adet** kümeye doğrudan bölmektir. Bir hiyerarşi oluşturulmaz; bunun yerine, veri noktaları belirli bir optimizasyon kriterine göre en uygun kümelere atanır. Genellikle hiyerarşik yöntemlerden daha hızlıdırlar ve bu nedenle büyük veri setleri için daha uygundurlar.
+
+Bu sınıftaki bazı önemli alt başlıklar şunlardır:
+
+*   **a) Ayırma (Partitioning) Yöntemleri:** En yaygın kullanılan yaklaşımdır. Amaç, veri setini K adet, kesişmeyen kümeye ayırmaktır. Analizcinin küme sayısı olan 'K' değerini en başta belirtmesi gerekir. En bilinen örneği **K-Means** algoritmasıdır. Bu algoritma, her kümenin bir merkez noktası (centroid) etrafında toplandığını varsayar.
+
+*   **b) Yoğunluk Tabanlı (Density-based) Yöntemler:** Bu algoritmalar kümeleri, veri uzayında yoğun olarak bulunan bölgeler olarak tanımlar. Düşük yoğunluklu bölgeler ise bu kümeleri birbirinden ayıran sınırlar olarak görülür. Kümelerin küresel olmak zorunda olmadığını varsaydıkları için **farklı geometrik şekillerdeki kümeleri** bulabilirler. Ayrıca, herhangi bir kümeye ait olmayan "gürültü" (noise) veya "aykırı" (outlier) noktaları tespit etmede de oldukça başarılıdırlar. **DBSCAN** bu kategorinin popüler bir örneğidir.
+
+*   **c) Izgara Tabanlı (Grid-based) Yöntemler:** Bu yöntemler, veri uzayını ızgara benzeri hücrelere böler ve tüm kümeleme işlemlerini bu hücreler üzerinde gerçekleştirir. Avantajı, işlem hızının veri noktası sayısına değil, ızgara hücrelerinin sayısına bağlı olmasıdır. Bu da onu çok büyük veri setleri için oldukça verimli kılar.
+
+Sonuç olarak, hangi kümeleme yönteminin seçileceği; verinin yapısına, boyutuna, veri setinde gürültü olup olmamasına ve analizin nihai hedefine bağlıdır. Tek bir "en iyi" yöntem yoktur; her problemin doğası, en uygun yaklaşımın seçilmesini gerektirir.
+
+
+### Hiyerarşik Olmayan Kümeleme: K-Means Algoritması
+
+Gençler, şimdi hiyerarşik olmayan yöntemlerin en popüler ve temel taşı olarak kabul edilen algoritmasını, **K-Means**'i inceleyeceğiz. Bu algoritmanın güzelliği, karmaşık bir problemi oldukça basit ve sezgisel adımlarla çözmesinde yatar.
+
+Temel fikir şudur: Elimizdeki veri setini, önceden belirlediğimiz 'k' adet kümeye ayırmak istiyoruz. K-Means, her kümenin bir "ağırlık merkezi" veya geometrik merkezi olduğunu varsayar. Bu merkeze literatürde **centroid** denir. Bir veri noktasının kaderi basittir: Hangi centroid'e daha yakınsa, o centroid'in kümesine aittir.
+
+Algoritmayı, bir odaya dağılmış insanları 'k' adet gruba ayırmaya çalışan bir organizatöre benzetebiliriz. Organizatörün görevi, her grubun kendi içinde mümkün olduğunca sıkı ve birbirine yakın olmasını sağlamaktır.
+
+#### Algoritmanın Çalışma Prensibi
+
+K-Means, bu en iyi gruplamayı bulmak için yinelemeli (iterative) bir yaklaşım kullanır. Süreç, belirli bir denge durumuna ulaşana kadar kendini tekrar eden adımlardan oluşur.
+
+1.  **Başlatma (Initialization):**
+    *   İlk olarak, veriyi kaç kümeye ayırmak istediğimize karar veririz. Bu sayı 'k'dır.
+    *   Ardından, veri uzayında rastgele 'k' adet nokta, başlangıç merkezleri (centroid'ler) olarak seçilir. Bu ilk merkezler, genellikle veri setinden rastgele seçilen 'k' adet noktanın kendisi olabilir. Bu, organizatörün odada rastgele 'k' noktayı "grup toplanma merkezi" olarak ilan etmesi gibidir.
+
+2.  **Atama (Assignment):**
+    *   Veri setindeki her bir nokta (odadaki her bir kişi) tek tek ele alınır.
+    *   Her nokta için, kendisine en yakın olan centroid hesaplanır. "Yakınlık" ölçümü için standart olarak **Öklid uzaklığı** kullanılır.
+    *   Her nokta, en yakın olduğu centroid'in kümesine dahil edilir. Bu adımın sonunda, herkes en yakın bulduğu toplanma merkezine gitmiş ve 'k' adet başlangıç kümesi oluşmuş olur.
+
+3.  **Güncelleme (Update):**
+    *   Atama adımı tamamlandıktan sonra, oluşan her bir kümenin yeni centroid'i, yani yeni ağırlık merkezi hesaplanır.
+    *   Bu, o kümeye atanmış olan tüm veri noktalarının koordinatlarının aritmetik ortalaması alınarak yapılır. Algoritmanın ismindeki **"Means" (Ortalamalar)** kelimesi bu adımdan gelmektedir.
+    *   Yani organizatör, her grubun tam ortasına giderek "Yeni toplanma merkezi burasıdır!" der.
+
+4.  **Yineleme ve Yakınsama (Iteration & Convergence):**
+    *   2. (Atama) ve 3. (Güncelleme) adımları, sistem bir denge durumuna ulaşana kadar tekrar edilir. İnsanlar yeni merkezlere göre tekrar en yakın grubu seçer, merkezler tekrar hesaplanır.
+    *   Bu döngü ne zaman durur? Genellikle iki koşuldan biri sağlandığında:
+        *   Centroid'lerin konumları bir önceki adıma göre artık hiç değişmez veya çok az değişir.
+        *   Noktaların küme üyelikleri artık değişmez (kimse grup değiştirmez).
+    *   Bu denge durumuna ulaşıldığında (buna **yakınsama** denir), küme merkezleri ve üyelikleri sabitlenir ve algoritma sonlanır.
+
+Aşağıdaki diyagram, bu yinelemeli süreci görselleştirmektedir:
+
+```mermaid
+graph TD
+    subgraph "K-Means Döngüsü"
+        A["1. Başlatma<br/>Rastgele 'k' adet centroid seç"] --> B["2. Atama Adımı<br/>Her veri noktasını en yakın<br/>centroide ata"];
+        B --> C["3. Güncelleme Adımı<br/>Her kümenin yeni merkezini<br/>(ortalamasını) hesapla"];
+        C --> D{"4. Yakınsama Kontrolü<br/>Centroid'ler değişti mi?"};
+        D -- "Evet (Değişti)" --> B;
+        D -- "Hayır (Değişmedi)" --> E["Sonuç: Kümeler tamamlandı"];
+    end
+```
+
+#### K-Means'in Matematiksel Hedefi: WCSS'yi Minimize Etmek
+
+Gençler, K-Means'in bu adımları rastgele takip etmediğini bilmek önemlidir. Algoritmanın aslında çözmeye çalıştığı bir optimizasyon problemi vardır. Amaç, **küme içi hata kareleri toplamını (Within-Cluster Sum of Squares - WCSS)** en aza indirmektir.
+
+WCSS, her bir veri noktasının, kendi atandığı kümenin merkezine (centroid'ine) olan uzaklığının karesinin toplamıdır. Formülsel olarak:
+
+$$
+WCSS = \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2
+$$
+
+Burada:
+*   `k` küme sayısıdır.
+*   `C_i`, `i`-inci kümedir.
+*   `x`, `C_i` kümesindeki bir veri noktasıdır.
+*   `\mu_i`, `C_i` kümesinin centroid'idir.
+*   `||x - \mu_i||^2`, `x` noktası ile `\mu_i` centroid'i arasındaki Öklid uzaklığının karesidir.
+
+K-Means'in her bir "Atama" ve "Güncelleme" adımı, bu WCSS değerini azaltmaya yönelik bir hamledir. Algoritma, bu değeri daha fazla düşüremeyeceği bir noktaya geldiğinde (yani bir **yerel minimuma (local minimum)** ulaştığında) durur. Bu, algoritmanın en iyi çözümü bulduğunu garanti etmez, ancak genellikle oldukça iyi ve pratik sonuçlar üretir. Başlangıç centroid'lerinin seçimi, bu nihai sonucun kalitesini önemli ölçüde etkileyebilir.
+
+
+
+***
+
+### Uygulama: Weka ile "insanlar.csv" Veri Seti Üzerinde Analiz
+
+Bu çalışmadaki amacımız, kişilerin fiziksel özelliklerine (`yas`, `boy`, `kilo`, `ayak_no`) bakarak aralarında doğal gruplar olup olmadığını keşfetmek ve ardından bu grupları tanımlayan kuralları ortaya çıkarmaktır.
+
+---
+
+### **Bölüm 1: k-Means ile Keşifsel Kümeleme**
+
+#### **Adım 1: Veri Setini Weka'ya Yükleme**
+
+Weka, yerel dosyaların yanı sıra doğrudan internet üzerindeki verilere de erişebilir.
+
+*   **İşlem:**
+    1.  Weka Explorer'ı başlatın.
+    2.  "Preprocess" sekmesinde, "Open file..." yerine **"Open URL..."** seçeneğine tıklayın.
+    3.  Açılan pencereye aşağıdaki adresi yapıştırın ve "OK" tuşuna basın:
+        `https://raw.githubusercontent.com/erkanozhan/datamining_lab_data/master/insanlar.csv`
+    4.  Veri yüklendiğinde, "Attributes" panelinde `ad`, `yas`, `boy`, `kilo` ve `ayak_no` özniteliklerini göreceksiniz.
+
+#### **Adım 2: Veriyi Kümelemeye Hazırlama ve k-Means'i Çalıştırma**
+
+Kümeleme, sayısal mesafelere dayandığı için sayısal olmayan veya analize katkısı olmayacak öznitelikleri çıkarmalıyız. Bu veri setinde `ad` özniteliği, her kişi için benzersiz bir tanımlayıcıdır ve kümeleme mantığına bir katkısı yoktur. Bu nedenle analize dahil etmemeliyiz.
+
+*   **İşlem:**
+    1.  "Preprocess" sekmesindeki "Attributes" listesinden `ad` özniteliğini seçin ve alttaki **"Remove"** butonuna basarak kaldırın.
+    2.  "Cluster" sekmesine geçin.
+    3.  "Choose" butonu ile `SimpleKMeans`'i seçin.
+    4.  Algoritma adına tıklayarak ayarlarını açın ve `numClusters` değerini **3** olarak belirleyin. (Bu, veriyi 3 gruba ayırmak istediğimizi belirtir).
+    5.  "Start" butonuna basarak kümeleme işlemini başlatın.
+
+#### **Adım 3: Sonuçları Yorumlama (Öklid Uzaklığı ile)**
+
+Weka'nın "Clusterer output" panelindeki sonuçları bu veri setine göre yorumlayalım. (Not: Rastgele başlangıç nedeniyle sizin sonuçlarınız küçük farklılıklar gösterebilir, ancak genel yapı benzer olacaktır.)
+
+*   **Cluster Centroids (Küme Merkezleri):**
+    Bu tablo, 3 grubun "ortalama insan profilini" gösterir. Olası bir çıktı şöyle görünebilir:
+
+| Öznitelik | Küme 0 | Küme 1 | Küme 2 |
+| :--- | :---: | :---: | :---: |
+| yas | 22.5 | 25.8 | 32.0 |
+| boy | 1.72 | 1.84 | 1.96 |
+| kilo | 59.5 | 81.2 | 100.0 |
+| ayak_no | 38.4 | 43.8 | 44.5 |
+
+    *   **Yorum:**
+        *   **Küme 0:** Bu grup, daha kısa boylu, daha zayıf ve daha küçük ayak numarasına sahip, genellikle kadınlardan oluşan bir segmenti temsil ediyor gibi görünmektedir.
+        *   **Küme 1:** Bu grup, ortalamanın üzerinde boy ve kiloya sahip, genellikle erkeklerden oluşan en kalabalık segmenti temsil etmektedir.
+        *   **Küme 2:** Bu grup ise belirgin şekilde daha yaşlı, çok daha uzun ve daha kilolu kişileri içeren daha küçük bir segmenti ifade etmektedir.
+
+*   **Clustered Instances (Kümelenmiş Örnekler):**
+    `Cluster 0: 12 (%32)`
+    `Cluster 1: 20 (%54)`
+    `Cluster 2: 5 (%14)`
+    *   **Yorum:** Veri setindeki kişilerin yarısından fazlası (%54) Küme 1 profiline uymaktadır.
+
+---
+
+### **Bölüm 2: Küme Etiketlerinden Anlam Çıkarma (Sınıflandırma)**
+
+Şimdi, bu soyut "Küme 0", "Küme 1" etiketlerinin hangi somut kurallarla tanımlandığını bulalım.
+
+#### **Adım 1: Küme Etiketlerini Veriye Ekleme**
+
+*   **İşlem:**
+    1.  "Preprocess" sekmesine dönün.
+    2.  "Filter" -> "Choose" -> `weka.filters.unsupervised.attribute.AddCluster` yolunu izleyin.
+    3.  Filtrenin ayarlarına girip kümeleyici olarak `SimpleKMeans`'i ve `numClusters`'ı **3** olarak yapılandırın.
+    4.  "Apply" butonuna basın. Veri setinizin sonuna her bir kişinin hangi kümeye atandığını gösteren yeni bir `cluster` sütunu eklenecektir.
+
+#### **Adım 2: Karar Ağacı ile Kuralları Görselleştirme**
+
+Bu küme etiketlerini hangi fiziksel özelliklerin belirlediğini bir ağaç yapısıyla görelim.
+
+*   **İşlem:**
+    1.  "Classify" sekmesine geçin.
+    2.  Hedef değişken olarak en üstteki listeden yeni eklenen `(Nom) cluster` özniteliğini seçin.
+    3.  "Choose" butonu ile `weka.classifiers.trees.J48`'i seçin.
+    4.  "Start" butonuna basın.
+*   **Ağacı Yorumlama:**
+    "Result list" panelinde oluşan modelin üzerine sağ tıklayıp **"Visualize tree"** deyin. Karşınıza çıkacak ağaç, muhtemelen şöyle bir yapıya sahip olacaktır:
+
+    ```
+    boy <= 1.72
+    |   kilo <= 65: cluster0 (12.0/1.0)  // Eğer boy 1.72'den küçük ve kilo 65'ten az ise büyük ihtimalle Küme 0'dır.
+    |   kilo > 65: cluster1 (3.0/1.0)
+    boy > 1.72
+    |   kilo <= 85
+    |   |   boy <= 1.85: cluster1 (15.0/2.0)
+    |   |   boy > 1.85: cluster2 (4.0/1.0)
+    |   kilo > 85: cluster2 (3.0)
+    ```
+    *   **Yorum:** Bu ağaç bize, kümeleri ayıran en önemli özelliğin **boy** ve ardından **kilo** olduğunu net bir şekilde gösteriyor. Örneğin, 1.72m'den kısa ve 65kg'dan hafif kişilerin neredeyse tamamı Küme 0'a atanmış. Bu, kümeleme ile bulduğumuz soyut gruplara, insan tarafından okunabilir, somut ve işe yarar tanımlar getirmemizi sağlar.
+
+#### **Adım 3: Kural Tabanlı Algoritma ile Kuralları Listeleme**
+
+Aynı işi bir de basit kural listesi olarak görelim.
+
+*   **İşlem:**
+    "Choose" ile `weka.classifiers.rules.JRip` algoritmasını seçin ve "Start"a basın.
+*   **Kuralları Yorumlama:**
+    Çıktı panelinde şuna benzer, daha sade bir kural listesi göreceksiniz:
+
+    `(boy <= 1.72) and (kilo <= 65) => cluster=cluster0 (12.0/1.0)`
+    `(boy >= 1.88) or (kilo >= 90) => cluster=cluster2 (5.0/0.0)`
+    `=> cluster=cluster1 (20.0/3.0)`
+
+    *   **Yorum:** Bu kurallar da bize aynı hikayeyi anlatıyor: Küme 0, kısa ve zayıf kişilerden oluşuyor. Küme 2, çok uzun veya çok kilolu kişileri kapsıyor. Geriye kalan herkes ise Küme 1'dir. Bu tür net kurallar, müşteri segmentasyonu gibi alanlarda pazarlama stratejileri geliştirmek için doğrudan kullanılabilir.
+
+# Metin Madenciliği (Text Mining)
+
+# Metin Madenciliği (Text Mining)
+
+Gençler, şimdiye kadar genellikle sayılardan veya net kategorilerden oluşan, yani "yapılandırılmış" verilerle çalıştık. Her bilginin yeri belliydi: bir tablo, bir satır, bir sütun. Ancak dijital dünyanın büyük bir kısmı böyle düzenli değil. E-postalar, sosyal medya gönderileri, haber makaleleri, müşteri yorumları, kitaplar... Bunların hepsi, insan dilinin esnekliği ve karmaşıklığıyla dolu "yapılandırılmamış" metinlerdir.
+
+İşte **Metin Madenciliği**, bu devasa metin okyanusundan anlamlı bilgi ve örüntüler çıkarmak için kullandığımız bir dizi tekniktir. Temelde, bilgisayarlara bu metinleri "okumayı", işlemeyi ve içlerindeki gizli hazineleri keşfetmeyi öğretme sanatıdır. Amacımız, bir insanın okuyup anlayarak yapacağı analizi, binlerce hatta milyonlarca doküman üzerinde saniyeler içinde yapabilmektir.
+
+Metin madenciliği, belirgin bir formatı olmayan, yazı biçimindeki veriler içerisinden gizli nitelikli bilginin çıkarılması ve düzensiz haldeki bilginin formatlanması sürecidir.
+Bir başka tanıma göre metin madenciliği, metin koleksiyonlarından bilgiye erişmeyi, metinlerden bilgi çıkarmayı amaçlayan süreçleri birleştiren mimaridir.
+
+Metin madenciliği, veri madenciliğinin bir alt dalı olarak görülebilir, ancak kendine özgü zorlukları ve yöntemleri vardır. Temel felsefesi, yapılandırılmamış metin verisini, analiz edebileceğimiz **yapılandırılmış bir formata** dönüştürmektir. Bu dönüşüm sağlandıktan sonra, daha önce öğrendiğimiz sınıflandırma, kümeleme gibi veri madenciliği tekniklerini bu yeni yapılandırılmış veri üzerinde uygulayabiliriz.
+
+Bu süreç genellikle birkaç temel adımdan oluşur:
+
+1.  **Bilgi Erişimi (Information Retrieval):** Analiz için ilgili dokümanları bulma ve toplama aşamasıdır. Google'da bir arama yapmak gibi düşünebilirsiniz.
+2.  **Doğal Dil İşleme (Natural Language Processing - NLP):** Sürecin kalbidir. Burada metin, dilbilgisi kurallarına göre parçalarına ayrılır. Cümleler, kelimeler, kelime kökleri (stemming), isimler, fiiller gibi dilbilimsel unsurlar tespit edilir. Bu, bilgisayarın metnin yapısını anlamasını sağlar.
+3.  **Bilgi Çıkarımı (Information Extraction):** Metnin içinden belirli ve somut bilgilerin (örneğin, kişi adları, şirket isimleri, tarihler, yerler) otomatik olarak çıkarılmasıdır.
+4.  **Örüntü Keşfi (Pattern Discovery):** Yapılandırılmış hale getirilen bu veriler üzerinde istatistiksel ve makine öğrenmesi algoritmaları çalıştırılarak gizli ilişkiler, trendler ve gruplar ortaya çıkarılır.
+
+**Metin Madenciliğinin Bazı Popüler Uygulamaları:**
+
+*   **Duygu Analizi (Sentiment Analysis):** Müşteri yorumlarının veya sosyal medya gönderilerinin pozitif mi, negatif mi, yoksa nötr mü olduğunu otomatik olarak belirlemek.
+*   **Konu Modelleme (Topic Modeling):** Binlerce haber makalesini analiz edip, "ekonomi", "spor", "teknoloji" gibi ana konuları otomatik olarak gruplamak.
+*   **Metin Sınıflandırma:** Gelen e-postaları "spam" veya "önemli" olarak etiketlemek, destek taleplerini ilgili departmanlara yönlendirmek.
+*   **Metin Özetleme:** Uzun bir dokümanı okuyup ana fikirlerini içeren kısa bir özetini otomatik olarak oluşturmak.
+
+
+Metin Madenciliği (Text Mining), bu yapılandırılmamış metin yığınlarının içindeki değerli bilgiyi ve gizli örüntüleri keşfetme sürecidir. Bu, tek bir adımdan oluşan sihirli bir işlem değil, sistematik bir yaklaşımlar bütünüdür. Şimdi bu sürecin temel aşamalarını daha derinlemesine inceleyelim.
+
+***
+
+### Metin Madenciliği (Text Mining)
+
+Metin madenciliği, ham metin verisini bilgisayarların anlayabileceği ve üzerine analiz yapabileceği bir formata dönüştürerek, bu veriden anlamlı sonuçlar çıkarma disiplinidir. Bu süreç, genellikle dört ana aşamadan oluşan bir boru hattı (pipeline) olarak düşünülebilir.
+
+#### **Aşama 1: Metin Koleksiyonu Oluşturma (Corpus Building)**
+
+Her veri projesinde olduğu gibi, ilk adım üzerinde çalışacağımız veriyi toplamaktır. Metin madenciliğinde, bu toplanan dokümanlar bütününe **"corpus"** veya **"derlem"** denir. Bu aşamanın amacı, analiz hedefimize uygun, ilgili ve yeterli miktarda metin verisini bir araya getirmektir.
+
+*   **Ne Yapılır?**
+    *   **Kaynak Belirleme:** Analiz edeceğimiz metinler nereden gelecek? Müşteri yorumları için bir e-ticaret sitesi mi, kamuoyu nabzını ölçmek için Twitter mı, yoksa bilimsel trendleri anlamak için akademik makale veritabanları mı?
+    *   **Veri Toplama:** Kaynak belirlendikten sonra, veriler teknik yöntemlerle toplanır. Bu, web sitelerinden veri kazımak (web scraping), sosyal medya platformlarının sağladığı API'ları (Uygulama Programlama Arayüzü) kullanmak veya kurumsal veritabanlarından (e-postalar, destek talepleri) veri çekmek olabilir.
+*   **Neden Önemli?**
+    Toplanan verinin kalitesi ve ilgililiği, projenin başarısını doğrudan etkiler. Yanlış veya ilgisiz bir metin koleksiyonu ile başlanırsa, sonraki tüm aşamalar anlamını yitirecektir.
+
+#### **Aşama 2: Metin Önişleme (Text Preprocessing)**
+
+Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıdır. Ham metin, bilgisayarlar için anlamsız bir karakter dizisidir. Amacımız, bu "kirli" ve yapılandırılmamış metni, makine öğrenmesi algoritmalarının işleyebileceği temiz, standart ve **sayısal** bir formata dönüştürmektir.
+
+*   **Temel Adımlar:**
+    *   **Normalizasyon:** Metindeki tutarsızlıkları giderme işlemidir. Genellikle tüm harfleri küçük harfe çevirmek (`"Veri"`, `"VERİ"` → `"veri"`) gibi adımları içerir.
+    *   **Tokenizasyon (Tokenization):** Metni anlamlı birimlere, yani "token"lara ayırmaktır. Bu genellikle kelimelere ayırma şeklinde olur. `("Bu bir cümledir.") → ["Bu", "bir", "cümledir", "."]`
+    *   **Etkisiz Kelimelerin Çıkarılması (Stop Word Removal):** Metinde sıkça geçen ancak anlamsal olarak tek başına bir değer taşımayan kelimelerin (`"ve"`, `"ama"`, `"bir"`, `"için"`, `"şey"`) temizlenmesidir. Bu, analizde gürültüyü azaltır.
+    *   **Kök Bulma (Stemming & Lemmatization):** Kelimeleri eklerinden arındırarak kök formuna indirgemektir. Bu, aynı anlama gelen farklı kelime formlarını tek bir çatı altında toplamayı sağlar.
+        *   **Stemming:** Basit ve kurala dayalı bir kırpma işlemidir. Kelimenin sonundaki ekleri basitçe keser. Hızlıdır ama bazen anlamsız veya yanlış kökler üretebilir.
+            *   **Örnekler (Türkçe):** `"kitaplar"`, `"kitapçı"`, `"kitaplık"` → `"kitap"`. `"gözlükçü"`, `"gözlem"`, `"gözleri"` → `"göz"`. `"koşuyorlar"`, `"koşucu"` → `"koş"`.
+            *   **Örnekler (İngilizce):** `"studies"`, `"studying"` → `"studi"` (anlamsız kök). `"running"`, `"ran"`, `"runner"` → `"run"`.
+        *   **Lemmatization:** Kelimenin dilbilgisel yapısını ve bağlamını dikkate alarak sözlükteki anlamlı kökünü (lemma) bulur. Daha doğrudur ama daha yavaştır ve bir dil sözlüğü gerektirir.
+            *   **Örnekler (Türkçe):** `"gidiyorum"`, `"gittiler"`, `"gidecek"` → `"gitmek"`. `"yaptım"`, `"yapar"` → `"yapmak"`.
+            *   **Örnekler (İngilizce):** `"am"`, `"is"`, `"are"` → `"be"`. `"better"` → `"good"`. `"mice"` → `"mouse"`.
+*   **Sayısal Temsile Dönüştürme (Vectorization):**
+    Temizlenen, köklerine ayrılmış metin, nihayetinde sayılara dönüştürülmelidir. Bu aşamada, her doküman bir sayı vektörü olarak temsil edilir. Bu, metni makine öğrenmesi algoritmalarının anlayabileceği bir "dil" olan matematiğe çevirmektir. En yaygın yöntemlerden biri, her dokümanın hangi kelimeleri ne kadar önemle içerdiğini gösteren bir **Belge-Terim Matrisi (Document-Term Matrix)** oluşturmaktır.
+
+    **TF-IDF (Term Frequency-Inverse Document Frequency)** gibi teknikler, bir kelimenin bir doküman ve tüm koleksiyon (corpus) içindeki önemini tartan ağırlıklar hesaplayarak bu dönüşümü gerçekleştirir.
+
+    **TF-IDF Değerlerinin Hesaplanması:**
+
+    TF-IDF değeri, iki ana bileşenin çarpımıyla elde edilir: **Terim Frekansı (TF)** ve **Ters Doküman Frekansı (IDF)**.
+
+    1.  **Terim Frekansı (Term Frequency - TF):** Bir kelimenin (terimin) belirli bir doküman içinde ne sıklıkla geçtiğini ölçer. Genellikle, kelimenin dokümandaki geçiş sayısının, o dokümandaki toplam kelime sayısına bölünmesiyle normalleştirilir.
+        $$
+        TF(t, d) = \frac{\text{t teriminin d dokümanındaki geçiş sayısı}}{\text{d dokümanındaki toplam terim sayısı}}
+        $$
+
+    2.  **Ters Doküman Frekansı (Inverse Document Frequency - IDF):** Bir kelimenin tüm doküman koleksiyonu (corpus) içinde ne kadar nadir olduğunu ölçer. Nadir kelimeler daha yüksek IDF değerine sahip olur, çünkü bu kelimeler dokümanı daha iyi ayırt eder.
+        $$
+        IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)
+        $$
+        (Bazı uygulamalarda paydada `(t terimini içeren doküman sayısı + 1)` kullanılır veya logaritma tabanı 2 olabilir.)
+
+    3.  **TF-IDF Değeri:** Bir kelimenin bir doküman için önemini gösteren nihai değerdir.
+        $$
+        TF-IDF(t, d) = TF(t, d) \times IDF(t)
+        $$
+
+    **Örnek Üzerinden Adım Adım Hesaplama:**
+
+    Üç basit dokümanımız olduğunu varsayalım (ön işleme adımlarından sonra):
+    *   D1: "veri madencilik veri analiz" (Toplam kelime: 4)
+    *   D2: "metin madencilik uygulama" (Toplam kelime: 3)
+    *   D3: "veri analiz raporlama" (Toplam kelime: 3)
+
+    Toplam Doküman Sayısı (N) = 3
+    Sözlük (Benzersiz Kelimeler): "veri", "madencilik", "analiz", "metin", "uygulama", "raporlama"
+
+    **Adım 1: Terim Frekansı (TF) Hesaplaması**
+
+    *   **D1 için:**
+        *   TF("veri", D1) = 2/4 = 0.50
+        *   TF("madencilik", D1) = 1/4 = 0.25
+        *   TF("analiz", D1) = 1/4 = 0.25
+        *   Diğer kelimeler (metin, uygulama, raporlama) için TF = 0
+
+    *   **D2 için:**
+        *   TF("metin", D2) = 1/3 ≈ 0.33
+        *   TF("madencilik", D2) = 1/3 ≈ 0.33
+        *   TF("uygulama", D2) = 1/3 ≈ 0.33
+        *   Diğer kelimeler (veri, analiz, raporlama) için TF = 0
+
+    *   **D3 için:**
+        *   TF("veri", D3) = 1/3 ≈ 0.33
+        *   TF("analiz", D3) = 1/3 ≈ 0.33
+        *   TF("raporlama", D3) = 1/3 ≈ 0.33
+        *   Diğer kelimeler (madencilik, metin, uygulama) için TF = 0
+
+    **Adım 2: Ters Doküman Frekansı (IDF) Hesaplaması**
+
+    *   "veri": D1, D3'te geçiyor (2 doküman)
+        *   IDF("veri") = log_e(3/2) = log_e(1.5) ≈ 0.41
+    *   "madencilik": D1, D2'de geçiyor (2 doküman)
+        *   IDF("madencilik") = log_e(3/2) = log_e(1.5) ≈ 0.41
+    *   "analiz": D1, D3'te geçiyor (2 doküman)
+        *   IDF("analiz") = log_e(3/2) = log_e(1.5) ≈ 0.41
+    *   "metin": D2'de geçiyor (1 doküman)
+        *   IDF("metin") = log_e(3/1) = log_e(3) ≈ 1.10
+    *   "uygulama": D2'de geçiyor (1 doküman)
+        *   IDF("uygulama") = log_e(3/1) = log_e(3) ≈ 1.10
+    *   "raporlama": D3'te geçiyor (1 doküman)
+        *   IDF("raporlama") = log_e(3/1) = log_e(3) ≈ 1.10
+
+    **Adım 3: TF-IDF Değerlerinin Hesaplaması (TF x IDF)**
+
+    *   **D1 için:**
+        *   TF-IDF("veri", D1) = 0.50 * 0.41 = 0.205
+        *   TF-IDF("madencilik", D1) = 0.25 * 0.41 = 0.1025
+        *   TF-IDF("analiz", D1) = 0.25 * 0.41 = 0.1025
+        *   TF-IDF("metin", D1) = 0 * 1.10 = 0
+        *   TF-IDF("uygulama", D1) = 0 * 1.10 = 0
+        *   TF-IDF("raporlama", D1) = 0 * 1.10 = 0
+
+    *   **D2 için:**
+        *   TF-IDF("veri", D2) = 0 * 0.41 = 0
+        *   TF-IDF("madencilik", D2) = 0.33 * 0.41 = 0.1353
+        *   TF-IDF("analiz", D2) = 0 * 0.41 = 0
+        *   TF-IDF("metin", D2) = 0.33 * 1.10 = 0.363
+        *   TF-IDF("uygulama", D2) = 0.33 * 1.10 = 0.363
+        *   TF-IDF("raporlama", D2) = 0 * 1.10 = 0
+
+    *   **D3 için:**
+        *   TF-IDF("veri", D3) = 0.33 * 0.41 = 0.1353
+        *   TF-IDF("madencilik", D3) = 0 * 0.41 = 0
+        *   TF-IDF("analiz", D3) = 0.33 * 0.41 = 0.1353
+        *   TF-IDF("metin", D3) = 0 * 1.10 = 0
+        *   TF-IDF("uygulama", D3) = 0 * 1.10 = 0
+        *   TF-IDF("raporlama", D3) = 0.33 * 1.10 = 0.363
+
+    Bu hesaplamalar sonucunda elde edilen Belge-Terim Matrisi (yaklaşık değerlerle):
+
+    | Doküman | veri | madencilik | analiz | metin | uygulama | raporlama |
+    | :--- | :--: | :---: | :---: | :---: | :---: | :---: |
+    | **D1** | 0.21 | 0.10 | 0.10 | 0.00 | 0.00 | 0.00 |
+    | **D2** | 0.00 | 0.14 | 0.00 | 0.36 | 0.36 | 0.00 |
+    | **D3** | 0.14 | 0.00 | 0.14 | 0.00 | 0.00 | 0.36 |
+
+    *   **Not:** TF-IDF hesaplamalarında kullanılan normalizasyon yöntemleri (örneğin, L2 normalizasyonu) veya logaritma tabanı farklılık gösterebilir. Bu durum, farklı araçlar veya kütüphaneler arasında küçük sayısal farklılıklara yol açabilir, ancak temel mantık ve kelimelerin göreceli önemi aynı kalır.
+
+    *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir. Artık bu sayısal matris üzerinde kümeleme veya sınıflandırma gibi algoritmaları çalıştırabiliriz.
+
+#### **Aşama 3: Veri Madenciliği (Pattern Discovery)**
+
+Önişleme aşamasında yapısal hale getirdiğimiz sayısal veri matrisi üzerinde artık bildiğimiz veri madenciliği algoritmalarını uygulayabiliriz. Bu aşamada metnin içindeki örüntüler, ilişkiler ve yapılar ortaya çıkarılır.
+
+*   **Yaygın Görevler:**
+    *   **Metin Sınıflandırma (Text Classification):** Metinleri önceden tanımlanmış kategorilere atama. En popüler örneği **Duygu Analizi (Sentiment Analysis)**'dir. Müşteri yorumlarının "pozitif", "negatif" veya "nötr" olarak etiketlenmesi bu kapsama girer.
+    *   **Metin Kümeleme (Text Clustering):** Benzer metinleri etiket olmaksızın doğal gruplarına ayırma. Örneğin, haber makalelerini konu başlıklarına göre (spor, siyaset, ekonomi) otomatik olarak gruplamak.
+    *   **Konu Modellemesi (Topic Modeling):** Bir metin koleksiyonunda gizli olan soyut "konuları" ve bu konuların hangi kelimelerle ifade edildiğini istatistiksel olarak keşfetmek.
+
+#### **Aşama 4: Değerlendirme ve Yorumlama**
+
+Son aşama, elde edilen sonuçların kalitesini ölçmek ve bu sonuçları anlamlı, eyleme dönüştürülebilir bilgilere çevirmektir.
+
+*   **Değerlendirme:**
+    *   Modelin performansı sayısal metriklerle ölçülür. Sınıflandırma için **doğruluk (accuracy), hassasiyet (precision)** gibi metrikler kullanılır. Kümeleme sonuçlarının kalitesi ise genellikle daha dolaylı yöntemlerle veya uzman görüşüyle değerlendirilir.
+*   **Yorumlama:**
+    Bu, teknik bulguların iş diline tercüme edildiği yerdir.
+    *   *Örnek:* "Duygu analizi modelimiz, son ürün lansmanından sonraki hafta negatif yorumların %30 arttığını gösterdi. TF-IDF analizine göre, bu negatif yorumlarda en çok öne çıkan kelimeler 'pil ömrü' ve 'yavaşlama' oldu."
+    *   Bu teknik sonuç, "Yeni ürünün pil performansı konusunda ciddi bir müşteri memnuniyetsizliği var ve acilen müdahale edilmesi gerekiyor" şeklinde eyleme geçirilebilir bir bilgiye dönüşür.
+
+Bu dört aşamalı süreç, metin gibi karmaşık bir veri türünden bile sistematik bir şekilde değer yaratmamızı sağlar.
+
+## Örnek Uygulama: SMS Spam Tespiti Naive Bayes ile
+Gençler,
+
+Aşağıda SMS spam örneğini Weka ile adım adım, önce uygulamada yapılacak temel işler sonra dikkat edilmesi gereken teknik ayrıntılar şeklinde açıklıyorum. Her adımı sırasıyla uygulayın; gerektiğinde küçük ayarlarla deney yapın.
+
+1) Veri edinme ve açma
+- Veri kaynağı: https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip  
+ZIP'i indirin, açın ve içindeki SMSSpamCollection dosyasını alın. Bu dosya genelde her satırda "label<TAB>message" formatındadır. Gerekirse CSV/ARFF’e dönüştürün (Weka Explorer’da Open file... ile CSV yüklenebilir).
+- Dosyayı açarken sınıf (label) sütununun nominal (spam/ham) olduğundan emin olun.
+
+2) Metni sayısallaştırma (ön işlem)
+- Preprocess sekmesinde StringToWordVector filtresini seçin.
+- Önemli ayarlar:
+    - lowerCaseTokens = True (Küçük harfe çevir)
+    - outputWordCounts = True (kelime frekanslarını kullan) — NaiveBayesMultinomial ile genelde tercih edilir.
+    - wordsToKeep = 1000–5000 (ilk deneme için 1000 iyi bir başlangıç)
+    - useStoplist = True (standart stop-word listesi)
+    - stemmer = PorterStemmer (isteğe bağlı; kelime çeşitlemesini azaltır)
+    - tokenizer: WordTokenizer veya NGramTokenizer (tek kelime ile başlayın; gerekirse 2-gram deneyin)
+    - TF/IDF: önce sayılarla çalışın; TF-IDF kullanımı farklı davranış verebilir (deneyin).
+- Apply ile filtreyi uyguladıktan sonra veri setiniz artık birçok sayısal öznitelikten oluşacaktır. Sınıf özniteliğinin (spam/ham) korunup korunmadığını kontrol edin.
+
+3) Sınıflandırıcı seçimi ve eğitim
+- Classify sekmesine geçin.
+- Choose -> weka.classifiers.bayes.NaiveBayesMultinomial seçin (metin frekansları için uygun).
+- Test options: 10-fold cross-validation seçin (varsayılan olarak stratified olur). Random seed = 1 gibi sabit bir değer kullanın.
+- Start ile eğitimi başlatın.
+
+4) Sonuçları okuma ve yorumlama
+- Confusion matrix: dört hücreyi okuyun (True Negatives, False Positives, False Negatives, True Positives). 
+    - False Positive = normal mesajın (ham) yanlışlıkla spam işaretlenmesi — kullanıcı açısından daha maliyetli olabilir.
+    - False Negative = spam’in kaçması — güvenlik/başarı açısından önemli.
+- Raporta Accuracy, Precision, Recall, F1 ve ROC AUC değerlerine bakın.
+    - Spam tespitte genelde Precision (etiketlenen spam’lerin gerçekten spam olma oranı) ile Recall arasında tercih/denge gerekir; kullanım senaryonuza göre öncelik belirleyin.
+- Eğer sınıflar dengesizse (genelde ham çok daha fazladır), accuracy yanıltıcı olabilir; Precision/Recall ve AUC tercih edin.
+
+5) Basit iyileştirmeler ve pratik kontroller
+- Eğer çok fazla false positive görürseniz:
+    - threshold veya maliyet matrisi uygulamayı düşünün (Weka’da CostSensitiveClassifier ya da resampling).
+    - sınıf ağırlıklarını değiştirin veya yanlış sınıf cezalarını ayarlayın.
+- Daha iyi performans için deneyler:
+    - wordsToKeep’i değiştirin (1000 → 3000).
+    - n-gram (1 vs 2-gram) deneyin.
+    - stemming ve stoplist varyasyonlarını test edin.
+    - outputWordCounts yerine boolean (present/absent) ile karşılaştırın.
+    - TF-IDF’yi deneyin; bazı durumlarda Multinomial yerine Bernoulli/naive bayes versiyonları farklı sonuç verir.
+
+- Neden NaiveBayesMultinomial? Kelime frekanslarını (counts) direkt modelleyen formülü içerir; metin verilerinde sıklıkla daha stabil ve hızlıdır.
+- Smoothing (Laplace): Çok nadir görülen kelimeler veya hiç görülmeyen kelimeler için sıfır olasılığı engelleyen düzeltme gereklidir; Multinomial uygulamalar genelde smoothing içerir.
+- Log-olasılık: Gerçek uygulamalarda P(X|C) çarpımları çok küçük sayılar üretir; algoritma iç hesaplamalarda log-probabilities ile çalışır (numerik kararlılık).
+- Tokenizasyon ve özellik uzayı: Hangi tokenizasyonu kullandığınız ve kaç kelime tuttuğunuz model kapasitesini doğrudan etkiler. Çok geniş sözlük → daha yüksek varyans; çok dar → yüksek bias.
+- Özellik seçimi: Bilgi kazancı (InfoGain) veya chi-square ile öznitelik seçimi yaparak gürültüyü azaltmak performansı artırabilir.
+- Değerlendirme güvenilirliği: 10-fold CV iyi bir başlangıçtır; model tuning (hiperparametre araması) yaparken iç içe (nested) CV veya ayrı doğrulama kümesi kullanın.
+
+7) Hızlı kontrol listesi (uygulamaya başlamadan önce)
+- Dosyayı düzgün yüklediniz mi? (label ve message doğru kolonlarda)
+- Sınıf etiketi nominal mi?
+- StringToWordVector’da outputWordCounts ve lowerCaseTokens doğru mu?
+- Classify bölümünde NaiveBayesMultinomial seçili mi?
+- 10-fold CV ile değerlendirme yaptınız mı?
+- Confusion matrix’i ve Precision/Recall/F1’i incelediniz mi?
+
+Not: Her ayar değişikliğinden sonra yalnızca bir parametreyi değiştirip sonucu karşılaştırın. Böylece hangi değişikliğin etkili olduğunu açıkça görürsünüz.
+
+Kısa örnek deney sırası (pratik):
+1. Orijinal pipeline ile temel sonuç alın (wordsToKeep=1000, unigrams, stemmer on).
+2. wordsToKeep=3000 ile tekrar çalıştırın; değişim kaydedin.
+3. Unigrams → unigrams+2‑grams ile tekrar çalıştırın.
+4. outputWordCounts = False (sadece var/yok) ile tekrar karşılaştırın.
+5. En iyi sonuç veren kombinasyonda bilgi kazancı ile üst 500 özelliği seçip tekrar test edin.
+
+Bu adımları takip ederek Weka’da SMS spam sınıflandırmasını hem uygulamalı hem de bilinçli bir şekilde deneyimleyebilirsiniz. Her adımda sonuçları kaydedin ve küçük değişikliklerin etkisini not edin; model iyileştirme sistematik, ölçülebilir denemelerle yapılır.
