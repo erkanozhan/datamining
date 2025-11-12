@@ -1887,74 +1887,7 @@ Jaccard benzerliği = 2/4 = 0.5
 
 Bu yöntem, özellikle öneri sistemlerinde (recommendation systems) kullanılır. "Bu ürünü alanlar bunları da aldı" mantığının arkasında bu hesaplamalar vardır.
 
-#### 2. Sayısal Veriler İçin Ölçütler (Numerical/Metric Data Measures)
-
-Sayısal veriler için geometrik uzaklık kavramlarını kullanırız. Burada üç temel yöntem var:
-
-**Öklid Uzaklığı (Euclidean Distance):** En bilindik uzaklık metriğidir (distance metric). İki nokta arasındaki düz çizgi mesafesini ölçer. 
-
-Basit bir örnek verelim: İki öğrencinin matematik ve fen notları var.
-- Öğrenci A: Matematik 80, Fen 70
-- Öğrenci B: Matematik 85, Fen 75
-
-Bu iki öğrenciyi bir koordinat sisteminde (coordinate system) düşünün. X ekseni matematik, Y ekseni fen notu. Aralarındaki mesafeyi cetvel koyup ölçsek, Öklid uzaklığını bulmuş oluruz. Matematiksel olarak: √[(85-80)² + (75-70)²] = √(25+25) = 7.07
-
-**Manhattan Uzaklığı (Manhattan Distance / City Block Distance):** Adından da anlaşılacağı gibi, Manhattan'ın ızgara şeklindeki sokak yapısından esinlenilmiştir. İki nokta arasında sadece yatay ve dikey hareketlerle gidilen yolu hesaplar.
-
-Aynı öğrenci örneğinde:
-- Matematik farkı: |85-80| = 5
-- Fen farkı: |75-70| = 5
-- Manhattan uzaklığı = 5 + 5 = 10
-
-Gençler, bu iki yöntem arasındaki farkı şöyle düşünebilirsiniz: Öklid uzaklığı kuş uçuşu mesafe (as the crow flies), Manhattan uzaklığı ise sokakları takip ederek gidilen mesafedir.
-
-**Minkowski Uzaklığı (Minkowski Distance):** Bu, yukarıdaki iki yöntemi de kapsayan genelleştirilmiş bir formüldür. Bir parametre (p değeri) değiştirerek:
-- p=1 olursa Manhattan uzaklığı
-- p=2 olursa Öklid uzaklığı  
-- p=∞ olursa Chebyshev uzaklığı elde edilir
-
-Daha ileri düzey analizlerde, probleme özgü uzaklık tanımları yapmak için kullanılır.
-
-#### 3. Karma Veriler İçin Yaklaşımlar (Mixed Data Approaches)
-
-Gerçek hayatta veriler genelde karışık tipte (mixed-type) olur. Bir müşteri verisinde hem yaş (sayısal/numerical) hem meslek (kategorik/categorical) olabilir. Bu durumda ne yapacağız?
-
-Her öznitelik türü (attribute type) için ayrı uzaklık hesaplarız, sonra bunları birleştiririz:
-- Yaş farkı için Öklid uzaklığı kullan, normalize et (normalization) - 0-1 arası yap
-- Meslek için eşleşme var mı yok mu bak (0 veya 1)
-- İkisinin ağırlıklı ortalamasını (weighted average) al
-
-Bu birleştirme işleminde dikkatli olmak gerekir. Bazı özellikler diğerlerinden daha önemli olabilir. Mesela kredi risk analizinde (credit risk analysis) gelir, hobilerden daha önemlidir. Bu durumda özellik ağırlıklandırması (feature weighting) yaparız.
-
-### Uzaklık Ölçütü Seçiminin Önemi
-
-Yanlış uzaklık ölçütü seçmek, tamamen yanlış sonuçlara yol açabilir. Örneğin:
-- Metin madenciliğinde (text mining) Öklid uzaklığı yerine kosinüs benzerliği (cosine similarity) kullanmak daha mantıklıdır
-- Yüksek boyutlu verilerde (high-dimensional data) Manhattan uzaklığı bazen daha iyi sonuç verir
-- Aykırı değerlere (outliers) duyarlı olmamak için Mahalanobis uzaklığı tercih edilebilir
-
-### Pratik Uygulamalar
-
-**R'da uygulama:**
-```r
-dist(data, method = "euclidean")  # Öklid uzaklığı
-dist(data, method = "manhattan")  # Manhattan uzaklığı
-```
-
-**Python'da uygulama:**
-```python
-from sklearn.metrics import pairwise_distances
-distances = pairwise_distances(data, metric='euclidean')
-```
-
-**Weka'da:** Kümeleme algoritması seçerken "Distance Function" bölümünden uygun metriği seçebilirsiniz.
-
-**Java'da:** Kendi uzaklık fonksiyonunuzu (custom distance function) yazabilir veya Apache Commons Math kütüphanesini kullanabilirsiniz.
-
-Pratikte, farklı uzaklık ölçütlerini deneyip sonuçları karşılaştırmak iyi bir yaklaşımdır. Hangi ölçüt daha anlamlı kümeler veriyorsa, o sizin probleminiz için daha uygundur. Unutmayın, veri ön işleme (data preprocessing) ve ölçeklendirme (scaling) adımları da uzaklık hesaplamalarını doğrudan etkiler.
-
-Kümeleme analizinin kalitesi, bu temel kararlarla başlar. Verinizin yapısını anlayın, amacınızı belirleyin, sonra uygun ölçütü seçin. Varsayılan ayarları (default settings) körü körüne kullanmayın.
-### Veri Madenciliği ve Kümeleme Analizi: Benzerliklerin Hesaplanması
+### Kümeleme Analizi: Benzerliklerin Hesaplanması
 
 Kümeleme analizinin temel adımlarından biri, veri setindeki gözlemlerin (bu örnekte müşterilerin) birbirlerine ne kadar benzediğini veya ne kadar uzak olduğunu ölçmektir. Elimizdeki veri seti, kategorik değişkenler içerdiğinden, benzerliği tespit etmek için özel bir yöntem kullanmamız gerekir. Bu derste, eşleşen özelliklerin sayılmasına dayalı basit bir yöntemi inceleyeceğiz.
 
@@ -2040,8 +1973,6 @@ Her bir `S_ij` değeri, i numaralı müşteri ile j numaralı müşteri arasınd
 
 ---
 
-### Sonuç ve Yorum
-
 Hesaplamalar sonucunda en yüksek benzerlik skorunun **S₁₅ = 2** olduğunu görüyoruz. Bu, veri setimizdeki birbirine en çok benzeyen çiftin **1. ve 5. müşteriler** olduğu anlamına gelir. Bu iki müşteri, 3 özellikten 2'sinde aynı tercihi yapmıştır.
 
 Diğer yandan, skoru 1 olan (S₁₂, S₂₃, S₂₄, S₃₄, S₄₅) ve skoru 0 olan (S₁₃, S₁₄, S₂₅, S₃₅) çiftler de bulunmaktadır.
@@ -2052,7 +1983,7 @@ Bu yöntem, en benzer çifti net bir şekilde ortaya koyar. Ancak, bu skorların
 
 ***
 
-### Veri Madenciliği ve Kümeleme Analizi: Ağırlıklandırılmış Benzerlik Hesabı
+### Kümeleme Analizi: Ağırlıklandırılmış Benzerlik Hesabı
 
 Önceki yöntemde her bir özelliğe (Model, Ülke, Renk) eşit önem vermiştik. Ancak, bazı durumlarda bu yaklaşım yeterli olmayabilir. Örneğin, daha fazla seçeneği olan bir değişkendeki eşleşme, daha az seçeneği olan bir değişkendeki eşleşmeden daha anlamlı veya daha nadir bir durumu ifade ediyor olabilir.
 
@@ -2106,6 +2037,10 @@ Gençler, önceki bölümde, tamamen kategorik değişkenlerden oluşan bir veri
 Şimdi düşünelim ki, otomobil tercihleri tablomuzdaki 'Model', 'Ülke' ve 'Renk' gibi kategorik özelliklerin yanına, 'Yıllık Gelir' veya 'Yaş' gibi sayısal bir değişken ekledik. Bu durumda, basit eşleşme katsayısı yöntemimiz yetersiz kalır. Çünkü 'Gelir' gibi sürekli bir değişken için 'aynı' veya 'farklı' demenin ötesinde, 'ne kadar farklı' olduklarını ölçmemiz gerekir. İki kişinin gelirinin 50.000 TL ile 51.000 TL olması ile 50.000 TL ile 500.000 TL olması arasındaki farkı, sadece 'farklı' diyerek göz ardı edemeyiz. Bu, benzerlik ölçümümüzün hassasiyetini ve anlamlılığını ciddi şekilde düşürür.
 
 İşte bu tür karmaşık veri yapıları için, özellikle sayısal değişkenlerin farklılıklarını daha anlamlı bir şekilde değerlendirebilmek adına yeni yaklaşımlara ihtiyacımız doğar. Bu noktada, gözlemler arasındaki 'uzaklığı' veya 'farklılığı' ölçmeye odaklanan iki temel yöntem devreye girer: **Mutlak Sapmalar Yöntemi** ve **Farklar Karesi Toplamı Yöntemi**.
+
+
+
+
 
 ### Mutlak Sapmalar Yöntemi
 
@@ -2177,9 +2112,9 @@ Peki, bu "yakınlığı" nasıl ölçeriz? İşte burada, amaca ve verinin yapı
 
 ***
 
-### Sayısal Verilerde Uzaklık Ölçümleri
+### Sayısal Verilerde Uzaklık Ölçümleri (Numerical/Metric Data Measures)
 
-Kümeleme algoritmaları, veri noktaları (gözlemler) arasındaki mesafeleri hesaplayarak işe başlar. En yakın olanları aynı kümeye dahil etme eğilimindedirler. Bu süreçte en yaygın olarak kullanılan üç temel uzaklık ölçüsünü inceleyelim.
+Kümeleme algoritmaları, veri noktaları (gözlemler) arasındaki mesafeleri hesaplayarak işe başlar. En yakın olanları aynı kümeye dahil etme eğilimindedirler. Sayısal veriler için geometrik uzaklık kavramlarını kullanırız. Bu süreçte en yaygın olarak kullanılan üç temel uzaklık ölçüsünü inceleyelim.
 
 #### 1. Öklid Uzaklığı (Euclidean Distance)
 
@@ -2197,6 +2132,12 @@ Bu formülü, veri setimizdeki 'p' adet özelliğe (boyuta) genelleyebiliriz. A 
 
 **Sayısal Örnekler:**
 
+*   **Öğrenci Notları Örneği:** İki öğrencinin matematik ve fen notları var.
+    *   Öğrenci A: Matematik 80, Fen 70
+    *   Öğrenci B: Matematik 85, Fen 75
+    Bu iki öğrenciyi bir koordinat sisteminde düşünün. X ekseni matematik, Y ekseni fen notu. Aralarındaki mesafeyi cetvel koyup ölçsek, Öklid uzaklığını bulmuş oluruz. Matematiksel olarak:
+    `Öklid(A, B) = √[(85-80)² + (75-70)²] = √(25+25) = 7.07`
+
 *   **2 Boyutlu Örnek:** A(1, 2) ve B(4, 6) noktaları arasındaki Öklid uzaklığı:
     `Öklid(A, B) = √[ (4 - 1)² + (6 - 2)² ]`
     `= √[ (3)² + (4)² ]`
@@ -2211,7 +2152,7 @@ Bu formülü, veri setimizdeki 'p' adet özelliğe (boyuta) genelleyebiliriz. A 
 
 *   **Neden Önemli?** Öklid uzaklığı, büyük farklara karşı oldukça hassastır. Bir özellikteki büyük bir fark, karesi alındığı için toplam mesafeyi ciddi şekilde artırır. Bu, aykırı değerlerin (outlier) kümeleme sonuçlarını önemli ölçüde etkileyebileceği anlamına gelir. Verileriniz yoğun ve küresel bir dağılıma sahipse genellikle çok iyi sonuçlar verir.
 
-#### 2. Manhattan veya City-Block Uzaklığı
+#### 2. Manhattan veya City-Block Uzaklığı (Manhattan Distance / City Block Distance)
 
 İsmini, Manhattan gibi ızgara planlı bir şehirde bir yerden bir yere gitme probleminden alır. Binaların içinden geçemeyeceğiniz için, caddeler ve sokaklar boyunca yatay ve dikey olarak hareket etmek zorundasınızdır. Bu yüzden "şehir bloku" veya "taksimetre" uzaklığı olarak da bilinir.
 
@@ -2227,6 +2168,12 @@ Bu metrik, iki nokta arasındaki farkların **mutlak değerlerini** toplar.
 
 **Sayısal Örnekler:**
 
+*   **Öğrenci Notları Örneği:** Aynı öğrenci örneğinde:
+    *   Matematik farkı: |85-80| = 5
+    *   Fen farkı: |75-70| = 5
+    *   Manhattan uzaklığı = 5 + 5 = 10
+    Gençler, bu iki yöntem arasındaki farkı şöyle düşünebilirsiniz: Öklid uzaklığı kuş uçuşu mesafe (as the crow flies), Manhattan uzaklığı ise sokakları takip ederek gidilen mesafedir.
+
 *   **2 Boyutlu Örnek:** A(1, 2) ve B(4, 6) noktaları arasındaki Manhattan uzaklığı:
     `Manhattan(A, B) = |4 - 1| + |6 - 2|`
     `= 3 + 4 = 7`
@@ -2237,7 +2184,7 @@ Bu metrik, iki nokta arasındaki farkların **mutlak değerlerini** toplar.
 
 *   **Neden Önemli?** Bu yöntem, farkların karesini almadığı için Öklid uzaklığına göre aykırı değerlere karşı **daha dayanıklıdır (robust)**. Bir özellikteki büyük bir fark, toplam mesafeyi Öklid'deki kadar dramatik bir şekilde artırmaz. Özellikle, özellikler arasındaki "köşegen" bir hareketin anlamlı olmadığı durumlarda (örneğin, bir eksen yaş, diğer eksen alışveriş adedi ise bu ikisi arasında doğrudan bir geçiş anlamsızdır) veya çok yüksek boyutlu veri setlerinde tercih edilebilir.
 
-#### 3. Minkowski Uzaklığı
+#### 3. Minkowski Uzaklığı (Minkowski Distance)
 
 Minkowski uzaklığı, aslında bir "üst metrik" veya "genelleştirilmiş" bir formüldür. Öklid ve Manhattan uzaklıklarını özel durumlar olarak içinde barındırır.
 
@@ -2255,6 +2202,11 @@ Buradaki **'p'** parametresi, metriğin davranışını kontrol eden kilit nokta
     `[ |a₁ - b₁|² + ... ]¹/² = √[ (a₁ - b₁)² + ... ]`
     Formül, **Öklid Uzaklığı**'na dönüşür.
 
+*   **Eğer p = ∞ ise:**
+    Chebyshev uzaklığı elde edilir.
+
+Daha ileri düzey analizlerde, probleme özgü uzaklık tanımları yapmak için kullanılır.
+
 **Sayısal Örnek (p=3 için):**
 
 *   **2 Boyutlu Örnek (p=3):** A(1, 2) ve B(4, 6) noktaları arasındaki Minkowski uzaklığı (p=3):
@@ -2264,6 +2216,47 @@ Buradaki **'p'** parametresi, metriğin davranışını kontrol eden kilit nokta
     `= [ 91 ]¹/³ ≈ 4.50`
 
 *   **Neden Önemli?** Minkowski uzaklığı, bize esneklik kazandırır. `p` parametresini değiştirerek, büyük farklara ne kadar önem vereceğimizi ayarlayabiliriz. `p` değeri arttıkça, en büyük farkın toplam mesafe üzerindeki etkisi de o kadar artar. Bu, analizcinin problemine en uygun uzaklık ölçüsünü deneyerek bulmasına olanak tanır.
+
+#### 4. Karma Veriler İçin Yaklaşımlar (Mixed Data Approaches)
+
+Gerçek hayatta veriler genelde karışık tipte (mixed-type) olur. Bir müşteri verisinde hem yaş (sayısal/numerical) hem meslek (kategorik/categorical) olabilir. Bu durumda ne yapacağız?
+
+Her öznitelik türü (attribute type) için ayrı uzaklık hesaplarız, sonra bunları birleştiririz:
+
+*   Yaş farkı için Öklid uzaklığı kullan, normalize et (normalization) - 0-1 arası yap
+*   Meslek için eşleşme var mı yok mu bak (0 veya 1)
+*   İkisinin ağırlıklı ortalamasını (weighted average) al
+
+Bu birleştirme işleminde dikkatli olmak gerekir. Bazı özellikler diğerlerinden daha önemli olabilir. Mesela kredi risk analizinde (credit risk analysis) gelir, hobilerden daha önemlidir. Bu durumda özellik ağırlıklandırması (feature weighting) yaparız.
+
+#### 5. Uzaklık Ölçütü Seçiminin Önemi
+
+Yanlış uzaklık ölçütü seçmek, tamamen yanlış sonuçlara yol açabilir. Örneğin:
+
+*   Metin madenciliğinde (text mining) Öklid uzaklığı yerine kosinüs benzerliği (cosine similarity) kullanmak daha mantıklıdır (Sonraki bölümlerde anlatılacak).
+*   Yüksek boyutlu verilerde (high-dimensional data) Manhattan uzaklığı bazen daha iyi sonuç verir.
+*   Aykırı değerlere (outliers) duyarlı olmamak için Mahalanobis uzaklığı tercih edilebilir.
+
+#### 6. Pratik Uygulamalar
+
+Farklı uzaklık ölçütlerini çeşitli platformlarda uygulayabiliriz:
+
+*   **R'da uygulama:**
+    ```R
+    dist(data, method = "euclidean")  # Öklid uzaklığı
+    dist(data, method = "manhattan")  # Manhattan uzaklığı
+    ```
+*   **Python'da uygulama:**
+    ```python
+    from sklearn.metrics import pairwise_distances
+    distances = pairwise_distances(data, metric='euclidean')
+    ```
+*   **Weka'da:** Kümeleme algoritması seçerken "Distance Function" bölümünden uygun metriği seçebilirsiniz.
+*   **Java'da:** Kendi uzaklık fonksiyonunuzu (custom distance function) yazabilir veya Apache Commons Math kütüphanesini kullanabilirsiniz.
+
+Pratikte, farklı uzaklık ölçütlerini deneyip sonuçları karşılaştırmak iyi bir yaklaşımdır. Hangi ölçüt daha anlamlı kümeler veriyorsa, o sizin probleminiz için daha uygundur. Unutmayın, veri ön işleme (data preprocessing) ve ölçeklendirme (scaling) adımları da uzaklık hesaplamalarını doğrudan etkiler.
+
+Kümeleme analizinin kalitesi, bu temel kararlarla başlar. Verinizin yapısını anlayın, amacınızı belirleyin, sonra uygun ölçütü seçin. Varsayılan ayarları (default settings) körü körüne kullanmayın.
 
 ### Özetle
 
@@ -2276,11 +2269,6 @@ Doğru uzaklık metriğini seçmek, kümeleme analizinin kalitesini doğrudan et
 ![Uzaklık Metriği Seçimi](images/distances.svg)
 
 
-Şimdiye kadar veriler arasındaki benzerliği veya uzaklığı nasıl ölçebileceğimizi ele aldık. Artık elimizde bir "cetvel" var. Bir sonraki mantıksal adım, bu cetveli kullanarak veri noktalarını anlamlı gruplara, yani kümelere ayıracak stratejileri, yani algoritmaları incelemektir.
-
-Literatürde bu işi yapan çok sayıda kümeleme algoritması mevcuttur. Her birinin kendine özgü güçlü ve zayıf yönleri vardır. Ancak bu algoritmaları daha iyi anlamak için onları temel yaklaşımlarına göre sınıflandırabiliriz. Tıpkı biyolojide canlıları sınıflandırdığımız gibi, burada da algoritmaları felsefelerine göre ayırıyoruz.
-
-***
 
 ### Veri Madenciliği ve Kümeleme Analizi: Kümeleme Yöntemleri
 
