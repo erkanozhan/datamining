@@ -700,7 +700,7 @@ Bu sayede Kazanç Oranı, hem yüksek bilgi sağlayan hem de veriyi makul sayıd
 
 ### 3.3. Gini İndeksi ile Adım Adım Karar Ağacı İnşası: Bir Vaka Analizi
 
-Sevgili arkadaşlar, teorik bilgileri somut bir örnekle taçlandırmanın zamanı geldi. Gelin, "Bugün tenis oynamalı mıyız?" sorusuna cevap arayan klasik bir veri seti üzerinden, Gini İndeksi'ni kullanarak bir karar ağacını adım adım nasıl inşa ettiğimizi birlikte görelim. Bu süreç, algoritmanın "düşünme" biçimini anlamamız için bize harika bir fırsat sunacak.
+Gençler, teorik bilgileri somut bir örnekle taçlandırmanın zamanı geldi. Gelin, "Bugün tenis oynamalı mıyız?" sorusuna cevap arayan klasik bir veri seti üzerinden, Gini İndeksi'ni kullanarak bir karar ağacını adım adım nasıl inşa ettiğimizi birlikte görelim.
 
 **Örnek Veri Setimiz:**
 
@@ -959,7 +959,7 @@ graph TD
 
 ### 4.1. Yaygın Durdurma Parametreleri
 
-Bu süreci yönetmek için elimizde harika kontrol mekanizmaları, yani hiperparametreler var. Gelin en yaygın olanlarına bir göz atalım:
+Bu süreci yönetmek için elimizde etkili kontrol mekanizmaları, yani hiperparametreler var. En yaygın olanlarına bir göz atalım:
 
 **a) Minimum Yaprak Boyutu (Minimum Leaf Size):** Bir yaprak düğümde en az kaç örnek olmalı? Bu, modelin çok özele inip tekil örnekleri ezberlemesini engeller.
 
@@ -2171,9 +2171,7 @@ Kısacası, farkların karesini almak;
 *   Negatif ve pozitif farkların birbirini götürmesini engeller ve tüm hataları pozitif bir değer olarak hesaba katar.
 
 Bu sebeplerle, Öklid mesafesi, en küçük kareler yöntemi gibi istatistik ve makine öğrenmesinin temelini oluşturan birçok yöntemde, farkların karesi kullanılır.
-
-
-Harika bir noktaya değindiniz. Önceki derste tartıştığımız "farkların karesini almak" meselesi, aslında şimdi ele alacağımız sayısal uzaklık ölçümlerinin tam kalbinde yer alıyor. Kümeleme analizi, özünde, veri noktalarını "benzerliklerine" göre gruplama sanatıdır ve bu benzerliğin matematiksel ifadesi de genellikle "mesafe" veya "uzaklık" kavramıyla ölçülür. İki nokta birbirine ne kadar "yakınsa", o kadar benzer kabul edilir.
+Önceki derste tartıştığımız "farkların karesini almak" meselesi, aslında şimdi ele alacağımız sayısal uzaklık ölçümlerinin tam kalbinde yer alıyor. Kümeleme analizi, özünde, veri noktalarını "benzerliklerine" göre gruplama sanatıdır ve bu benzerliğin matematiksel ifadesi de genellikle "mesafe" veya "uzaklık" kavramıyla ölçülür. İki nokta birbirine ne kadar "yakınsa", o kadar benzer kabul edilir.
 
 Peki, bu "yakınlığı" nasıl ölçeriz? İşte burada, amaca ve verinin yapısına göre seçebileceğimiz farklı metrikler devreye giriyor.
 
@@ -2278,7 +2276,7 @@ Doğru uzaklık metriğini seçmek, kümeleme analizinin kalitesini doğrudan et
 ![Uzaklık Metriği Seçimi](images/distances.svg)
 
 
-Harika, şimdiye kadar veriler arasındaki benzerliği veya uzaklığı nasıl ölçebileceğimizi ele aldık. Artık elimizde bir "cetvel" var. Bir sonraki mantıksal adım, bu cetveli kullanarak veri noktalarını anlamlı gruplara, yani kümelere ayıracak stratejileri, yani algoritmaları incelemektir.
+Şimdiye kadar veriler arasındaki benzerliği veya uzaklığı nasıl ölçebileceğimizi ele aldık. Artık elimizde bir "cetvel" var. Bir sonraki mantıksal adım, bu cetveli kullanarak veri noktalarını anlamlı gruplara, yani kümelere ayıracak stratejileri, yani algoritmaları incelemektir.
 
 Literatürde bu işi yapan çok sayıda kümeleme algoritması mevcuttur. Her birinin kendine özgü güçlü ve zayıf yönleri vardır. Ancak bu algoritmaları daha iyi anlamak için onları temel yaklaşımlarına göre sınıflandırabiliriz. Tıpkı biyolojide canlıları sınıflandırdığımız gibi, burada da algoritmaları felsefelerine göre ayırıyoruz.
 
