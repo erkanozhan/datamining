@@ -1794,60 +1794,166 @@ Bu yöntem market sepeti analizinden metin madenciliğine, web analizi'nden biyo
 
 ## Veri Madenciliği - Kümeleme (Clustering) Analizi
 
-Gençler, şimdi veri madenciliğinin en temel ve sezgisel konularından birine, **Kümeleme Analizi**'ne odaklanacağız. Elimizde büyük bir veri yığını olduğunu düşünün. Bu yığının içinde, birbirine benzeyen ancak henüz tanımlanmamış gruplar olabilir. Kümeleme analizi, tam da bu noktada devreye girer.
+## Kümeleme Analizi
 
-Bu analizin öncelikli amacı, bir araştırma sonucunda elde edilen gözlemleri veya veri noktalarını, aralarındaki **benzerlikleri** temel alarak iki veya daha fazla doğal gruba ayırmaktır. Buradaki kritik nokta, bu grupların önceden tanımlanmamış olmasıdır; yani bir sınıflandırma problemindeki gibi "etiketli" veriye ihtiyacımız yoktur. Algoritma, verinin kendi iç yapısını keşfederek bu grupları oluşturur.
+Gençler, bugün veri madenciliğinde sıkça karşımıza çıkan kümeleme analizini ele alacağız. Öncelikle basit bir örnekle başlayalım.
 
-Peki, bu gruplama bize ne sağlar? Kümeleme analizi sonucunda elde edilen bu bölünmeler, nesnelerin veya olayların altında yatan yapıları hakkında **varsayımlar oluşturmamızı** sağlar. Örneğin, bir müşteri veri setini kümelediğimizde, ortaya çıkan her bir grup (küme), belirli demografik özelliklere veya satın alma davranışlarına sahip farklı bir müşteri segmentini temsil edebilir. Bu segmentleri inceleyerek, daha önce fark etmediğimiz pazar değerlerini veya müşteri profillerini keşfedebiliriz. Bu, genellikle **keşifsel (exploratory)** bir yaklaşımdır; yani verinin bize ne anlattığını anlamaya çalışırız.
+Diyelim ki bir markette çalışıyorsunuz ve müdür sizden binlerce müşterinin alışveriş verilerini incelemenizi istedi. Bu verilerin içinde kim hangi ürünü almış, ne zaman almış, ne kadar harcamış gibi bilgiler var. İşte kümeleme analizi bu noktada devreye giriyor - bu karmaşık veriyi benzer özellikteki gruplara ayırmamıza yardımcı oluyor.
 
-Ayrıca, kümeleme analizi sadece keşifsel amaçlar için değil, aynı zamanda **kanıtlayıcı (confirmatory)** amaçlar için de kullanılabilir. Eğer belirli bir hipotezimiz varsa (örneğin, "müşterilerimiz aslında üç ana gruba ayrılıyor olmalı"), kümeleme algoritmalarını kullanarak bu hipotezin veri tarafından desteklenip desteklenmediğini test edebiliriz. Bu sayede, teorik beklentilerimiz ile ampirik veriler arasındaki uyumu değerlendirme fırsatı buluruz.
+### Kümeleme Nedir?
 
-Özetle, kümeleme analizi, karmaşık veri setlerini daha anlamlı ve yönetilebilir parçalara ayırarak, verinin içindeki gizli yapıları ortaya çıkarmamıza ve bu yapılar üzerinden yeni bilgiler edinmemize olanak tanıyan güçlü bir araçtır.
-Kümeleme analizine başlamadan önce, bu keşifsel yolculuğumuzun sağlam temeller üzerine inşa edildiğinden emin olmak için bazı temel sorulara yanıt bulmamız gerekir. Bu sorular, hem analizin yönünü belirleyecek hem de elde edeceğimiz sonuçların anlamlılığını doğrudan etkileyecektir.
+Kümeleme, eldeki veri noktalarını benzerliklerine göre gruplara ayırma işlemidir. Dikkat edin, burada önceden belirlenmiş kategoriler yok. Algoritma verinin kendi yapısını inceleyerek bu grupları kendisi buluyor. Bu yönüyle sınıflandırmadan farklıdır - sınıflandırmada hangi grupların olduğunu bilirsiniz, kümelemede ise grupları keşfedersiniz.
 
-1.  **Araştırmanın Ana Hatları Belirli mi? (Amacımız ve Beklentilerimiz Neler?)**
-    Kümeleme, etiketlenmemiş verilerdeki gizli yapıları ortaya çıkarmayı hedefler. Ancak bu, tamamen amaçsız bir keşif olduğu anlamına gelmez. Hangi tür grupları aradığımız, bu gruplardan ne gibi içgörüler elde etmeyi umduğumuz, hatta hangi özelliklerin bu gruplamada önemli olabileceğine dair önsezilerimiz, analiz sürecini şekillendirir. Örneğin, müşteri segmentasyonu yapıyorsak, "satın alma davranışlarına göre mi, yoksa demografik özelliklere göre mi gruplama yapmalıyız?" sorusu, hangi veri özniteliklerine odaklanacağımızı belirler. Bu ön belirleme, hem veri hazırlığı hem de algoritma seçimi için bir rehber görevi görür.
+Bir örnekle açıklayalım: Sınıfta oturan öğrencileri boy uzunluklarına ve kilolarına göre gruplamak istesek, kümeleme algoritması muhtemelen benzer fiziksel özelliklere sahip öğrencileri aynı gruba koyacaktır. Ama biz önceden "uzun boylu", "kısa boylu" gibi etiketler vermeyiz - algoritma bu grupları kendisi oluşturur.
 
-2.  **Gözlemlerin Benzerlik Ölçümü Nasıl Olmalı? (Hangi Uzaklık Metriğini Kullanacağız?)**
-    Kümeleme algoritmalarının temelinde, veri noktaları arasındaki "benzerlik" veya "uzaklık" kavramı yatar. Ancak "benzerlik" evrensel bir kavram değildir; farklı veri türleri ve problem bağlamları için farklı şekillerde tanımlanır. İki veri noktasının birbirine ne kadar yakın olduğunu ölçmek için kullanılan bu matematiksel fonksiyonlara **uzaklık metrikleri** denir. Örneğin, sayısal veriler için en yaygın kullanılanlardan biri **Öklid uzaklığı**dır; bu, iki nokta arasındaki düz çizgi mesafesini ölçer. Ancak metin verileri gibi yüksek boyutlu ve seyrek verilerde **kosinüs benzerliği** gibi metrikler, vektörler arasındaki açıyı ölçerek yönsel benzerliği yakalamada daha etkili olabilir. Doğru metriği seçmek, kümelerin doğal yapısını doğru bir şekilde yansıtabilmek için kritik öneme sahiptir.
+### Kümeleme Analizinin Kullanım Amaçları
 
-3.  **Verilerin Standartları Olmalı mı? (Öznitelik Ölçeklendirmesi Gerekli mi?)**
-    Çoğu kümeleme algoritması, uzaklık hesaplamalarına dayanır. Eğer veri setimizdeki öznitelikler (değişkenler) farklı ölçeklere sahipse, yani bir öznitelik çok büyük değerler alırken diğeri çok küçük değerler alıyorsa, büyük ölçekli öznitelikler uzaklık hesaplamalarına orantısız bir şekilde etki edebilir. Örneğin, "yaş" (0-100) ve "yıllık gelir" (10.000-1.000.000) gibi iki özniteliği düşünün. Gelirdeki küçük bir değişim bile yaştaki büyük bir değişimden daha fazla etki yaratabilir. Bu durumu önlemek için verilerin **ölçeklendirilmesi (scaling)** veya **normalleştirilmesi (normalization)** gerekebilir. Bu işlem, tüm özniteliklerin benzer bir aralığa (örneğin 0-1 arasına) veya benzer bir istatistiksel dağılıma (ortalama 0, standart sapma 1) sahip olmasını sağlayarak, her özniteliğin kümeleme sürecine eşit katkıda bulunmasını temin eder.
+Kümeleme analizini iki temel amaçla kullanırız:
 
-4.  **Elimdeki Veriyi Kaç Kümeye Ayırırsam Optimal Dağılımı Elde Ederim? (Optimal Küme Sayısı 'k' Nasıl Belirlenir?)**
-    Birçok kümeleme algoritması (özellikle K-Means gibi), analize başlamadan önce kaç adet küme oluşturulacağını (`k` değeri) bizden ister. Ancak bu `k` değerini önceden bilmek genellikle zordur. Veri setinin doğal yapısını en iyi yansıtan küme sayısını bulmak için çeşitli yöntemler kullanılır. **Dirsek yöntemi (Elbow Method)** ve **Siluet katsayısı (Silhouette Score)** gibi istatistiksel yaklaşımlar, farklı `k` değerleri için kümeleme kalitesini değerlendirerek bize bir fikir verebilir. Bununla birlikte, alan bilgisi ve iş hedefleri de optimal `k` değerinin belirlenmesinde önemli bir rol oynar. Bazen istatistiksel olarak "en iyi" görünen `k` değeri, iş açısından en anlamlı `k` değeri olmayabilir.
+**1. Keşifsel Amaçlar:** Verinin bize ne anlattığını anlamaya çalışırız. Örneğin, bir bankanın müşteri verilerini analiz ettiğimizde ortaya çıkan kümeler bize farklı müşteri tiplerini gösterebilir - emekliler, öğrenciler, çalışan profesyoneller gibi. Bu grupları önceden tahmin etmemiş olabiliriz ama veri bize bunları gösterir.
 
-Bu sorulara verilen yanıtlar, kümeleme analizinin başarısı için temel bir çerçeve oluşturur. Kümeleme sonuçlarının kalitesi, kümeler içinde yüksek derecede **homojenlik** (yani, aynı kümedeki veri noktalarının birbirine çok benzemesi) ve kümeler arasında ise yüksek derecede **heterojenlik** (yani, farklı kümelerdeki veri noktalarının birbirinden belirgin şekilde farklı olması) göstermelidir. Bu denge, elde edilen kümelerin hem iç tutarlılığını hem de ayırt ediciliğini garanti eder.
+**2. Doğrulayıcı Amaçlar:** Bir hipotezimiz varsa, bunu test etmek için kullanırız. Mesela "müşterilerimiz üç ana gruba ayrılıyor" diye düşünüyorsak, kümeleme ile bunun doğru olup olmadığını kontrol edebiliriz.
 
-## Benzerlik ve Uzaklık Ölçütleri: Kümelerin Temel Taşı
+### Kümeleme Analizine Başlamadan Önce Cevaplanması Gereken Sorular
 
-Kümeleme analizinin kalbinde, gözlemlediğimiz bireylerin veya nesnelerin birbirine ne kadar benzediğini ya da birbirinden ne kadar farklı olduğunu belirleme ihtiyacı yatar. Bu, kümelerin oluşumunu sağlayan temel prensiptir. Bir kümeleme algoritması, veri noktalarını bir araya getirirken, aslında aralarındaki **benzerlikleri** veya **uzaklıkları** hesaplar. Bu hesaplamalar, kümelerin içindeki homojenliği ve kümeler arasındaki heterojenliği sağlamak için kritik öneme sahiptir.
+Kümeleme yapmadan önce bazı kritik kararlar vermemiz gerekiyor. Bu kararlar sonuçlarımızı doğrudan etkiler.
 
-Peki, iki veri nesnesinin birbirine ne kadar benzediğini veya ne kadar uzak olduğunu nasıl ölçeriz? Bu sorunun cevabı, elimizdeki verinin türüne ve problemimizin doğasına göre değişir. "Benzerlik" kavramı, evrensel bir tanıma sahip değildir; farklı bağlamlarda farklı şekillerde yorumlanabilir. Bu nedenle, doğru **benzerlik ölçütü (similarity measure)** veya **uzaklık metriği (distance metric)** seçimi, kümeleme analizinin başarısı için hayati öneme sahiptir.
+**1. Ne Aradığımızı Biliyor muyuz?**
 
-### Veri Türlerine Göre Benzerlik ve Uzaklık
+Tamamen körlemesine veri analizi yapmıyoruz aslında. Hangi özelliklerin önemli olabileceğine dair bir fikrimiz olmalı. Müşteri segmentasyonu yapıyorsak, yaş ve gelir mi önemli yoksa alışveriş sıklığı mı? Bu sorunun cevabı hangi verilere odaklanacağımızı belirler.
 
-Veri setimizdeki öznitelikler (değişkenler) farklı türlerde olabilir. Her veri türü için uygun bir ölçüm yöntemi bulunur:
+Basit bir mantıkla düşünelim: Okuldaki öğrencileri gruplamak istiyorsak, boy ve kiloyu mu kullanacağız yoksa ders notlarını mı? Amacımız spor takımları oluşturmaksa ilki, akademik başarı grupları oluşturmaksa ikincisi mantıklı olur.
 
-1.  **Kategorik (Nominal) Veriler İçin:**
-    Eğer özniteliklerimiz "renk" (kırmızı, mavi, yeşil) veya "cinsiyet" (erkek, kadın) gibi kategorik değerler alıyorsa, iki nesnenin benzerliğini, sahip oldukları ortak kategorik değerlerin sayısına bakarak belirleyebiliriz.
-    *   **Basit Eşleşme Katsayısı (Simple Matching Coefficient):** İki nesne arasındaki eşleşen öznitelik sayısını, toplam öznitelik sayısına bölerek basit bir benzerlik oranı elde ederiz. Örneğin, iki müşterinin "medeni durumu" ve "eğitim seviyesi" gibi özelliklerinin kaç tanesinin aynı olduğuna bakmak gibi.
-    *   **Jaccard Katsayısı:** Özellikle ikili (binary) verilerde veya seyrek veri setlerinde (örneğin, market sepeti analizinde hangi ürünlerin birlikte alındığı) kullanılır. İki nesnenin ortak olarak sahip olduğu pozitif öznitelik sayısını, en az birinde pozitif olan özniteliklerin toplam sayısına bölerek benzerliği ölçer.
+**2. Benzerliği Nasıl Ölçeceğiz?**
 
-2.  **Sayısal (Metrik) Veriler İçin:**
-    Özniteliklerimiz "yaş", "gelir", "sıcaklık" gibi sayısal değerler alıyorsa, benzerlik genellikle geometrik uzaklık kavramlarıyla ifade edilir.
-    *   **Öklid Uzaklığı (Euclidean Distance):** En yaygın kullanılan uzaklık metriğidir. İki nokta arasındaki düz çizgi mesafesini ölçer. İki boyutlu bir grafikte iki nokta arasındaki cetvelle ölçtüğümüz mesafe gibi düşünebilirsiniz. Daha fazla boyutta da bu mantık geçerlidir.
-    *   **Manhattan Uzaklığı (Manhattan Distance / City Block Distance):** "Şehir bloğu uzaklığı" olarak da bilinir. İki nokta arasındaki mesafeyi, sadece yatay ve dikey hareketlerle katedilen toplam yol olarak hesaplar. Bir şehirdeki bloklar arasında hareket ederken köşeleri dönerek ilerlemek gibi düşünebilirsiniz.
-    *   **Minkowski Uzaklığı:** Öklid ve Manhattan uzaklıklarını kapsayan genelleştirilmiş bir formüldür. Parametresi değiştirilerek farklı uzaklık ölçümleri elde edilebilir.
+İki şeyin birbirine ne kadar benzediğini sayısal olarak ifade etmemiz gerekiyor. En basit yöntem Öklid uzaklığıdır - iki nokta arasındaki düz çizgi mesafesi. Ancak her durumda bu yöntem işe yaramaz.
 
-3.  **Karma Veriler İçin:**
-    Gerçek dünya veri setleri genellikle hem kategorik hem de sayısal öznitelikler içerir. Bu durumda, her öznitelik türü için uygun uzaklık ölçütleri ayrı ayrı hesaplanır ve ardından bu ölçütler birleştirilerek genel bir uzaklık değeri elde edilir.
+Düşünün ki iki öğrencinin matematik ve fen notlarını karşılaştırıyorsunuz. Birinin notları (80, 85), diğerinin (75, 80). Öklid uzaklığı bu iki öğrenci arasındaki farkı hesaplar. Ama eğer metin verileriyle çalışıyorsak, mesela öğrencilerin yazdığı kompozisyonları gruplamak istiyorsak, farklı yöntemler kullanmamız gerekir.
 
-Doğru uzaklık veya benzerlik ölçütünü seçmek, kümelerin kalitesini ve elde edilen içgörülerin anlamlılığını doğrudan etkiler. Yanlış bir ölçüt, verinin doğal yapısını bozarak anlamsız kümelere yol açabilir. Bu nedenle, veri setimizin yapısını ve analiz amacımızı iyi anlamak, bu kritik kararı verirken bize yol gösterecektir.
+**3. Verileri Standartlaştıracak mıyız?**
 
+Bu çok önemli bir nokta. Diyelim ki yaş (0-100 arası) ve maaş (3000-50000 arası) verilerimiz var. Maaştaki 1000 liralık bir fark, yaştaki 10 yıllık farktan çok daha büyük görünecektir matematiksel olarak. Bu da maaşın kümeleme üzerinde haksız bir ağırlığa sahip olmasına neden olur.
 
-***
+Bunu önlemek için verileri aynı ölçeğe getiririz. Mesela hepsini 0 ile 1 arasına sıkıştırırız. Böylece yaştaki 10 yıllık fark ile maaştaki 5000 liralık fark eşit ağırlıkta değerlendirilir.
 
+**4. Kaç Küme Oluşturacağız?**
+
+İşin belki de en zor kısmı budur. Veriyi 2'ye mi, 3'e mi, 10'a mı böleceğiz? Bunun için çeşitli istatistiksel yöntemler var.
+
+Dirsek yöntemi bunlardan biri. Farklı küme sayıları deneyip, her birinde ne kadar iyi gruplandığına bakarız. Genelde belli bir noktadan sonra iyileşme azalır - işte o nokta optimal küme sayımızdır. Tıpkı bir grafikte dirseğe benzeyen kırılma noktası gibi.
+
+Ama unutmayın, istatistiksel olarak "en iyi" olan her zaman pratik olarak en anlamlı olan değildir. Bazen 7 küme matematiksel olarak optimal olabilir ama iş dünyasında 3-4 küme çok daha yönetilebilir ve anlamlı olabilir.
+
+### Başarılı Bir Kümelemenin Özellikleri
+
+İyi bir kümeleme sonucunda:
+- Aynı kümedeki elemanlar birbirine çok benzemelidir (homojenlik)
+- Farklı kümelerdeki elemanlar birbirinden belirgin şekilde farklı olmalıdır (heterojenlik)
+
+Bunu şöyle düşünebilirsiniz: Sınıftaki öğrencileri grupladığınızda, aynı gruptakiler birbirine benzemeli, farklı gruptakiler ise birbirinden ayırt edilebilir olmalı. Eğer gruplar arasında çok fazla benzerlik varsa veya grup içinde çok fazla farklılık varsa, kümelememiz başarısız demektir.
+
+Kümeleme analizi, veri madenciliğinin temel taşlarından biridir. Doğru uygulandığında, büyük veri yığınlarındaki gizli yapıları ortaya çıkarır ve bize değerli içgörüler sunar. Ancak unutmayın, bu bir araçtır ve her araç gibi, doğru kullanıldığında faydalıdır.
+
+## Benzerlik ve Uzaklık Ölçütleri (Similarity and Distance Measures)
+
+Kümeleme analizinde (clustering analysis) en temel soru şudur: İki veri noktasının birbirine ne kadar benzediğini nasıl ölçeriz? Bu sorunun cevabı, tüm kümeleme sürecinin temelini oluşturur.
+
+### Benzerlik ve Uzaklık Kavramları
+
+Önce basit bir örnekle başlayalım. Sınıftaki iki arkadaşınızın birbirine ne kadar benzediğini düşünün. Neye göre karşılaştırırsınız? Boy, kilo, saç rengi, hobiler, ders notları... Her özellik için farklı bir karşılaştırma yöntemi kullanmanız gerekir. İşte veri analizinde de durum böyledir.
+
+Kümeleme algoritmaları, veri noktalarını (data points) gruplarken aralarındaki **benzerlikleri (similarities)** veya **uzaklıkları (distances)** hesaplar. Benzerlik yüksekse aynı kümeye (cluster), düşükse farklı kümelere koyar. Ama "benzerlik" dediğimiz şey, duruma göre değişir. İki müşterinin benzer olması başka, iki kelimenin benzer olması başkadır.
+
+### Veri Türlerine Göre Ölçüm Yöntemleri
+
+#### 1. Kategorik Veriler İçin Ölçütler (Categorical Data Measures)
+
+Kategorik veriler (categorical/nominal data), sayısal olmayan değerlerdir. Renk, cinsiyet, meslek gibi. Bunlarda büyüklük-küçüklük yoktur, sadece farklılık vardır.
+
+**Basit Eşleşme Katsayısı (Simple Matching Coefficient - SMC):** İki kişinin kaç özelliğinin (attribute) aynı olduğuna bakarız. Mesela Ali ve Ayşe'yi karşılaştıralım:
+- Şehir: İkisi de İstanbul (eşleşme var)
+- Meslek: Ali öğretmen, Ayşe mühendis (eşleşme yok)
+- Hobiler: İkisi de kitap okuyor (eşleşme var)
+
+3 özellikten 2'si eşleşiyor, benzerlik = 2/3 = 0.67
+
+**Jaccard Katsayısı (Jaccard Coefficient/Index):** Özellikle ikili veriler (binary data) veya seyrek veri setleri (sparse datasets) için kullanılır. Market sepeti analizi (market basket analysis) bunun klasik örneğidir:
+- Ali: Ekmek, süt, yumurta aldı
+- Ayşe: Ekmek, süt, peynir aldı
+
+Ortak ürünler (intersection): Ekmek, süt (2 ürün)
+Toplam farklı ürün (union): Ekmek, süt, yumurta, peynir (4 ürün)
+Jaccard benzerliği = 2/4 = 0.5
+
+Bu yöntem, özellikle öneri sistemlerinde (recommendation systems) kullanılır. "Bu ürünü alanlar bunları da aldı" mantığının arkasında bu hesaplamalar vardır.
+
+#### 2. Sayısal Veriler İçin Ölçütler (Numerical/Metric Data Measures)
+
+Sayısal veriler için geometrik uzaklık kavramlarını kullanırız. Burada üç temel yöntem var:
+
+**Öklid Uzaklığı (Euclidean Distance):** En bilindik uzaklık metriğidir (distance metric). İki nokta arasındaki düz çizgi mesafesini ölçer. 
+
+Basit bir örnek verelim: İki öğrencinin matematik ve fen notları var.
+- Öğrenci A: Matematik 80, Fen 70
+- Öğrenci B: Matematik 85, Fen 75
+
+Bu iki öğrenciyi bir koordinat sisteminde (coordinate system) düşünün. X ekseni matematik, Y ekseni fen notu. Aralarındaki mesafeyi cetvel koyup ölçsek, Öklid uzaklığını bulmuş oluruz. Matematiksel olarak: √[(85-80)² + (75-70)²] = √(25+25) = 7.07
+
+**Manhattan Uzaklığı (Manhattan Distance / City Block Distance):** Adından da anlaşılacağı gibi, Manhattan'ın ızgara şeklindeki sokak yapısından esinlenilmiştir. İki nokta arasında sadece yatay ve dikey hareketlerle gidilen yolu hesaplar.
+
+Aynı öğrenci örneğinde:
+- Matematik farkı: |85-80| = 5
+- Fen farkı: |75-70| = 5
+- Manhattan uzaklığı = 5 + 5 = 10
+
+Gençler, bu iki yöntem arasındaki farkı şöyle düşünebilirsiniz: Öklid uzaklığı kuş uçuşu mesafe (as the crow flies), Manhattan uzaklığı ise sokakları takip ederek gidilen mesafedir.
+
+**Minkowski Uzaklığı (Minkowski Distance):** Bu, yukarıdaki iki yöntemi de kapsayan genelleştirilmiş bir formüldür. Bir parametre (p değeri) değiştirerek:
+- p=1 olursa Manhattan uzaklığı
+- p=2 olursa Öklid uzaklığı  
+- p=∞ olursa Chebyshev uzaklığı elde edilir
+
+Daha ileri düzey analizlerde, probleme özgü uzaklık tanımları yapmak için kullanılır.
+
+#### 3. Karma Veriler İçin Yaklaşımlar (Mixed Data Approaches)
+
+Gerçek hayatta veriler genelde karışık tipte (mixed-type) olur. Bir müşteri verisinde hem yaş (sayısal/numerical) hem meslek (kategorik/categorical) olabilir. Bu durumda ne yapacağız?
+
+Her öznitelik türü (attribute type) için ayrı uzaklık hesaplarız, sonra bunları birleştiririz:
+- Yaş farkı için Öklid uzaklığı kullan, normalize et (normalization) - 0-1 arası yap
+- Meslek için eşleşme var mı yok mu bak (0 veya 1)
+- İkisinin ağırlıklı ortalamasını (weighted average) al
+
+Bu birleştirme işleminde dikkatli olmak gerekir. Bazı özellikler diğerlerinden daha önemli olabilir. Mesela kredi risk analizinde (credit risk analysis) gelir, hobilerden daha önemlidir. Bu durumda özellik ağırlıklandırması (feature weighting) yaparız.
+
+### Uzaklık Ölçütü Seçiminin Önemi
+
+Yanlış uzaklık ölçütü seçmek, tamamen yanlış sonuçlara yol açabilir. Örneğin:
+- Metin madenciliğinde (text mining) Öklid uzaklığı yerine kosinüs benzerliği (cosine similarity) kullanmak daha mantıklıdır
+- Yüksek boyutlu verilerde (high-dimensional data) Manhattan uzaklığı bazen daha iyi sonuç verir
+- Aykırı değerlere (outliers) duyarlı olmamak için Mahalanobis uzaklığı tercih edilebilir
+
+### Pratik Uygulamalar
+
+**R'da uygulama:**
+```r
+dist(data, method = "euclidean")  # Öklid uzaklığı
+dist(data, method = "manhattan")  # Manhattan uzaklığı
+```
+
+**Python'da uygulama:**
+```python
+from sklearn.metrics import pairwise_distances
+distances = pairwise_distances(data, metric='euclidean')
+```
+
+**Weka'da:** Kümeleme algoritması seçerken "Distance Function" bölümünden uygun metriği seçebilirsiniz.
+
+**Java'da:** Kendi uzaklık fonksiyonunuzu (custom distance function) yazabilir veya Apache Commons Math kütüphanesini kullanabilirsiniz.
+
+Pratikte, farklı uzaklık ölçütlerini deneyip sonuçları karşılaştırmak iyi bir yaklaşımdır. Hangi ölçüt daha anlamlı kümeler veriyorsa, o sizin probleminiz için daha uygundur. Unutmayın, veri ön işleme (data preprocessing) ve ölçeklendirme (scaling) adımları da uzaklık hesaplamalarını doğrudan etkiler.
+
+Kümeleme analizinin kalitesi, bu temel kararlarla başlar. Verinizin yapısını anlayın, amacınızı belirleyin, sonra uygun ölçütü seçin. Varsayılan ayarları (default settings) körü körüne kullanmayın.
 ### Veri Madenciliği ve Kümeleme Analizi: Benzerliklerin Hesaplanması
 
 Kümeleme analizinin temel adımlarından biri, veri setindeki gözlemlerin (bu örnekte müşterilerin) birbirlerine ne kadar benzediğini veya ne kadar uzak olduğunu ölçmektir. Elimizdeki veri seti, kategorik değişkenler içerdiğinden, benzerliği tespit etmek için özel bir yöntem kullanmamız gerekir. Bu derste, eşleşen özelliklerin sayılmasına dayalı basit bir yöntemi inceleyeceğiz.
