@@ -2373,22 +2373,25 @@ graph TD
 
 #### K-Means'in Matematiksel Hedefi: WCSS'yi Minimize Etmek
 
-Gençler, K-Means'in bu adımları rastgele takip etmediğini bilmek önemlidir. Algoritmanın aslında çözmeye çalıştığı bir optimizasyon problemi vardır. Amaç, **küme içi hata kareleri toplamını (Within-Cluster Sum of Squares - WCSS)** en aza indirmektir.
+Gençler, K-Means'in bu adımları rastgele atmadığını, aslında net bir matematiksel hedefi takip ettiğini bilmek önemlidir. Algoritmanın temel amacı, oluşturduğu kümeleri kendi içlerinde olabildiğince yoğun ve birbirine yakın tutmaktır. Her bir kümenin ne kadar "dağınık" olduğunu ölçen bir maliyet fonksiyonu düşünün. K-Means, her adımda bu toplam dağınıklığı, yani hatayı azaltmaya çalışır.
 
-WCSS, her bir veri noktasının, kendi atandığı kümenin merkezine (centroid'ine) olan uzaklığının karesinin toplamıdır. Formülsel olarak:
+Bu toplam hatanın teknik adı **Küme İçi Hata Kareleri Toplamı (Within-Cluster Sum of Squares - WCSS)**'dır. WCSS, her bir veri noktasının, ait olduğu kümenin merkezine (centroid'e) olan uzaklıklarının karesinin toplanmasıyla hesaplanır.
 
+Formülü şu şekildedir:
 $$
 WCSS = \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2
 $$
 
-Burada:
-*   `k` küme sayısıdır.
-*   `C_i`, `i`-inci kümedir.
-*   `x`, `C_i` kümesindeki bir veri noktasıdır.
-*   `\mu_i`, `C_i` kümesinin centroid'idir.
-*   `||x - \mu_i||^2`, `x` noktası ile `\mu_i` centroid'i arasındaki Öklid uzaklığının karesidir.
+Bu formüldeki bileşenleri inceleyelim:
+*   $k$: Toplam küme sayısı.
+*   $C_i$: $i$ numaralı küme.
+*   $x$: $C_i$ kümesine ait bir veri noktası.
+*   $\mu_i$: $C_i$ kümesinin centroid'i (merkezi).
+*   $||x - \mu_i||^2$: $x$ noktası ile centroid $\mu_i$ arasındaki Öklid uzaklığının karesi. Bu kare alma işlemi, merkeze uzak olan noktaların hatasını daha fazla vurgular.
 
-K-Means'in her bir "Atama" ve "Güncelleme" adımı, bu WCSS değerini azaltmaya yönelik bir hamledir. Algoritma, bu değeri daha fazla düşüremeyeceği bir noktaya geldiğinde (yani bir **yerel minimuma (local minimum)** ulaştığında) durur. Bu, algoritmanın en iyi çözümü bulduğunu garanti etmez, ancak genellikle oldukça iyi ve pratik sonuçlar üretir. Başlangıç centroid'lerinin seçimi, bu nihai sonucun kalitesini önemli ölçüde etkileyebilir.
+K-Means'in yaptığı her bir "Atama" ve "Güncelleme" adımı, bu WCSS değerini sistematik olarak düşürmeye yönelik bir hamledir. Atama adımında her nokta, kendisini WCSS'yi en çok azaltacak merkeze atar. Güncelleme adımında ise her bir centroid, kendi kümesinin yeni kütle merkezine taşınır ki bu da o küme için WCSS'yi minimize eden noktadır.
+
+Algoritma, bu değeri daha fazla düşüremediği bir denge noktasına ulaştığında durur. Bu noktaya **yerel minimum (local minimum)** denir. Bu, algoritmanın mümkün olan en iyi çözümü bulduğunu garanti etmez; çünkü sonuç, başlangıçta centroid'lerin nereye yerleştirildiğine bağlıdır. Bu nedenle pratikte, algoritma farklı başlangıç noktalarıyla birkaç kez çalıştırılır ve en düşük WCSS değerini veren sonuç en iyi kümeleme olarak kabul edilir.
 
 
 
@@ -2413,16 +2416,17 @@ Weka, yerel dosyaların yanı sıra doğrudan internet üzerindeki verilere de e
         `https://raw.githubusercontent.com/erkanozhan/datamining_lab_data/master/insanlar.csv`
     4.  Veri yüklendiğinde, "Attributes" panelinde `ad`, `yas`, `boy`, `kilo` ve `ayak_no` özniteliklerini göreceksiniz.
 
-#### **Adım 2: Veriyi Kümelemeye Hazırlama ve k-Means'i Çalıştırma**
+#### **Adım 2: k-Means Algoritmasını Yapılandırma ve Çalıştırma**
 
-Kümeleme, sayısal mesafelere dayandığı için sayısal olmayan veya analize katkısı olmayacak öznitelikleri çıkarmalıyız. Bu veri setinde `ad` özniteliği, her kişi için benzersiz bir tanımlayıcıdır ve kümeleme mantığına bir katkısı yoktur. Bu nedenle analize dahil etmemeliyiz.
+Kümeleme, nesneler arasındaki sayısal mesafelere dayalı bir analizdir. Veri setimizdeki `ad` özniteliği, her kişi için benzersiz bir tanımlayıcı olduğundan, iki kişi arasındaki mesafeyi hesaplarken anlamsal bir katkı sağlamaz. Bu tür tanımlayıcı öznitelikleri analizden çıkarmak, modelin daha anlamlı sonuçlar üretmesini sağlar. Weka'da bir özniteliği kalıcı olarak silmek yerine, kümeleme algoritmasının onu **göz ardı etmesini (ignore)** sağlayabiliriz.
 
 *   **İşlem:**
-    1.  "Preprocess" sekmesindeki "Attributes" listesinden `ad` özniteliğini seçin ve alttaki **"Remove"** butonuna basarak kaldırın.
-    2.  "Cluster" sekmesine geçin.
-    3.  "Choose" butonu ile `SimpleKMeans`'i seçin.
-    4.  Algoritma adına tıklayarak ayarlarını açın ve `numClusters` değerini **3** olarak belirleyin. (Bu, veriyi 3 gruba ayırmak istediğimizi belirtir).
-    5.  "Start" butonuna basarak kümeleme işlemini başlatın.
+    1.  "Cluster" sekmesine geçin.
+    2.  "Choose" butonu ile `weka.clusterers.SimpleKMeans`'i seçin.
+    3.  Algoritma adına tıklayarak ayarlarını açın ve `numClusters` değerini **3** olarak belirleyin. (Bu, veriyi 3 gruba ayırmak istediğimizi belirtir). "OK" ile kapatın.
+    4.  "Cluster mode" bölümünün hemen altında bulunan **"Ignore attributes"** butonuna tıklayın.
+    5.  Açılan pencerede `(Nom) ad` özniteliğini seçin. Bu işlem, Weka'ya k-Means algoritmasını çalıştırırken bu sütunu mesafe hesaplamalarına dahil etmemesini söyler.
+    6.  "Start" butonuna basarak kümeleme işlemini başlatın.
 
 #### **Adım 3: Sonuçları Yorumlama (Öklid Uzaklığı ile)**
 
