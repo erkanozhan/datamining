@@ -2377,10 +2377,9 @@ Gençler, K-Means'in bu adımları rastgele atmadığını, aslında net bir mat
 
 Bu toplam hatanın teknik adı **Küme İçi Hata Kareleri Toplamı (Within-Cluster Sum of Squares - WCSS)**'dır. WCSS, her bir veri noktasının, ait olduğu kümenin merkezine (centroid'e) olan uzaklıklarının karesinin toplanmasıyla hesaplanır.
 
-Formülü şu şekildedir:
-$$
-WCSS = \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2
-$$
+<p align="center">
+    WCSS = &sum;<sub>i=1</sub><sup>k</sup> &sum;<sub>x &isin; C<sub>i</sub></sub> ||x - &mu;<sub>i</sub>||<sup>2</sup>
+</p>
 
 Bu formüldeki bileşenleri inceleyelim:
 *   $k$: Toplam küme sayısı.
