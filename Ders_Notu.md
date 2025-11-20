@@ -11,19 +11,19 @@ Tel: +90 282 250 23 84
 Ofis: Çorlu Mühendislik Fakültesi, 4.Kat A-418 ---
 Görüşme Saatleri: Her hafta Perşembe 09:30-12:30 arası.
 
-## Veri Nedir? (What is Data?)
+## 1. Veri Nedir? (What is Data?)
 - **Dijital Veri**
 - **Basılı – Fiziksel Veri**
 - **Soyut Veri**
 
-### Veri Türleri:
+### 1.1. Veri Türleri:
 - Doküman, Resim, Ses, Video, Metin, Program  
 - Gazete, Dergi, Kitap, Afiş vb.  
 - Tecrübeler, Hatıralar, Hayaller …
 
 ---
 
-## Veri Kaynakları
+## 2. Veri Kaynakları
 - Marketler  
 - Kurumlar  
 - Konuşmalar  
@@ -39,7 +39,7 @@ Görüşme Saatleri: Her hafta Perşembe 09:30-12:30 arası.
 
 ---
 
-## Veri Kaynaklarının Gelişimi
+## 3. Veri Kaynaklarının Gelişimi
 Otomatize edilmiş veri toplama araçları ve “olgunlaşmış” veritabanları; veri ambarlarında ve diğer bilgi depolama alanlarında devasa miktarda verinin birikmesine sebep olmuştur.  
 
 - **Veri Üretimi:** Günümüzde her gün milyarlarca gigabayt veri üretilmektedir. 2025 yılına kadar küresel veri miktarının 175 zettabayta ulaşması beklenmektedir.
@@ -50,16 +50,16 @@ Jerome Friedman:
 > “Verinin boyutu her 10 katına çıktığında, onu analiz etme biçimimizi tamamen yeniden şekillendirmek zorundayız.”  
 
 
-## Veri Madenciliği (Data Mining)
+## 4. Veri Madenciliği (Data Mining)
 
 Veri madenciliği, veri tabanı sorgularından (**database query**) farklıdır.  
 
-### Veritabanı Sorgusu (Geleneksel Analiz)
+### 4.1. Veritabanı Sorgusu (Geleneksel Analiz)
 - "Geçen ay en çok hangi ürün satıldı?"
 - "İstanbul'daki müşterilerimizin ortalama yaşı kaçtır?"
 - "Son üç ayda kaç yeni müşteri kazandık?"  
 
-### Veri Madenciliği Analizi (Keşif ve Tahmin)
+### 4.2. Veri Madenciliği Analizi (Keşif ve Tahmin)
 Veri madenciliği, verinin derinliklerindeki gizli örüntüleri, ilişkileri ve gelecek trendlerini ortaya çıkarmayı hedefler.
 
 - **Birliktelik Analizi:** "Hangi ürünler genellikle birlikte satın alınır?" (Örn: Bebek bezi alan müşteriler bira da alır mı?)
@@ -70,7 +70,7 @@ Veri madenciliği, verinin derinliklerindeki gizli örüntüleri, ilişkileri ve
 
 ---
 
-## Veri Madenciliği Modelleri
+## 5. Veri Madenciliği Modelleri
 Veri madenciliğinin temel amacı, verinin içindeki gizli örüntüleri ve ilişkileri keşfetmek için modeller oluşturmaktır. Bu modeller, açıkça kodlanmış kurallara dayanmak yerine, veriden otomatik olarak öğrenilir ve genellikle iki ana kategoriye ayrılır:
 
 1.  **Tahminleyici (Predictive) Modeller:**
@@ -83,7 +83,7 @@ Veri madenciliğinin temel amacı, verinin içindeki gizli örüntüleri ve ili�
 
 ---
 
-## Veri Madenciliği, Makine Öğrenmesi ve İstatistik İlişkisi
+## 6. Veri Madenciliği, Makine Öğrenmesi ve İstatistik İlişkisi
 Veri madenciliği, makine öğrenmesi ve istatistik birbiriyle yakından ilişkili, sıklıkla iç içe geçmiş alanlardır. Veri madenciliği, bu disiplinlerden gelen yöntemleri pratik problemlere uygulama sürecidir.
 
 -   **İstatistik (Statistics):**
@@ -108,7 +108,7 @@ Veri madenciliği, makine öğrenmesi ve istatistik birbiriyle yakından ilişki
 
 ---
 
-## Veri Madenciliğinin Önemi ve Uygulama Alanları
+## 7. Veri Madenciliğinin Önemi ve Uygulama Alanları
 
 Veri madenciliği, ham veriyi iş zekasına, bilimsel keşiflere ve stratejik karar alma süreçlerine dönüştüren kritik bir disiplindir. Önemi, sadece büyük veri yığınlarını analiz etme kapasitesinden değil, aynı zamanda bu verilerden daha önce bilinmeyen, eyleme geçirilebilir ve değerli bilgiler çıkarma yeteneğinden kaynaklanır. Bu süreç, çeşitli sektörlerde devrim yaratmıştır:
 
@@ -131,9 +131,9 @@ Veri madenciliği, ham veriyi iş zekasına, bilimsel keşiflere ve stratejik ka
 
 Bu uygulamalar, veri madenciliğinin sadece teorik bir alan olmadığını, aynı zamanda kuruluşların daha akıllı kararlar almasını, verimliliği artırmasını ve rekabet avantajı elde etmesini sağlayan güçlü bir pratik araç olduğunu göstermektedir.
 
-## Veri Madenciliği (Data Mining)
+## 8. Veri Madenciliği (Data Mining)
 
-### Tanım
+### 8.1. Tanım
 Veri madenciliği, çeşitli akademik kaynaklarda farklı şekillerde tanımlanmakla birlikte, temel olarak büyük veri setleri içindeki değerli bilgiyi keşfetme sürecini ifade eder.
 
 - **Fayyad, Piatetsky-Shapiro, & Smyth (1996)** tarafından yapılan klasik tanıma göre veri madenciliği, "veri içerisindeki **geçerli, yeni, potansiyel olarak kullanışlı** ve nihayetinde **anlaşılabilir** örüntülerin önemsiz olmayan (non-trivial) çıkarım sürecidir." Bu tanım, sürecin sadece veri işlemeyi değil, aynı zamanda keşfedilen bilginin niteliğini de vurgular.
@@ -141,11 +141,11 @@ Veri madenciliği, çeşitli akademik kaynaklarda farklı şekillerde tanımlanm
 - Temel amaç, veriden öğrenen bir **model** oluşturmaktır. Bu model, veriyi özetler ve gelecekteki olayları tahmin etmek (tahminleyici model) veya verinin iç yapısını anlamak (betimleyici model) için kullanılır. Keşfedilen bu yapılar genellikle **model** veya **örüntü (pattern)** olarak adlandırılır.
 
 ---
-## Veritabanlarında Bilgi Keşfi (Knowledge Discovery in Databases - KDD)
+## 9. Veritabanlarında Bilgi Keşfi (Knowledge Discovery in Databases - KDD)
 
 Veritabanlarında Bilgi Keşfi (KDD), ham veri yığınları içerisinden **geçerli, yeni, potansiyel olarak faydalı ve nihayetinde anlaşılabilir** örüntüleri bulmaya yönelik **önemsiz olmayan (non-trivial)** ve bütünsel bir süreçtir. KDD, veri madenciliğini de içeren çok adımlı bir metodoloji olarak kabul edilir ve veriden bilgiye giden yol haritasını çizer.
 
-### KDD Sürecinin Adımları
+### 9.1. KDD Sürecinin Adımları
 KDD süreci, genellikle aşağıdaki ardışık adımlardan oluşur:
 
 1.  **Veri Seçimi (Selection):** Analiz hedefine uygun olarak, ilgili veri kaynaklarından (veritabanları, veri ambarları vb.) bir hedef veri kümesi oluşturulur.
@@ -154,7 +154,7 @@ KDD süreci, genellikle aşağıdaki ardışık adımlardan oluşur:
 4.  **Veri Madenciliği (Data Mining):** Sürecin çekirdek adımıdır. Belirli bir amaç doğrultusunda (örn. sınıflandırma, kümeleme) akıllı algoritmalar kullanılarak veri içerisindeki örüntüler sistematik olarak çıkarılır.
 5.  **Yorumlama ve Değerlendirme (Interpretation & Evaluation):** Keşfedilen örüntülerin ve modellerin, başlangıçtaki hedeflerle ne kadar uyumlu olduğu değerlendirilir. Anlamlı bulunan bilgiler görselleştirilerek veya raporlanarak karar vericiler için eyleme geçirilebilir bilgiye dönüştürülür.
 
-### Keşfedilen Bilginin Nitelikleri
+### 9.2. Keşfedilen Bilginin Nitelikleri
 KDD sürecinin nihai hedefi, sadece herhangi bir örüntü bulmak değil, aşağıdaki niteliklere sahip olan **bilgiyi** ortaya çıkarmaktır:
 
 -   **Örtük (Implicit):** Basit sorgularla veya geleneksel analiz yöntemleriyle kolayca bulunamayan, verinin derinliklerinde saklı olan.
@@ -164,11 +164,11 @@ KDD sürecinin nihai hedefi, sadece herhangi bir örüntü bulmak değil, aşağ
 -   **Anlaşılabilir (Understandable):** Alan uzmanları veya son kullanıcılar tarafından kolayca yorumlanabilen ve anlamlandırılabilen.
 
 ---
-## Veri Madenciliği ve KDD Arasındaki İlişki
+## 10. Veri Madenciliği ve KDD Arasındaki İlişki
 
 Veri madenciliği, sıklıkla KDD süreciyle eş anlamlı olarak kullanılsa da, metodolojik olarak KDD'nin yalnızca bir adımıdır; ancak en merkezi adımıdır. KDD, veriden bilgiye ulaşmayı hedefleyen bütünsel bir metodoloji iken, veri madenciliği bu sürecin içerisinde belirli algoritmalar kullanarak örüntülerin fiilen çıkarıldığı analitik aşamayı temsil eder. Kısacası, KDD "bilgi keşfi"nin stratejik yol haritasını çizerken, veri madenciliği bu haritadaki en önemli "keşif" eylemidir.
 
-### Geleneksel Yöntemlerin Rolü
+### 10.1. Geleneksel Yöntemlerin Rolü
 Uygulamada, bir KDD projesinde harcanan zaman ve eforun büyük bir kısmı—genellikle %80'e varan bir oranı—veri madenciliği adımından önceki hazırlık aşamalarına (veri seçimi, ön işleme ve dönüşüm) ayrılır. Bunun temel nedeni, gerçek dünya verilerinin genellikle "kirli" (eksik, gürültülü, tutarsız) olmasıdır. Veri madenciliği algoritmalarının başarısı, doğrudan girdi verisinin kalitesine bağlıdır. "Çöp girer, çöp çıkar" (Garbage In, Garbage Out) prensibi, bu aşamanın kritik önemini vurgular.
 
 KDD sürecinin başlangıcında, genellikle standart veritabanı sorgulama dilleri (SQL) ve Çevrimiçi Analitik İşleme (OLAP) araçları ile bir ön analiz yapılır. Bu araçlar, veritabanında açıkça var olan bilgileri özetlemek, filtrelemek ve raporlamak için son derece güçlüdür. Ancak bu geleneksel yöntemler, verinin derinliklerindeki örtük, daha önce bilinmeyen ve tahmine dayalı ilişkileri ortaya çıkarmada yetersiz kalır. İşte bu noktada veri madenciliği devreye girer ve SQL'in cevaplayamadığı sorulara odaklanır:
@@ -178,11 +178,11 @@ KDD sürecinin başlangıcında, genellikle standart veritabanı sorgulama dille
 
 Özetle, SQL ve OLAP mevcut veriyi "sorgularken", veri madenciliği verinin kendisine "soru sormasını" sağlayarak gizli içgörüleri ve geleceğe yönelik modelleri keşfeder.
 
-## Operasyonel Veritabanları ve Veri Ambarları
+## 11. Operasyonel Veritabanları ve Veri Ambarları
 
 Veri analizi ve karar destek sistemleri bağlamında, operasyonel veritabanları ile veri ambarları arasında temel mimari ve amaç farklılıkları bulunmaktadır.
 
-### Operasyonel Veritabanı Sistemleri (OLTP)
+### 11.1. Operasyonel Veritabanı Sistemleri (OLTP)
 Operasyonel sistemler, bir kuruluşun günlük işlemlerini yürütmek için tasarlanmış **Çevrimiçi İşlem Gerçekleştirme (Online Transaction Processing - OLTP)** sistemleridir.
 
 -   **Temel Amaç:** Günlük ticari işlemleri (ekleme, silme, güncelleme) hızlı ve tutarlı bir şekilde kaydetmek ve yönetmektir.
@@ -190,7 +190,7 @@ Operasyonel sistemler, bir kuruluşun günlük işlemlerini yürütmek için tas
 -   **Kullanıcılar:** Genellikle son kullanıcılar, kasiyerler veya veri giriş operatörleridir.
 -   **Odak Noktası:** Anlık, güncel veriler üzerindedir. Örneğin, bir bankacılık sistemindeki anlık bakiye veya bir e-ticaret sitesindeki mevcut stok durumu.
 
-### Veri Ambarları (Data Warehouses - DW)
+### 11.2. Veri Ambarları (Data Warehouses - DW)
 Veri ambarı, farklı operasyonel kaynaklardan toplanan verilerin analiz ve karar destek amacıyla bütünleştirildiği merkezi bir depodur. Bu sistemler **Çevrimiçi Analitik İşleme (Online Analytical Processing - OLAP)** için optimize edilmiştir.
 
 **Tanım (W. H. Inmon):** Veri ambarı; stratejik karar almayı desteklemek amacıyla tasarlanmış, **konu odaklı (subject-oriented)**, **bütünleşik (integrated)**, **zamana göre değişen (time-variant)** ve **kalıcı (non-volatile)** bir veri koleksiyonudur.
@@ -200,7 +200,7 @@ Veri ambarı, farklı operasyonel kaynaklardan toplanan verilerin analiz ve kara
 -   **Zamana Göre Değişen:** Veriler, tarihsel bir perspektif sunacak şekilde (örn. son 5 yılın satış verileri) saklanır. Bu, trend analizini mümkün kılar.
 -   **Kalıcı:** Veri ambarına yüklenen veriler genellikle değiştirilmez veya silinmez. Sadece periyodik olarak yeni veriler eklenir.
 
-### OLTP ve Veri Ambarı Karşılaştırması
+### 11.3. OLTP ve Veri Ambarı Karşılaştırması
 
 | Özellik | OLTP Sistemleri (Operasyonel Veritabanı) | Veri Ambarı (OLAP için) |
 | :--- | :--- | :--- |
@@ -211,7 +211,7 @@ Veri ambarı, farklı operasyonel kaynaklardan toplanan verilerin analiz ve kara
 | **Erişim Türü** | Sık okuma/yazma işlemleri | Yoğunlukla okuma, karmaşık sorgular |
 | **Kullanıcılar** | Veri giriş operatörleri, son kullanıcılar | Bilgi çalışanları, analistler, yöneticiler |
 
-### Veri Ambarı Mimarisi ve ETL Süreci
+### 11.4. Veri Ambarı Mimarisi ve ETL Süreci
 
 Veri ambarları, çeşitli kaynaklardan veri toplayan ve bu veriyi analize uygun hale getiren bir **Ayıklama, Dönüştürme, Yükleme (Extract, Transform, Load - ETL)** süreci üzerine kuruludur.
 
@@ -251,7 +251,7 @@ graph TD
 3.  **Yükleme (Load):** Dönüştürülmüş ve hazır hale getirilmiş veri, analiz edilmek üzere veri ambarına yüklenir.
 
 
-### Meta Veri (Metadata)
+### 11.5. Meta Veri (Metadata)
 
 **Tanım:** En basit tanımıyla meta veri, **"veri hakkında veri"** demektir. Veri ambarındaki verinin ne anlama geldiğini, nereden geldiğini, nasıl yapılandırıldığını ve nasıl kullanılacağını açıklayan bir tür "veri sözlüğü" veya "kullanım kılavuzu"dur. Ham veriye bağlam ve anlam kazandırır.
 
@@ -275,11 +275,11 @@ Bir satış tablosunda `150` şeklinde bir değer olduğunu düşünelim. Bu de�
 
 Bu meta veri sayesinde `150` değerinin, `Gunluk_Satislar` tablosundaki bir satış işleminde 150 adet ürün satıldığını ifade eden bir tamsayı olduğunu anlarız. Meta veri olmadan, veri yığınları anlamsız sayılardan ibaret kalır.
 
-### Veri Ambarı Şemaları: Veriyi Anlamlandırma Sanatı
+### 11.6. Veri Ambarı Şemaları: Veriyi Anlamlandırma Sanatı
 
 Veri ambarında veriler, analiz sorgularını hızlı ve verimli bir şekilde çalıştıracak şekilde özel yapılarla organize edilir. Bu yapılara **şema** denir. En yaygın kullanılan üç şema türü Yıldız, Kar Tanesi ve Galaksi (Fact Constellation) şemalarıdır.
 
-#### 1. Yıldız Şeması (Star Schema)
+#### 11.6.1. Yıldız Şeması (Star Schema)
 
 En basit ve en yaygın kullanılan veri ambarı şemasıdır. Adını, yapısının bir yıldıza benzemesinden alır: merkezde bir **olgu (fact) tablosu** ve bu tabloya doğrudan bağlı olan **boyut (dimension) tabloları** bulunur.
 
@@ -338,7 +338,7 @@ graph TD
     end
 ```
 
-#### 2. Kar Tanesi Şeması (Snowflake Schema)
+#### 11.6.2. Kar Tanesi Şeması (Snowflake Schema)
 
 Yıldız şemasının bir uzantısıdır. Temel fark, boyut tablolarının **normalize** edilmiş olmasıdır. Yani, bir boyut tablosu, veri tekrarını azaltmak için daha küçük ve ilişkili birden fazla tabloya bölünür. Bu yapı, bir kar tanesinin dallanmış kristal yapısına benzediği için bu adı almıştır.
 
@@ -403,7 +403,7 @@ graph TD
     end
 ```
 
-#### 3. Galaksi Şeması / Fact Constellation Şeması
+#### 11.6.3. Galaksi Şeması / Fact Constellation Şeması
 
 İki veya daha fazla olgu tablosunun, ortak boyut tablolarını paylaştığı daha karmaşık bir yapıdır. Bu şema, birbiriyle ilişkili farklı iş süreçlerini (örneğin, satış ve sevkiyat) tek bir modelde analiz etmek için kullanılır. Yapı, birden fazla yıldızın bir araya gelerek bir galaksi oluşturmasına benzetilir.
 
@@ -439,7 +439,7 @@ graph TD
     end
 ```
 
-### Şema Karşılaştırması
+### 11.7. Şema Karşılaştırması
 
 | Özellik | Yıldız Şeması (Star) | Kar Tanesi Şeması (Snowflake) | Galaksi Şeması (Fact Constellation) |
 | :--- | :--- | :--- | :--- |
@@ -449,7 +449,7 @@ graph TD
 | **Veri Bütünlüğü** | Daha düşük (veri tekrarı olabilir) | Yüksek (veri tekrarı az) | Yüksek (paylaşılan boyutlar sayesinde) |
 | **Kullanım Alanı** | Çoğu veri ambarı ve veri pazarı (data mart) | Karmaşık hiyerarşilere sahip veri modelleri | Birbiriyle ilişkili birden fazla iş sürecinin analizi |
 
-### Veri Pazarı (Data Mart)
+### 11.8. Veri Pazarı (Data Mart)
 Veri pazarı, kurumsal bir veri ambarının belirli bir departmana (örneğin Satış, Pazarlama) veya iş koluna odaklanmış daha küçük bir alt kümesidir. Amacı, belirli bir kullanıcı grubunun ihtiyaç duyduğu veriye daha hızlı ve kolay erişim sağlamaktır. Veri ambarının tamamı yerine sadece ilgili veri setini içerdiği için daha yönetilebilir, daha hızlı kurulabilir ve daha düşük maliyetlidir. Verilerini merkezi bir veri ambarından veya doğrudan operasyonel kaynaklardan alabilir.  
 
    - **Galaxy Şeması (Galaxy Schema):**  
@@ -458,11 +458,11 @@ Veri pazarı, kurumsal bir veri ambarının belirli bir departmana (örneğin Sa
      - Büyük ölçekli sistemlerde tercih edilir.  
 
 ---
-### OLAP (Çevrimiçi Analitik İşleme - Online Analytical Processing)
+## 12. OLAP (Çevrimiçi Analitik İşleme - Online Analytical Processing)
 
 OLAP, büyük veri ambarlarındaki verilerin, iş analistleri ve yöneticiler tarafından hızlı, tutarlı ve etkileşimli bir şekilde çok boyutlu olarak analiz edilmesini sağlayan bir teknolojidir. Geleneksel veritabanı sorguları (OLTP sistemlerinde olduğu gibi) veriyi genellikle iki boyutlu (satırlar ve sütunlar) bir yapıda sunarken, iş dünyasındaki sorular genellikle çok daha fazla boyuta sahiptir ("Geçen çeyrekte, Avrupa bölgesindeki hangi mağazalarda, hangi ürün kategorisi en çok kar getirdi?"). OLAP, bu tür karmaşık ve çok boyutlu analitik sorguları saniyeler içinde yanıtlamak için tasarlanmıştır.
 
-#### OLAP Küpü ve Temel Operasyonlar
+### 12.1. OLAP Küpü ve Temel Operasyonlar
 
 OLAP'ın temelinde **Veri Küpü (Data Cube)** adı verilen çok boyutlu bir veri yapısı bulunur. Bu küp, analiz edilmek istenen sayısal verileri (**ölçüler - measures**, örn. satış miktarı, kar) ve bu verilerin analiz edileceği farklı bakış açılarını (**boyutlar - dimensions**, örn. zaman, coğrafya, ürün) bir araya getirir. Kullanıcılar, bu küp üzerinde çeşitli operasyonlar gerçekleştirerek veriyi farklı açılardan inceleyebilir, özetleyebilir veya detaylandırabilir.
 
@@ -505,7 +505,7 @@ graph TD
 -   **Dice (Zar Atma):** Birden fazla boyut üzerinde seçim yaparak daha küçük bir alt küp oluşturur. Örneğin, `Coğrafya = 'Türkiye'` VE `Ürün Kategorisi = 'Elektronik'` olan verileri seçer.
 -   **Pivot (Döndürme):** Veri küpünün eksenlerini döndürerek veriye farklı bir perspektiften bakmayı sağlar. Örneğin, satırlarda ürünleri, sütunlarda zamanı gösteren bir raporu, satırlarda zamanı, sütunlarda ürünleri gösterecek şekilde değiştirir.
 
-#### OLAP'ın Temel Özellikleri ve Mimarisi
+### 12.2. OLAP'ın Temel Özellikleri ve Mimarisi
 
 OLAP sistemleri, ham veriyi anlamlı iş bilgisine dönüştürmek için tasarlanmış güçlü analitik motorlardır. Başarıları, aşağıdaki temel özelliklere ve mimari bileşenlere dayanır:
 
@@ -516,7 +516,7 @@ OLAP sistemleri, ham veriyi anlamlı iş bilgisine dönüştürmek için tasarla
 
 ---
 
-### OLAP Mimarisi: Küpler, Boyutlar ve Ölçüler
+## 13. OLAP Mimarisi: Küpler, Boyutlar ve Ölçüler
 
 OLAP'ın kalbinde, veriyi sezgisel ve analize uygun bir şekilde organize eden üç temel bileşen bulunur:
 
@@ -552,11 +552,11 @@ OLAP'ın kalbinde, veriyi sezgisel ve analize uygun bir şekilde organize eden �
 
 
 
-## 1. Karar Ağaçlarına Giriş: Sezgisel Bir Zeka Formu
+## 14. Karar Ağaçlarına Giriş: Sezgisel Bir Zeka Formu
 
 Makine öğrenmesi dünyasındaki yolculuğumuzda, hem insan sezgisine son derece yakın hem de matematiksel olarak bir o kadar sağlam olan zarif bir yöntemle tanışacağız: **Karar Ağaçları**. Bu yöntemi, veriye doğru teşhisi koymak için sistematik bir şekilde sorular soran bir uzmana benzetebiliriz. Her bir soru, veri setini daha küçük ve daha homojen gruplara ayırır ve bu süreç, her bir grup için net bir sonuca ulaşana kadar devam eder. Bu hiyerarşik karar verme süreci, bir akış şeması (flowchart) formunda görselleştirilebilir, bu da onu en karmaşık modeller arasında bile en yorumlanabilir olanlardan biri yapar. İster bir müşterinin kredi riskini belirlemek (sınıflandırma) ister bir gayrimenkulün piyasa değerini tahmin etmek (regresyon) olsun, karar ağaçları bize şeffaf ve güçlü bir analitik çerçeve sunar.
 
-### 1.1. Parametrik Olmayan Yapının Esnekliği ve Gücü
+### 14.1. Parametrik Olmayan Yapının Esnekliği ve Gücü
 
 Karar ağaçlarının temelindeki felsefeyi anlamak için, onları diğer modelleme yaklaşımlarından ayıran en temel özelliğe odaklanmalıyız: **parametrik olmayan (non-parametric)** bir yapıya sahip olmaları. Gelin bu teknik ayrımı bir analoji ile somutlaştıralım:
 
@@ -564,7 +564,7 @@ Karar ağaçlarının temelindeki felsefeyi anlamak için, onları diğer modell
 
 -   **Karar Ağaçları (Veriden Doğan Esnek Yapı):** Karar ağaçları ise verinin altta yatan dağılımı hakkında böyle katı varsayımlarda bulunmaz. Modelin yapısı ve karmaşıklığı, sabit bir denkleme bağlı olmak yerine, doğrudan verinin kendisinden öğrenilir. Veri miktarı ve karmaşıklığı arttıkça, ağaç da bu yeni örüntüleri yakalamak için büyüyebilir ve dallanabilir. Bu esneklik, karar ağaçlarının doğrusal olmayan (non-linear) ve karmaşık etkileşimleri, önceden bir formül belirtmeye gerek kalmadan, doğal bir şekilde modellemesine olanak tanır. Kısacası, veriyi bir kalıba sokmaya çalışmak yerine, kalıbın veriden doğmasına izin verirler.
 
-### 1.2. Karar Ağaçlarını Neden Bir Köşe Taşı Olarak Görüyoruz?
+### 14.2. Karar Ağaçlarını Neden Bir Köşe Taşı Olarak Görüyoruz?
 
 Bu yöntemin, veri bilimcileri ve analistler için neden vazgeçilmez bir araç olduğunu birkaç temel başlıkta özetleyebiliriz:
 
@@ -574,7 +574,7 @@ Bu yöntemin, veri bilimcileri ve analistler için neden vazgeçilmez bir araç 
 
 -   **Çok Yönlülük ve Hibrit Veri Desteği:** Gerçek dünya veri setleri nadiren tek tiptir. Karar ağaçlarının temelindeki bölme kriterleri (Gini İndeksi, Entropi vb.), hem sürekli (sayısal) hem de kategorik (nominal) özellikleri doğal bir şekilde işleyebilir. Bu, farklı veri türlerini bir arada barındıran zengin veri setleriyle, karmaşık dönüşümlere gerek kalmadan doğrudan çalışabilme imkanı tanır.
 
-## 2. Karar Ağacının Yapısal Bileşenleri
+## 15. Karar Ağacının Yapısal Bileşenleri
 
 Aşağıda, karar ağacının temel yapısını gösteren renkli bir diyagram yer almaktadır:
 
@@ -606,7 +606,7 @@ Bu diyagramda:
 - **Yeşil**: Pozitif sınıfı temsil eden yaprak düğüm
 - **Kırmızı**: Negatif sınıfı temsil eden yaprak düğüm
 
-### 2.1. Karar Ağacının Anatomisi: Düğümler ve Dallar
+### 15.1. Karar Ağacının Anatomisi: Düğümler ve Dallar
 
 Sevgili arkadaşlar, bir karar ağacını, veriye teşhis koymak için tasarlanmış organik bir yapı gibi düşünebiliriz. Bu yapının her bir parçası, mantıksal bir akış şemasının unsurlarını temsil eder ve bize verinin içindeki hikayeyi anlatır. Gelin bu zarif yapıyı birlikte inceleyelim.
 
@@ -619,15 +619,15 @@ Kök düğümden sonra gelen her bir ara karar noktasıdır. Her iç düğüm, b
 **c) Yaprak Düğümler (Leaf / Terminal Nodes): Hüküm Anı**
 Ağacın en uç noktalarıdır; artık daha fazla soru sorulmayan ve nihai kararın verildiği yerlerdir. Her bir yaprak düğüm, o düğüme ulaşan veri örnekleri için bir sınıf etiketi (sınıflandırma probleminde) veya bir sayısal değer (regresyon probleminde) içerir.
 
-### 2.2. Dallar (Branches): Mantığın Patikaları
+### 15.2. Dallar (Branches): Mantığın Patikaları
 
 Dallar, düğümler arasındaki yollardır ve her bir yol, bir karar sürecini temsil eder. Kök düğümden başlayıp bir yaprak düğüme kadar takip edilen her bir patika, aslında `EĞER-O HALDE` (IF-THEN) formatında, insan tarafından kolayca okunabilen bir kural setine karşılık gelir.
 
 **Örnek Kural:** `EĞER` (Sıcaklık > 25°C) `VE` (Nem Oranı < %60) `O HALDE` (Dışarıda Oyna = Evet)
 
-## 3. Karar Ağacı Nasıl İnşa Edilir: Özyinelemeli Bölme Sanatı
+## 16. Karar Ağacı Nasıl İnşa Edilir: Özyinelemeli Bölme Sanatı
 
-### 3.1. En İyi Bölmeyi Bulmak: Açgözlü (Greedy) Yaklaşım
+### 16.1. En İyi Bölmeyi Bulmak: Açgözlü (Greedy) Yaklaşım
 
 İşte işin büyüsü burada başlıyor. Bir karar ağacı inşa etmek, temelde bir **"böl ve yönet" (divide and conquer)** stratejisidir. Algoritma, her adımda veri setini daha saf alt kümelere ayıracak en iyi soruyu bulmaya çalışır. Bu sürece **özyinelemeli bölme (recursive partitioning)** adını veriyoruz.
 
@@ -642,11 +642,11 @@ Bu yaklaşım "açgözlü" (greedy) olarak nitelendirilir, çünkü algoritma he
     *   Önceden belirlenmiş bir maksimum ağaç derinliğine ulaşılmışsa.
     *   Düğümdeki örnek sayısı, bölünmek için belirlenen minimum sayının altına düşmüşse.
 
-### 3.2. Saflık Ölçütleri: Düzensizliği Ölçme Bilimi
+### 16.2. Saflık Ölçütleri: Düzensizliği Ölçme Bilimi
 
 Peki, algoritma "en iyi" bölmenin ne olduğuna nasıl karar veriyor? Cevap, **saflık (purity)** veya onun zıttı olan **kirlilik (impurity)** kavramında yatar. Bir düğüm ne kadar safsa, içindeki örnekler o kadar homojendir (yani çoğunlukla aynı sınıfa aittir). Algoritmanın amacı, her bölme işleminden sonra ortaya çıkan çocuk düğümlerin toplam kirliliğini en aza indirmektir. Bu kirliliği ölçmek için kullandığımız iki temel matematiksel araç vardır: Gini İndeksi ve Entropi.
 
-#### 3.2.1. Gini İndeksi (Gini Impurity): Yanlış Sınıflandırma Olasılığı
+#### 16.2.1. Gini İndeksi (Gini Impurity): Yanlış Sınıflandırma Olasılığı
 
 Gini İndeksi, oldukça sezgisel bir ölçüttür. Bir düğümdeki veri noktalarından rastgele birini seçip, bu düğümdeki sınıf dağılımına göre onu etiketlersek, ne kadar olasılıkla yanlış etiketleme yaparız? İşte Gini İndeksi tam olarak bunu ölçer.
 
@@ -661,7 +661,7 @@ $$
 
 Burada `p_i`, `i` sınıfına ait örneklerin oranını temsil eder. Algoritma, bölme sonrası oluşacak çocuk düğümlerin ağırlıklı Gini ortalamasını en çok düşüren bölmeyi tercih eder. Bu düşüşe **Gini Kazancı (Gini Gain)** denir.
 
-#### 3.2.2. Entropi ve Bilgi Kazancı (Information Gain)
+#### 16.2.2. Entropi ve Bilgi Kazancı (Information Gain)
 
 Entropi, bilgi teorisinin babası Claude Shannon'dan ödünç aldığımız bir kavramdır ve bir sistemdeki belirsizliği veya düzensizliği ölçer. Karar ağaçları bağlamında, bir düğümdeki sınıfların ne kadar karışık olduğunun bir ölçüsüdür.
 
@@ -684,7 +684,7 @@ Algoritma, Entropiyi doğrudan minimize etmek yerine, bir bölme işlemiyle ne k
 
 Pratikte, her iki metrik de genellikle çok benzer ağaçlar üretir. Gini İndeksi'nin hesaplama verimliliği, onu CART gibi algoritmalarda popüler bir varsayılan seçenek haline getirir.
 
-#### 3.2.3. Kazanç Oranı (Gain Ratio): Bilgi Kazancının Tuzağına Karşı Bir Savunma
+#### 16.2.3. Kazanç Oranı (Gain Ratio): Bilgi Kazancının Tuzağına Karşı Bir Savunma
 
 Bilgi Kazancı'nın zekice bir yaklaşım olmasına rağmen, tehlikeli bir zaafı vardır: **yüksek kardinaliteye sahip** (yani çok sayıda benzersiz değere sahip) özniteliklere karşı bir ön yargı besler. Örneğin, "Müşteri ID" veya "TC Kimlik No" gibi bir özniteliği düşünün. Her bir değer benzersiz olduğu için, bu özniteliğe göre yapılacak bir bölme, her biri tek bir örnek içeren mükemmel derecede saf yapraklar oluşturacaktır. Bilgi Kazancı bu durumu "mükemmel bir bölme" olarak görür, ancak bu aslında öğrenme değil, **ezberlemedir (overfitting)**.
 
@@ -698,7 +698,14 @@ $$
 
 Bu sayede Kazanç Oranı, hem yüksek bilgi sağlayan hem de veriyi makul sayıda, anlamlı alt gruplara ayıran **dengeli** bölmeleri tercih eder. Bu, modelin genelleme yeteneğini önemli ölçüde artırır.
 
-### 3.3. Gini İndeksi ile Adım Adım Karar Ağacı İnşası: Bir Vaka Analizi
+#### 16.2.4. Sınıflandırma Hatası (Classification Error)
+
+Şimdi gelelim en sezgisel, en doğrudan ölçütümüze: Sınıflandırma Hatası. Bu metrik, son derece pratik bir soru sorar: "Eğer bir düğümdeki en popüler sınıf neyse, o düğüme düşen her veriye o etiketi yapıştırsak, ne kadar yanılırız?"
+
+-   **Örnek:** Bir düğümde 8 "Evet" ve 2 "Hayır" kararımız varsa, en popüler sınıfımız "Evet"tir. Eğer bu düğümdeki herkese "Evet" tahmininde bulunursak, 10'da 2 kez yanılmış oluruz. Yani hata oranımız %20'dir.
+-   **Amaç:** Algoritmanın amacı da, bu basit ama etkili hata oranını en aza indirecek bölmeyi bulmaktır.
+
+### 16.3. Gini İndeksi ile Adım Adım Karar Ağacı İnşası: Bir Vaka Analizi
 
 Gençler, teorik bilgileri somut bir örnekle taçlandırmanın zamanı geldi. Gelin, "Bugün tenis oynamalı mıyız?" sorusuna cevap arayan klasik bir veri seti üzerinden, Gini İndeksi'ni kullanarak bir karar ağacını adım adım nasıl inşa ettiğimizi birlikte görelim.
 
@@ -721,7 +728,7 @@ Gençler, teorik bilgileri somut bir örnekle taçlandırmanın zamanı geldi. G
 | D13 | Bulutlu | Sıcak | Normal | Yok | Evet |
 | D14 | Yağmurlu | Ilık | Yüksek | Var | Hayır |
 
-#### Adım 1: Kök Düğümün Kirliliğini Hesaplama (Başlangıç Noktası)
+#### 16.3.1. Adım 1: Kök Düğümün Kirliliğini Hesaplama (Başlangıç Noktası)
 
 Her şeyden önce, tüm veri setimizin "kirliliğini" ölçmeliyiz. Bu, bizim referans noktamız olacak.
 - Toplam Gözlem: 14
@@ -734,7 +741,7 @@ Gini(Kök) = 1 - [ (9/14)² + (5/14)² ] = 1 - [ 0.413 + 0.128 ] = 0.459
 ```
 Başlangıç kirliliğimiz 0.459. Amacımız, bu değeri en çok düşüren özniteliği bulmak.
 
-#### Adım 2: Her Bir Öznitelik İçin Gini Kazancını Hesaplama
+#### 16.3.2. Adım 2: Her Bir Öznitelik İçin Gini Kazancını Hesaplama
 
 Şimdi her bir özniteliği ("Hava Durumu", "Sıcaklık", "Nem", "Rüzgar") potansiyel bir bölme noktası olarak değerlendireceğiz.
 
@@ -766,7 +773,7 @@ $Gain(\text{Rüzgar}) = 0.459 - 0.428 = \mathbf{0.031}$
 
 (Benzer hesaplamalar "Sıcaklık" ve "Nem" için de yapıldığında, onların kazançlarının daha düşük olduğu görülecektir.)
 
-#### Adım 3: En İyi Bölmeyi Seçme ve İlk Dalı Oluşturma
+#### 16.3.3. Adım 3: En İyi Bölmeyi Seçme ve İlk Dalı Oluşturma
 
 Kazançları karşılaştıralım:
 - **Gain(Hava Durumu) = 0.116** (En Yüksek!)
@@ -794,7 +801,7 @@ graph TD
 
 Dikkat ederseniz, "Bulutlu" dalı saf bir yaprak düğüme dönüştü. Artık o dal için daha fazla soru sormamıza gerek yok.
 
-#### Adım 4: Özyinelemeli Süreç: Alt Düğümleri Fethetmek
+#### 16.3.4. Adım 4: Özyinelemeli Süreç: Alt Düğümleri Fethetmek
 
 Kök düğümümüzü belirledik ve 'Bulutlu' hava durumunun bizi doğrudan 'Evet' sonucuna götürdüğünü keşfettik. Ama macera burada bitmiyor. Algoritmamızın "özyinelemeli" doğası tam da bu noktada devreye giriyor. Şimdi, henüz saf olmayan "Güneşli" ve "Yağmurlu" dallarını, sanki her biri kendi başına yeni bir veri setiymiş gibi ele alacağız. Gelin "Güneşli" dalına odaklanalım.
 
@@ -841,7 +848,7 @@ Kazançları karşılaştıralım:
 - Gain(Sıcaklık) = 0.28 (Hesaplandı)
 - Gain(Rüzgar) = 0.014
 
-Gördüğümüz gibi, **"Nem"** özniteliği `0.48`'lik kazançla ezici bir üstünlük sağlıyor. Bu, "Güneşli" günlerde tenis oynayıp oynamama kararını en iyi açıklayan faktörün nem oranı olduğu anlamına geliyor. Üstelik bu bölme o kadar mükemmel ki, her iki yeni dal da tamamen saf yapraklara dönüşüyor!
+Gördüğümüz gibi, **"Nem"** özniteliği `0.48`'lik kazançla ezici bir üstünlük sağlıyor. Bu, "Güneşli" günlerde tenis oynamayıp oynamama kararını en iyi açıklayan faktörün nem oranı olduğu anlamına geliyor. Üstelik bu bölme o kadar mükemmel ki, her iki yeni dal da tamamen saf yapraklara dönüşüyor!
 
 Ağacımızın güncel hali:
 
@@ -865,7 +872,7 @@ graph TD
     Internal -- "Normal" --> LeafYes2["<b>Evet</b>"]
 ```
 
-#### Adım 5: Ağacı Tamamlama
+#### 16.3.5. Adım 5: Ağacı Tamamlama
 
 Aynı özyinelemeli süreci "Yağmurlu" dalı için de ("Rüzgar" özniteliğine göre bölünür) uyguladığımızda, nihai karar ağacımız ortaya çıkar:
 
@@ -944,20 +951,13 @@ graph TD
     end
 ```
 
-#### 3.2.4. Sınıflandırma Hatası (Classification Error)
-
-Şimdi gelelim en sezgisel, en doğrudan ölçütümüze: Sınıflandırma Hatası. Bu metrik, son derece pratik bir soru sorar: "Eğer bir düğümdeki en popüler sınıf neyse, o düğüme düşen her veriye o etiketi yapıştırsak, ne kadar yanılırız?"
-
--   **Örnek:** Bir düğümde 8 "Evet" ve 2 "Hayır" kararımız varsa, en popüler sınıfımız "Evet"tir. Eğer bu düğümdeki herkese "Evet" tahmininde bulunursak, 10'da 2 kez yanılmış oluruz. Yani hata oranımız %20'dir.
--   **Amaç:** Algoritmanın amacı da, bu basit ama etkili hata oranını en aza indirecek bölmeyi bulmaktır.
-
-## 4. Durdurma Kriterleri (Stopping Criteria)
+## 17. Durdurma Kriterleri (Stopping Criteria)
 
 Şimdi, karar ağacımızı inşa ederken en kritik sorulardan birine geldik: **Ne zaman durmalıyız?** Eğer ağacımızın sonsuza kadar büyümesine izin verirsek, her bir veri noktasını ezberleyen, ancak genelleme yeteneği sıfır olan aşırı hevesli bir öğrenciye dönüşür. Bu duruma **aşırı uyum (overfitting)** diyoruz. Tersi durumda, ağacı çok erken durdurursak, verideki önemli örüntüleri kaçıran tembel bir öğrenciye sahip oluruz ki bu da **eksik uyumdur (underfitting)**.
 
 İşte bu dengeyi kurmak için ağacımıza bazı sınırlar koymamız, yani durdurma kriterleri belirlememiz gerekir.
 
-### 4.1. Yaygın Durdurma Parametreleri
+### 17.1. Yaygın Durdurma Parametreleri
 
 Bu süreci yönetmek için elimizde etkili kontrol mekanizmaları, yani hiperparametreler var. En yaygın olanlarına bir göz atalım:
 
@@ -971,7 +971,7 @@ Bu süreci yönetmek için elimizde etkili kontrol mekanizmaları, yani hiperpar
 
 **e) Minimum Saflık Artışı (Minimum Purity Increase):** Bir bölme işlemi yapacaksak, bu bize ne kadar "bilgi" kazandırmalı? Eğer kazanç çok azsa, o bölmeyi yapmaya değmez deriz.
 
-### 4.2. Ağacı Ne Zaman Durdurmalı
+### 17.2. Ağacı Ne Zaman Durdurmalı
 
 Karar ağacının ne kadar büyüyeceğine karar vermek, bir sınava nasıl çalışacağınıza karar vermeye çok benzer.
 
@@ -981,7 +981,7 @@ Karar ağacının ne kadar büyüyeceğine karar vermek, bir sınava nasıl çal
 
 **Peki, en iyisi nedir?** Konunun mantığını anlamak ve her konuyla ilgili birkaç farklı örnek çözmektir. İşte **Berry ve Linoff Kuralı** bize bu "ideal çalışma" seviyesi için pratik bir tavsiye verir. Der ki: "Ağacın her bir karar yaprağında, ne tek bir örnek kalacak kadar detaya in, ne de yüzlerce örnek kalacak kadar genel kal. Veri setinin büyüklüğüne göre makul bir sayıda örnek bırak." Bu kural, modelin hem öğrenmesini hem de ezberlememesini sağlamak için bir denge noktası sunar.
 
-### 4.3. Model Karmaşıklığı ve Genelleme Yeteneği
+### 17.3. Model Karmaşıklığı ve Genelleme Yeteneği
 
 Karar ağacının büyümesini kontrol eden durdurma kriterleri, modelin **genelleme performansı** ile **karmaşıklığı** arasındaki dengeyi (Bias-Variance Tradeoff) yönetmek için kritik öneme sahiptir. Bu bağlamda, yaprak düğümlerdeki minimum örnek sayısı (`min_samples_leaf`) en etkili hiperparametrelerden biridir.
 
@@ -1012,7 +1012,7 @@ Aşağıdaki tablo, bu parametrenin etkisini özetlemektedir:
 
 Bu kuralın mutlak bir yasa olmadığını, ancak model optimizasyon sürecinde hangi parametre aralığında arama yapılması gerektiğine dair güçlü bir başlangıç noktası sunduğunu unutmamak önemlidir. Nihai en iyi değer, genellikle çapraz doğrulama (cross-validation) gibi tekniklerle bulunur.
 
-## 5. Budama (Pruning): Ağacı Basitleştirme Sanatı
+## 18. Budama (Pruning): Ağacı Basitleştirme Sanatı
 
 Bir bahçıvanın gül fidanını budaması gibi, karar ağacı **budaması (pruning)** da benzer bir felsefeyle çalışır. Kontrolsüzce büyüyen bir fidan, enerjisini çok sayıda küçük ve zayıf güle dağıtır. Usta bir bahçıvan ise gereksiz dalları keserek fidanın gücünü daha az sayıda, ancak daha gösterişli ve sağlıklı güller yetiştirmeye odaklar.
 
@@ -1065,9 +1065,9 @@ Diyagramda görüldüğü gibi:
 
 Teknik açıdan budama, bir karar ağacının karmaşıklığını azaltmak için kullanılan bir **düzenlileştirme (regularization)** tekniğidir. Tamamen büyümüş bir ağaç, eğitim setindeki gürültüyü ve istisnaları modellediği için genellikle **yüksek varyansa (high variance)** sahiptir. Budama, modelin **yanlılığında (bias)** hafif bir artış pahasına, bu varyansı düşürerek daha dengeli bir model oluşturur. Amaç, görülmemiş veriler üzerinde en iyi performansı gösterecek, ne çok basit ne de çok karmaşık olan "altın oran"daki ağacı bulmaktır. Bu karar, genellikle bir doğrulama seti (validation set) üzerindeki performans metrikleri veya istatistiksel anlamlılık testleri ile verilir.
 
-### 5.1. Budama Türleri
+### 18.1. Budama Türleri
 
-#### 5.1.1. Ön Budama (Pre-pruning / Forward Pruning)
+#### 18.1.1. Ön Budama (Pre-pruning / Forward Pruning)
 
 Ağaç oluşturulurken dalların büyümesi kontrol edilir. Belirli kriterlere uymayan bölmeler engellenir.
 
@@ -1083,7 +1083,7 @@ Ağaç oluşturulurken dalların büyümesi kontrol edilir. Belirli kriterlere u
 - Minimum bilgi kazancı eşiği
 - Çoklu karşılaştırma düzeltmeleri
 
-#### 5.1.2. Son Budama (Post-pruning / Backward Pruning)
+#### 18.1.2. Son Budama (Post-pruning / Backward Pruning)
 
 Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri doğru budanır.
 
@@ -1094,7 +1094,7 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 **Dezavantajları**:
 - Hesaplama açısından daha maliyetlidir
 
-### 5.2. Budama Yöntemleri
+### 18.2. Budama Yöntemleri
 
 **a) Hatalı Tahmin Oranı Minimizasyonu**: Her alt ağaç için hata oranı hesaplanır ve en düşük orana sahip olan seçilir.
 
@@ -1110,16 +1110,16 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 - İşlem her katman için tekrarlanır
 - Ortalama hata hesaplanır ve en düşük hataya sahip model seçilir
 
-## 6. Popüler Karar Ağacı Algoritmaları
+## 19. Popüler Karar Ağacı Algoritmaları
 
-### 6.1. ID3 (Iterative Dichotomiser 3, 1986)
+### 19.1. ID3 (Iterative Dichotomiser 3, 1986)
 
 - Ross Quinlan tarafından geliştirilmiştir
 - Entropi ve bilgi kazancı kullanır
 - Sadece kategorik değişkenlerle çalışır
 - Budama yapmaz (aşırı uyum riski)
 
-### 6.2. C4.5 (1993) ve C5.0
+### 19.2. C4.5 (1993) ve C5.0
 
 - ID3'ün geliştirilmiş versiyonudur
 - Hem kategorik hem sürekli değişkenlerle çalışır
@@ -1128,7 +1128,7 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 - Eksik değerleri işleyebilir
 - C5.0, C4.5'in daha hızlı ve verimli versiyonudur
 
-### 6.3. CART (Classification and Regression Trees)
+### 19.3. CART (Classification and Regression Trees)
 
 - Breiman ve arkadaşları tarafından geliştirilmiştir
 - Gini indeksi kullanır
@@ -1136,16 +1136,16 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 - Her düğümde ikili (binary) bölme yapar
 - Maliyet-karmaşıklık budama kullanır
 
-### 6.4. CHAID (Chi-squared Automatic Interaction Detection)
+### 19.4. CHAID (Chi-squared Automatic Interaction Detection)
 
 - Ki-kare testi kullanarak istatistiksel olarak anlamlı bölmeler yapar
 - Çoklu yollu bölme yapabilir (ikiden fazla dal)
 - Kategorik hedef değişkenler için uygundur
 - Örüntü tanıma uygulamalarında yaygındır
 
-## 7. Karar Ağaçlarının Avantajları ve Dezavantajları
+## 20. Karar Ağaçlarının Avantajları ve Dezavantajları
 
-### 7.1. Avantajlar
+### 20.1. Avantajlar
 
 1. **Yorumlanabilirlik**: Karar süreçleri kolayca anlaşılabilir ve görselleştirilebilir
 2. **Veri ön işleme gereksinimsizliği**: Normalizasyon veya standardizasyon gerektirmez
@@ -1154,7 +1154,7 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 5. **Doğrusal olmayan ilişkileri yakalama**: Karmaşık etkileşimleri modelleyebilir
 6. **Öznitelik seçimi**: Önemli değişkenleri otomatik olarak belirler
 
-### 7.2. Dezavantajlar
+### 20.2. Dezavantajlar
 
 1. **Aşırı uyum eğilimi**: Karmaşık ağaçlar eğitim verilerine aşırı uyum sağlayabilir
 2. **Kararsızlık**: Verideki küçük değişiklikler farklı ağaç yapılarına yol açabilir
@@ -1162,7 +1162,7 @@ Tam bir ağaç oluşturulduktan sonra, performansı iyileştirmeyen dallar geri 
 4. **Sınıf dengesizliği**: Dengesiz veri kümelerinde dominant sınıfa yanlılık gösterebilir
 5. **Optimal çözüm garantisi yok**: Açgözlü (greedy) algoritmalar yerel optimuma takılabilir
 
-## 8. Uygulama Alanları
+## 21. Uygulama Alanları
 
 Karar ağaçları çeşitli alanlarda başarıyla uygulanmaktadır:
 
@@ -1174,7 +1174,7 @@ Karar ağaçları çeşitli alanlarda başarıyla uygulanmaktadır:
 - **Meteoroloji**: Hava durumu tahmini
 - **Biyoloji**: Tür sınıflandırması, genetik analiz
 - 
-## 9. Model Değerlendirme
+## 22. Model Değerlendirme
 
 Karar ağacı modelinin performansı çeşitli metriklerle değerlendirilir:
 
@@ -1185,15 +1185,15 @@ Karar ağacı modelinin performansı çeşitli metriklerle değerlendirilir:
 - **Karmaşıklık Matrisi (Confusion Matrix)**: Tahminlerin detaylı gösterimi
 - **ROC Eğrisi ve AUC**: Model ayırt etme gücünün değerlendirilmesi
 
-## 10. Sonuç
+## 23. Sonuç
 
 Karar ağaçları, makine öğrenmesinde güçlü ve esnek bir yöntemdir. Doğru parametreler ve budama teknikleriyle kullanıldığında, karmaşık sınıflandırma ve regresyon problemlerinde yüksek performans gösterebilir. Ancak, aşırı uyum riski ve kararsızlık gibi sınırlamaları göz önünde bulundurulmalıdır. Bu nedenle, pratikte genellikle ensemble yöntemleri (Random Forest, Gradient Boosting gibi) tercih edilir ve bu yöntemler birden fazla karar ağacını birleştirerek daha sağlam ve genellenebilir modeller oluşturur.
 
-## Weka ile Bir Sınıflandırma Uygulaması: `araclarvekaza.csv` Veri Seti Üzerine Naive Bayes
+## 24. Weka ile Bir Sınıflandırma Uygulaması: `araclarvekaza.csv` Veri Seti Üzerine Naive Bayes
 
 Şimdi, teorik bilgilerimizi somut bir uygulama ile pekiştirelim. GitHub'da bulunan `erkanozhan/datamining` deposundaki `araclarvekaza.csv` veri setini kullanarak, Naive Bayes sınıflandırıcısının Weka ortamında nasıl çalıştığını adım adım inceleyeceğiz. Bu veri seti, araç ve kaza bilgilerini içererek, belirli koşullar altında bir kazanın meydana gelip gelmeyeceğini tahmin etme gibi bir senaryoyu modellememize olanak tanır.
 
-### 1. Veri Setini Weka'ya Yükleme
+### 24.1. Veri Setini Weka'ya Yükleme
 
 İlk adımımız, veri setini Weka'ya tanıtmaktır.
 
@@ -1203,7 +1203,7 @@ Karar ağaçları, makine öğrenmesinde güçlü ve esnek bir yöntemdir. Doğr
 
 Weka, dosyayı yükledikten sonra "Current relation" bölümünde veri setinin adını, "Attributes" bölümünde ise veri setindeki öznitelikleri (sütunları) ve onların türlerini (nominal, numeric vb.) gösterecektir. Sağ taraftaki "Visualize" alanında ise seçili özniteliğin dağılımını görebilirsiniz. Bu aşamada, hedef değişkenimizin (yani tahmin etmek istediğimiz sonucun) doğru bir şekilde "Class" olarak işaretlendiğinden emin olun. Genellikle Weka, son özniteliği otomatik olarak sınıf özniteliği olarak algılar. Eğer yanlış bir öznitelik seçilmişse, "Class" açılır menüsünden doğru özniteliği seçebilirsiniz.
 
-### 2. Veri Ön İşleme (Gerekliyse)
+### 24.2. Veri Ön İşleme (Gerekliyse)
 
 `araclarvekaza.csv` gibi yapılandırılmış veri setlerinde genellikle büyük bir ön işleme ihtiyacı olmayabilir. Ancak genel olarak dikkat etmemiz gereken bazı noktalar vardır:
 
@@ -1212,7 +1212,7 @@ Weka, dosyayı yükledikten sonra "Current relation" bölümünde veri setinin a
 
 Bu örnek için, `araclarvekaza.csv` dosyasının genellikle temiz ve kullanıma hazır olduğunu varsayabiliriz.
 
-### 3. Sınıflandırıcı Seçimi ve Yapılandırması: Naive Bayes
+### 24.3. Sınıflandırıcı Seçimi ve Yapılandırması: Naive Bayes
 
 Şimdi modelimizi oluşturma ve eğitme aşamasına geçelim.
 
@@ -1220,7 +1220,7 @@ Bu örnek için, `araclarvekaza.csv` dosyasının genellikle temiz ve kullanıma
 *   **Sınıflandırıcı Seçimi:** "Classifier" bölümünde "Choose" butonuna tıklayın. Açılan menüden `weka.classifiers.bayes.NaiveBayes` sınıflandırıcısını seçin. (Eğer metin verisi gibi frekans tabanlı bir durum olsaydı `NaiveBayesMultinomial` daha uygun olabilirdi, ancak bu tür yapısal veriler için `NaiveBayes` genellikle yeterlidir.)
 *   **Sınıf Özniteliği:** "Class" açılır menüsünden tahmin etmek istediğimiz hedef özniteliğin (örneğin, "kaza_durumu" veya benzeri bir öznitelik) seçili olduğundan emin olun.
 
-### 4. Model Eğitimi ve Değerlendirme
+### 24.4. Model Eğitimi ve Değerlendirme
 
 Modelimizin ne kadar iyi çalıştığını anlamak için onu değerlendirmemiz gerekir.
 
@@ -1229,7 +1229,7 @@ Modelimizin ne kadar iyi çalıştığını anlamak için onu değerlendirmemiz 
     *   `Random seed` değerini `1` gibi sabit bir sayıya ayarlamak, her çalıştırdığınızda aynı sonuçları almanızı sağlar, bu da deneylerin tekrarlanabilirliği açısından önemlidir.
 *   **Eğitimi Başlatma:** Tüm ayarları yaptıktan sonra "Start" butonuna tıklayın. Weka, Naive Bayes modelini eğitecek ve çapraz doğrulama sürecini çalıştıracaktır.
 
-### 5. Sonuçların Yorumlanması
+### 24.5. Sonuçların Yorumlanması
 
 Model eğitimi tamamlandığında, "Classifier output" penceresinde detaylı sonuçlar belirecektir. Bu sonuçları dikkatlice yorumlamak, modelin performansını anlamak için kritik öneme sahiptir.
 
@@ -1248,7 +1248,7 @@ Model eğitimi tamamlandığında, "Classifier output" penceresinde detaylı son
 
 Bu metrikleri inceleyerek, Naive Bayes modelimizin `araclarvekaza.csv` veri seti üzerindeki performansını kapsamlı bir şekilde değerlendirebiliriz.
 
-### 6. İyileştirme ve İleri Adımlar
+### 24.6. İyileştirme ve İleri Adımlar
 
 Elde edilen sonuçlar, modelin başlangıç performansını gösterir. Eğer daha iyi bir performans hedefleniyorsa, aşağıdaki adımlar düşünülebilir:
 
@@ -1260,14 +1260,10 @@ Elde edilen sonuçlar, modelin başlangıç performansını gösterir. Eğer dah
 Bu uygulama, Naive Bayes'in temel prensiplerini ve Weka'da bir sınıflandırma projesinin nasıl yürütüleceğini anlamanız için iyi bir başlangıç noktasıdır. Her adımda elde ettiğiniz sonuçları not alarak ve farklı ayarları deneyerek veri bilimi yolculuğunuzda önemli tecrübeler kazanabilirsiniz.
 
 
-Naive Bayes'i, slaytlardaki örnek üzerinden adım adım inceleyelim.
-
----
-
-# Olasılık Temelli Tahminler: Naive Bayes Sınıflandırıcısı
+## 25. Olasılık Temelli Tahminler: Naive Bayes Sınıflandırıcısı
 
 Merhaba gençler. Bugün, elimizdeki verilerden yola çıkarak geleceğe yönelik akıllı tahminler yapmamızı sağlayan bir yöntemden bahsedeceğiz: **Naive Bayes Sınıflandırıcısı**. Adındaki "naive" kelimesi sizi yanıltmasın, kendisi oldukça güçlü bir tekniktir. Tıpkı bir dedektifin elindeki ipuçlarını birleştirerek bir sonuca varması gibi çalışır.
-### Naive Bayes — Keşfi ve Temelleri
+### 25.1. Naive Bayes — Keşfi ve Temelleri
 
 Gençler,
 
@@ -1340,10 +1336,10 @@ burada m = max_j s_j. Bu küçük bir öteleme ile exp(·) sırasında oluşabil
 
 Sonuç: Yorumlaması kolay, hızlı ve az veri ile çalışabilen bir yöntemdir. Öğrencilerin dikkat etmesi gereken ana nokta, bağımsızlık varsayımının güçlü bir varsayım olduğudur; uygulamada bunu akılda tutup gerekirse özellik mühendisliği ve smoothing yöntemleri kullanılır.
 
-## Örnek Uygulama: Bilgisayar Satın Alma Tahmini
+## 26. Örnek Uygulama: Bilgisayar Satın Alma Tahmini
 Slaytlardaki örneğimiz üzerinden gidelim. Bir bilgisayar mağazasının elinde geçmiş müşterilerine ait bir tablo var. Bu tabloda müşterilerin yaşı, geliri, öğrenci olup olmadığı ve kredi notu gibi bilgiler ile en sonunda bilgisayar alıp almadıkları (`evet` ya da `hayır`) yazıyor.
 
-### Bilgisayar Satın Alma Veri Seti
+### 26.1. Bilgisayar Satın Alma Veri Seti
 
 | yas | gelir | ogrencimi | kredibilite | bilgisayar_alimi |
 | :--- | :--- | :--- | :--- | :--- |
@@ -1430,11 +1426,11 @@ Bu formüldeki terimleri bizim örneğimize uyarlayalım:
 *   `P(X|C)`: **Olabilirlik (Likelihood):** `C` sınıfı doğruysa, `X` verisini gözlemleme olasılığımız.
 *   `P(X)`: **Kanıt Olasılığı (Evidence):** `X` verisini gözlemlemenin genel olasılığı. Bu değer, tüm sınıflar için sabittir, bu yüzden sınıflandırma yaparken karşılaştırma amacıyla genellikle ihmal edilebilir. Bizim için önemli olan `P(X|C) * P(C)` çarpımını maksimize etmektir.
 
-**"Naive" (Saf) Varsayım:**
+### 26.2. "Naive" (Saf) Varsayım:
 Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, ..., x_n`) sınıf verildiğinde **koşullu olarak bağımsız** olduğunu varsaymasıdır. Bu, `P(X|C)` terimini basitleştirmemizi sağlar:
 $$P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)$$
 
-### Laplace Smoothing ve Sayısal Kararlılık
+### 26.3. Laplace Smoothing ve Sayısal Kararlılık
 
 Gençler, şimdi Naive Bayes'in en zarif hilelerinden birine, ama aynı zamanda en kritik savunma mekanizmasına geliyoruz. Düşünün ki, modelimiz 'bilgisayar alır' diyen müşteriler arasında hiç 'geliri=düşük' olan birini görmemiş. Yeni bir müşteri geliyor, tüm özellikleri 'evet' demeye çok yatkın ama geliri düşük. Formülümüzdeki `P(gelir=düşük | evet)` terimi ne olur? Sıfır. Ve matematikte sıfır, çarpma işleminde acımasız bir yok edicidir. Diğer tüm kanıtlar ne kadar güçlü olursa olsun, o tek bir sıfır bütün skoru sıfırlar ve 'evet' ihtimalini tamamen ortadan kaldırır. Bu adil mi? Elbette değil. Bu, modelin tecrübesizliğinden kaynaklanan bir aşırı özgüven sorunudur.
 
@@ -1446,9 +1442,9 @@ Sonuç olarak, elimizdeki ipuçları ve basit varsayımlarla yapılan hesaplama 
 
 
 
-# Weka ile Birliktelik Kuralı Madenciliği
+## 27. Weka ile Birliktelik Kuralı Madenciliği
 
-## Veri Kümemiz
+### 27.1. Veri Kümemiz
 
 Elimizde beş işlem ve bu işlemlerde yer alan ögeler var:
 
@@ -1460,7 +1456,7 @@ Elimizde beş işlem ve bu işlemlerde yer alan ögeler var:
 | T4 | M, U, C, K, Y |
 | T5 | C, O, O, K, I, E |
 
-## Veriyi Anlamak
+### 27.2. Veriyi Anlamak
 
 Gençler, bu veriye baktığınızda her satırın bir alışveriş sepeti veya bir işlem olduğunu düşünebilirsiniz. Örneğin T1 işleminde {M, O, N, K, E, Y} ögeleri birlikte bulunuyor. Amacımız hangi ögelerin sıklıkla birlikte göründüğünü bulmak.
 
@@ -1469,11 +1465,11 @@ Birkaç örnek:
 - K ögesi: T1, T2, T3 ve T5'te görünüyor (4/5 işlemde)
 - M ögesi: T1, T3 ve T4'te görünüyor (3/5 işlemde)
 
-## Weka İçin Veri Formatı
+### 27.3. Weka İçin Veri Formatı
 
 Weka'da birliktelik kuralı analizi yapmak için verinin özel bir formatta olması gerekir. ARFF (Attribute-Relation File Format) dosyası oluşturacağız.
 
-### ARFF Dosyası Oluşturma
+#### 27.3.1. ARFF Dosyası Oluşturma
 Bir metin editörü açın ve aşağıdaki yapıyı oluşturun. Verilerde bulunmayan ögeler için Weka'daki "eksik değer" karşılığı olan `?` (soru işareti) kullanılmıştır.
 ```arff
 @relation market_basket
@@ -1509,9 +1505,9 @@ Her öge (harf) bir öznitelik (attribute) olarak tanımlanır. Değerler ikili 
 
 Bu dosyayı `market_data.arff` adıyla kaydedin.
 
-## Weka'da Analiz Adımları
+### 27.4. Weka'da Analiz Adımları
 
-### 1. Veriyi Yüklemek
+#### 27.4.1. Veriyi Yüklemek
 
 Weka'yı açın ve Explorer sekmesini seçin:
 
@@ -1521,7 +1517,7 @@ Weka'yı açın ve Explorer sekmesini seçin:
 
 Her özniteliğin istatistiklerini görebilirsiniz. Örneğin E özniteliğine tıklarsanız, 4 işlemde 1 değerini aldığını (yani 4 kez göründüğünü) görürsünüz.
 
-### 2. Apriori Algoritmasını Çalıştırmak
+#### 27.4.2. Apriori Algoritmasını Çalıştırmak
 
 Apriori, birliktelik kurallarını bulmak için kullanılan klasik bir algoritmadır.
 
@@ -1530,7 +1526,7 @@ Apriori, birliktelik kurallarını bulmak için kullanılan klasik bir algoritma
 3. **Apriori** algoritmasını seçin
 4. Algoritma adının yanındaki metne tıklayarak parametreleri ayarlayın
 
-#### Önemli Parametreler
+##### 27.4.2.1. Önemli Parametreler
 
 **minSupport (Minimum Destek):** Bir öge kümesinin en az kaç işlemde görünmesi gerektiğini belirler. 0.4 değeri, ögenin en az %40 işlemde (bizim durumumuzda 5 işlemin 2'sinde) bulunması gerektiği anlamına gelir.
 
@@ -1540,11 +1536,11 @@ Başlangıç için şu değerleri deneyin:
 - minSupport: 0.4 (2/5 işlem)
 - minMetric (confidence): 0.7
 
-### 3. Sonuçları Yorumlamak
+#### 27.4.3. Sonuçları Yorumlamak
 
 **Start** düğmesine bastıktan sonra çıktıda şunları göreceksiniz:
 
-#### Sık Öge Kümeleri
+##### 27.4.3.1. Sık Öge Kümeleri
 
 Örnek çıktı:
 ```
@@ -1558,7 +1554,7 @@ Bu ne anlama gelir?
 
 **İkinci kural:** E tek başına 4 işlemde görünüyor. E olan işlemlerin 3'ünde K de var. Dolayısıyla E görüldüğünde K'nın da olma olasılığı 3/4 = 0.75.
 
-#### Destek ve Güven Değerleri
+##### 27.4.3.2. Destek ve Güven Değerleri
 
 Her kural için iki metrik vardır:
 
@@ -1566,11 +1562,11 @@ Her kural için iki metrik vardır:
 
 **Güven (Confidence):** Sol taraftaki ögeler varken sağ taraftaki ögenin de bulunma olasılığı. Yukarıdaki örnekte 0.75.
 
-## Farklı Parametre Değerleri Denemek
+### 27.5. Farklı Parametre Değerleri Denemek
 
 Minimum desteği azaltırsanız (örneğin 0.3'e) daha fazla kural bulursunuz, ancak bunlar daha az işlemde geçerli olur. Minimum desteği artırırsanız (örneğin 0.6'ya) sadece çok sık görülen öge kombinasyonlarını bulursunuz.
 
-### Düşük Destek Örneği (minSupport = 0.3)
+#### 27.5.1. Düşük Destek Örneği (minSupport = 0.3)
 
 ```
 M=1 3 ==> E=1 2    conf:(0.67)
@@ -1578,7 +1574,7 @@ M=1 3 ==> E=1 2    conf:(0.67)
 
 M, 3 işlemde görünüyor (T1, T3, T4). Bu 3 işlemin 2'sinde E de var (T1, T3). Güven: 2/3 ≈ 0.67.
 
-### Yüksek Destek Örneği (minSupport = 0.6)
+#### 27.5.2. Yüksek Destek Örneği (minSupport = 0.6)
 
 MinSupport değerini 0.6 yaparsak (yani 3/5 = 3 işlem), bir öge kümesinin en az 3 işlemde görünmesi gerekir.
 
@@ -1655,13 +1651,13 @@ Best rules found:
 
 **Önemli gözlem:** K, E ve O ögeleri çok güçlü bir ilişki içinde. O görüldüğünde hem K hem E kesinlikle var. K ve E de neredeyse her zaman birlikte görünüyor. Bu üç öge arasında güçlü bir birliktelik var.
 
-## Lift Değeri: Kuralların Gerçek Anlamını Keşfetmek
+### 27.6. Lift Değeri: Kuralların Gerçek Anlamını Keşfetmek
 
 Gençler, birliktelik kurallarını incelerken sadece "destek" ve "güven" değerlerine bakmak bazen yanıltıcı olabilir. Bir kuralın gerçekten ilginç olup olmadığını anlamak için daha derin bir ölçüte ihtiyacımız var: **Lift değeri**.
 
 Düşünün ki, bir markette "ekmek alanların %80'i süt de alır" gibi bir kural buldunuz. Bu kulağa güçlü geliyor, değil mi? Ama ya markete gelen herkesin zaten %90'ı süt alıyorsa? Bu durumda, ekmek almanın süt alma olasılığını artırdığını söylemek pek de doğru olmaz. İşte Lift değeri tam da bu noktada devreye girer ve bir kuralın rastlantısal bir durumdan mı ibaret olduğunu yoksa gerçekten anlamlı bir ilişkiyi mi gösterdiğini ortaya koyar.
 
-### Lift Değeri Ne Anlatır?
+#### 27.6.1. Lift Değeri Ne Anlatır?
 
 Lift, bir kuralın sol tarafındaki ögelerin (antecedent) sağ tarafındaki ögeyi (consequent) tahmin etme gücünün, sağ taraftaki ögenin tek başına görülme olasılığına göre ne kadar arttığını gösterir. Basitçe ifade etmek gerekirse:
 
@@ -1669,7 +1665,7 @@ Lift, bir kuralın sol tarafındaki ögelerin (antecedent) sağ tarafındaki ög
 *   **Lift = 1:** Kuralın sol tarafındaki ögeler ile sağ taraftaki öge arasında **bağımsız bir ilişki** vardır. Yani, sol tarafın varlığı, sağ tarafın görülme olasılığını ne artırır ne de azaltır.
 *   **Lift < 1:** Kuralın sol tarafındaki ögeler, sağ taraftaki ögenin görülme olasılığını **azaltır**. Bu, ögeler arasında negatif bir ilişki olduğunu, yani sol tarafın varlığının sağ tarafın yokluğunu işaret edebileceğini gösterir.
 
-### Lift Değeri Nasıl Hesaplanır? 
+#### 27.6.2. Lift Değeri Nasıl Hesaplanır? 
 
 Lift değeri, bir kuralın güvenini, kuralın sağ tarafındaki ögenin (consequent) genel desteğine bölerek hesaplanır.
 
@@ -1709,7 +1705,7 @@ Lift değeri, birliktelik kurallarının iş dünyasındaki gerçek değerini an
 
 Lift 1.25 olduğu için, K ve E birlikte olduğunda Y'nin görünme olasılığı, Y'nin genel görünme olasılığından %25 daha yüksektir. Bu, kuralın faydalı olduğunu gösterir.
 
-## Algoritma Parametrelerini Ayarlamak
+### 27.7. Algoritma Parametrelerini Ayarlamak
 
 Apriori algoritması seçiliyken, algoritma adına tıklayarak parametreleri düzenleyebilirsiniz:
 
@@ -1737,7 +1733,7 @@ verbose: false
 
 **outputItemSets:** true yaparsanız, sadece kuralları değil, sık öge kümelerini de gösterir.
 
-## Sonuçları Kaydetmek
+### 27.8. Sonuçları Kaydetmek
 
 Weka'da sonuçları farklı formatlarda kaydedebilirsiniz:
 
@@ -1745,7 +1741,7 @@ Weka'da sonuçları farklı formatlarda kaydedebilirsiniz:
 2. **Save result buffer** seçin
 3. Bir metin dosyası olarak kaydedin
 
-## İpuçları
+### 27.9. İpuçları
 
 1. **Veri Hazırlığı:** Gerçek uygulamalarda veriniz CSV formatında olabilir. Bu durumda Excel veya bir Python betiği ile ARFF formatına dönüştürmeniz veya Weka'nın csv loader'ını kullanmanız gerekebilir.
 
@@ -1755,7 +1751,7 @@ Weka'da sonuçları farklı formatlarda kaydedebilirsiniz:
 
 4. **Karşılaştırma:** Apriori dışında FPGrowth gibi başka algoritmalar da deneyin. FPGrowth genellikle daha hızlıdır ancak aynı sonuçları verir.
 
-## Alternatif: FPGrowth Algoritması
+### 27.10. Alternatif: FPGrowth Algoritması
 
 FPGrowth, Apriori'ye göre daha verimli bir algoritmadır çünkü veri tabanını tekrar tekrar taramaz.
 
@@ -1766,7 +1762,7 @@ FPGrowth, Apriori'ye göre daha verimli bir algoritmadır çünkü veri tabanın
 
 FPGrowth genellikle büyük veri kümelerinde daha hızlı çalışır.
 
-## Sık Karşılaşılan Sorunlar
+### 27.11. Sık Karşılaşılan Sorunlar
 
 **Problem:** "No large itemsets and rules found!" hatası
 
@@ -1792,21 +1788,21 @@ Birliktelik kuralı madenciliği, hangi ögelerin birlikte sık görüldüğün�
 Bu yöntem market sepeti analizinden metin madenciliğine, web analizi'nden biyoinformatiğe kadar birçok alanda kullanılır.
 
 
-## Veri Madenciliği - Kümeleme (Clustering) Analizi
+## 28. Veri Madenciliği - Kümeleme (Clustering) Analizi
 
-## Kümeleme Analizi
+### 28.1. Kümeleme Analizi
 
 Gençler, bugün veri madenciliğinde sıkça karşımıza çıkan kümeleme analizini ele alacağız. Öncelikle basit bir örnekle başlayalım.
 
 Diyelim ki bir markette çalışıyorsunuz ve müdür sizden binlerce müşterinin alışveriş verilerini incelemenizi istedi. Bu verilerin içinde kim hangi ürünü almış, ne zaman almış, ne kadar harcamış gibi bilgiler var. İşte kümeleme analizi bu noktada devreye giriyor - bu karmaşık veriyi benzer özellikteki gruplara ayırmamıza yardımcı oluyor.
 
-### Kümeleme Nedir?
+#### 28.1.1. Kümeleme Nedir?
 
 Kümeleme, eldeki veri noktalarını benzerliklerine göre gruplara ayırma işlemidir. Dikkat edin, burada önceden belirlenmiş kategoriler yok. Algoritma verinin kendi yapısını inceleyerek bu grupları kendisi buluyor. Bu yönüyle sınıflandırmadan farklıdır - sınıflandırmada hangi grupların olduğunu bilirsiniz, kümelemede ise grupları keşfedersiniz.
 
 Bir örnekle açıklayalım: Sınıfta oturan öğrencileri boy uzunluklarına ve kilolarına göre gruplamak istesek, kümeleme algoritması muhtemelen benzer fiziksel özelliklere sahip öğrencileri aynı gruba koyacaktır. Ama biz önceden "uzun boylu", "kısa boylu" gibi etiketler vermeyiz - algoritma bu grupları kendisi oluşturur.
 
-### Kümeleme Analizinin Kullanım Amaçları
+#### 28.1.2. Kümeleme Analizinin Kullanım Amaçları
 
 Kümeleme analizini iki temel amaçla kullanırız:
 
@@ -1814,7 +1810,7 @@ Kümeleme analizini iki temel amaçla kullanırız:
 
 **2. Doğrulayıcı Amaçlar:** Bir hipotezimiz varsa, bunu test etmek için kullanırız. Mesela "müşterilerimiz üç ana gruba ayrılıyor" diye düşünüyorsak, kümeleme ile bunun doğru olup olmadığını kontrol edebiliriz.
 
-### Kümeleme Analizine Başlamadan Önce Cevaplanması Gereken Sorular
+#### 28.1.3. Kümeleme Analizine Başlamadan Önce Cevaplanması Gereken Sorular
 
 Kümeleme yapmadan önce bazı kritik kararlar vermemiz gerekiyor. Bu kararlar sonuçlarımızı doğrudan etkiler.
 
@@ -1844,7 +1840,7 @@ Dirsek yöntemi bunlardan biri. Farklı küme sayıları deneyip, her birinde ne
 
 Ama unutmayın, istatistiksel olarak "en iyi" olan her zaman pratik olarak en anlamlı olan değildir. Bazen 7 küme matematiksel olarak optimal olabilir ama iş dünyasında 3-4 küme çok daha yönetilebilir ve anlamlı olabilir.
 
-### Başarılı Bir Kümelemenin Özellikleri
+#### 28.1.4. Başarılı Bir Kümelemenin Özellikleri
 
 İyi bir kümeleme sonucunda:
 - Aynı kümedeki elemanlar birbirine çok benzemelidir (homojenlik)
@@ -1854,19 +1850,19 @@ Bunu şöyle düşünebilirsiniz: Sınıftaki öğrencileri grupladığınızda,
 
 Kümeleme analizi, veri madenciliğinin temel taşlarından biridir. Doğru uygulandığında, büyük veri yığınlarındaki gizli yapıları ortaya çıkarır ve bize değerli içgörüler sunar. Ancak unutmayın, bu bir araçtır ve her araç gibi, doğru kullanıldığında faydalıdır.
 
-## Benzerlik ve Uzaklık Ölçütleri (Similarity and Distance Measures)
+### 28.2. Benzerlik ve Uzaklık Ölçütleri (Similarity and Distance Measures)
 
 Kümeleme analizinde (clustering analysis) en temel soru şudur: İki veri noktasının birbirine ne kadar benzediğini nasıl ölçeriz? Bu sorunun cevabı, tüm kümeleme sürecinin temelini oluşturur.
 
-### Benzerlik ve Uzaklık Kavramları
+#### 28.2.1. Benzerlik ve Uzaklık Kavramları
 
 Önce basit bir örnekle başlayalım. Sınıftaki iki arkadaşınızın birbirine ne kadar benzediğini düşünün. Neye göre karşılaştırırsınız? Boy, kilo, saç rengi, hobiler, ders notları... Her özellik için farklı bir karşılaştırma yöntemi kullanmanız gerekir. İşte veri analizinde de durum böyledir.
 
 Kümeleme algoritmaları, veri noktalarını (data points) gruplarken aralarındaki **benzerlikleri (similarities)** veya **uzaklıkları (distances)** hesaplar. Benzerlik yüksekse aynı kümeye (cluster), düşükse farklı kümelere koyar. Ama "benzerlik" dediğimiz şey, duruma göre değişir. İki müşterinin benzer olması başka, iki kelimenin benzer olması başkadır.
 
-### Veri Türlerine Göre Ölçüm Yöntemleri
+#### 28.2.2. Veri Türlerine Göre Ölçüm Yöntemleri
 
-#### 1. Kategorik Veriler İçin Ölçütler (Categorical Data Measures)
+##### 28.2.2.1. Kategorik Veriler İçin Ölçütler (Categorical Data Measures)
 
 Kategorik veriler (categorical/nominal data), sayısal olmayan değerlerdir. Renk, cinsiyet, meslek gibi. Bunlarda büyüklük-küçüklük yoktur, sadece farklılık vardır.
 
@@ -1887,13 +1883,13 @@ Jaccard benzerliği = 2/4 = 0.5
 
 Bu yöntem, özellikle öneri sistemlerinde (recommendation systems) kullanılır. "Bu ürünü alanlar bunları da aldı" mantığının arkasında bu hesaplamalar vardır.
 
-### Kümeleme Analizi: Benzerliklerin Hesaplanması
+#### 28.2.3. Kümeleme Analizi: Benzerliklerin Hesaplanması
 
 Kümeleme analizinin temel adımlarından biri, veri setindeki gözlemlerin (bu örnekte müşterilerin) birbirlerine ne kadar benzediğini veya ne kadar uzak olduğunu ölçmektir. Elimizdeki veri seti, kategorik değişkenler içerdiğinden, benzerliği tespit etmek için özel bir yöntem kullanmamız gerekir. Bu derste, eşleşen özelliklerin sayılmasına dayalı basit bir yöntemi inceleyeceğiz.
 
 Yöntemin temel prensibi şudur: İki müşteri karşılaştırılırken, her bir özellik (değişken) için tercihleri kontrol edilir. Eğer iki müşterinin bir özellik için tercihi **aynı ise 1**, **farklı ise 0** puanı verilir. İki müşteri arasındaki toplam benzerlik skoru, tüm özelliklerden aldıkları puanların toplanmasıyla bulunur. En yüksek toplam puana sahip olan çift, birbirine en çok benzeyen çift olarak kabul edilir.
 
-#### İncelenecek Veri Seti
+##### 28.2.3.1. İncelenecek Veri Seti
 
 Analize başlamadan önce, 5 müşterinin otomobil tercihlerini içeren veri tablosunu tekrar hatırlayalım:
 
@@ -1907,7 +1903,7 @@ Analize başlamadan önce, 5 müşterinin otomobil tercihlerini içeren veri tab
 
 Bu tabloda 5 müşteri olduğundan, ikili olarak toplam C(5,2) = 10 farklı müşteri çifti ilişkisi bulunmaktadır. Şimdi her bir çift için benzerlik skorlarını hesaplayalım.
 
-#### Benzerlik Skorlarının Hesaplanması (S)
+##### 28.2.3.2. Benzerlik Skorlarının Hesaplanması (S)
 
 Her bir `S_ij` değeri, i numaralı müşteri ile j numaralı müşteri arasındaki benzerlik skorunu ifade etmektedir.
 
@@ -1983,13 +1979,13 @@ Bu yöntem, en benzer çifti net bir şekilde ortaya koyar. Ancak, bu skorların
 
 ***
 
-### Kümeleme Analizi: Ağırlıklandırılmış Benzerlik Hesabı
+#### 28.2.4. Kümeleme Analizi: Ağırlıklandırılmış Benzerlik Hesabı
 
 Önceki yöntemde her bir özelliğe (Model, Ülke, Renk) eşit önem vermiştik. Ancak, bazı durumlarda bu yaklaşım yeterli olmayabilir. Örneğin, daha fazla seçeneği olan bir değişkendeki eşleşme, daha az seçeneği olan bir değişkendeki eşleşmeden daha anlamlı veya daha nadir bir durumu ifade ediyor olabilir.
 
 Gözlemler arasındaki benzerliği daha net ve hassas bir şekilde ifade edebilmek için her bir özelliğe bir "ağırlık" atayabiliriz. Bu örnekte, her bir değişkenin sahip olduğu kategori (ölçek) sayısını o değişkenin ağırlığı olarak kabul edeceğiz. Bu yaklaşım, daha fazla alternatife sahip bir özellikteki eşleşmenin, benzerlik skoruna daha fazla katkı yapmasını sağlar.
 
-#### Ağırlıkların Belirlenmesi
+##### 28.2.4.1. Ağırlıkların Belirlenmesi
 
 *   **Model Değişkeni:** 3 farklı seçeneği var (Klasik, Spor, Aile). **Ağırlık = 3**
 *   **Ülke Değişkeni:** 2 farklı seçeneği var (Japonya, Fransa). **Ağırlık = 2**
@@ -1999,7 +1995,7 @@ Hesaplama yöntemi aynı kalacak (eşleşme için 1, farklılık için 0), ancak
 
 **Formül:** `Ağırlıklı Skor = (Eşleşme_Model * 3) + (Eşleşme_Ülke * 2) + (Eşleşme_Renk * 4)`
 
-#### Ağırlıklandırılmış Benzerlik Skorlarının Hesaplanması
+##### 28.2.4.2. Ağırlıklandırılmış Benzerlik Skorlarının Hesaplanması
 
 Şimdi tüm müşteri çiftleri için bu yeni yönteme göre skorları tekrar hesaplayalım.
 
@@ -2016,7 +2012,7 @@ Hesaplama yöntemi aynı kalacak (eşleşme için 1, farklılık için 0), ancak
 
 ---
 
-### Sonuçların Değerlendirilmesi ve Karşılaştırılması
+##### 28.2.4.3. Sonuçların Değerlendirilmesi ve Karşılaştırılması
 
 Yeni hesaplamalarımıza göre, **en yüksek skoru (6) alan 1. ve 5. müşteriler**, yine en çok benzeyen çift olarak öne çıkmaktadır. Ağırlıklandırma, bu çiftin benzerliğinin ne kadar güçlü olduğunu daha da belirginleştirmiştir.
 
@@ -2042,17 +2038,17 @@ Gençler, önceki bölümde, tamamen kategorik değişkenlerden oluşan bir veri
 
 
 
-### Mutlak Sapmalar Yöntemi
+#### 28.2.5. Mutlak Sapmalar Yöntemi
 
 **Mutlak Sapmalar Yöntemi**, adından da anlaşılacağı gibi, iki gözlem arasındaki her bir sayısal özelliğin farkının mutlak değerini alarak bu farkları toplar. Yani, 'A' ve 'B' gibi iki gözlemimiz ve 'X', 'Y', 'Z' gibi sayısal özelliklerimiz varsa, her bir özellik için `|A_X - B_X|`, `|A_Y - B_Y|`, `|A_Z - B_Z|` gibi mutlak farkları hesaplarız. Ardından bu mutlak farkları toplayarak iki gözlem arasındaki toplam sapmayı elde ederiz. Bu yöntem, her bir özelliğin farkını doğrudan yansıtır ve büyük farkların etkisini doğrusal bir şekilde hesaba katar. Örneğin, bir kişinin geliri 50.000, diğerinin 60.000 ise fark 10.000'dir. Başka bir çiftte 100.000 ve 110.000 ise yine fark 10.000'dir. Her iki durumda da bu 10.000'lik fark, toplam sapma skoruna eşit ağırlıkta katkıda bulunur. Bu yöntem, özellikle aykırı değerlerin (outlier) etkisini daha az hissettirmek istediğimiz durumlarda tercih edilebilir, çünkü farkları karelemek gibi bir amplifikasyon yapmaz.
 
-### Farklar Karesi Toplamı Yöntemi
+#### 28.2.6. Farklar Karesi Toplamı Yöntemi
 
 Diğer bir önemli yaklaşım ise **Farklar Karesi Toplamı Yöntemi**'dir. Bu yöntemde, her bir sayısal özelliğin farkı alındıktan sonra, bu farkın karesi hesaplanır ve ardından tüm özellikler için bu kareler toplanır. Yani, `(A_X - B_X)² + (A_Y - B_Y)² + (A_Z - B_Z)²` şeklinde bir hesaplama yaparız. Bu yöntem, aslında **Öklid uzaklığının karesi** olarak da bilinen bir ölçümdür. Kare alma işlemi, küçük farkları daha küçük, büyük farkları ise orantısal olarak çok daha büyük hale getirir. Örneğin, 1 birimlik bir farkın karesi 1 iken, 10 birimlik bir farkın karesi 100 olur. Bu durum, büyük sapmaların toplam uzaklık skoruna çok daha baskın bir şekilde etki etmesine neden olur. Dolayısıyla, bu yöntem, gözlemler arasındaki belirgin farklılıkları vurgulamak istediğimizde veya aykırı değerlerin kümeleme üzerindeki etkisini artırmak istediğimizde daha uygun olabilir.
 
 Her iki yöntem de sayısal değişkenler için uzaklık ölçümü sunar. Seçimimiz, veri setimizin özelliklerine ve analizden beklentilerimize bağlıdır. Mutlak sapmalar, farkları doğrusal olarak ele alırken, farklar karesi toplamı, büyük farklara daha fazla ağırlık vererek onları daha belirgin hale getirir. Bu yöntemler, kümeleme analizinde gözlemler arasındaki gerçek farklılıkları daha doğru bir şekilde yansıtmamızı sağlayarak, daha anlamlı küme yapıları elde etmemize olanak tanır.
 
-### Neden farklar karesi alırız? Sadece farkları toplasak yetmez mi?
+#### 28.2.7. Neden farklar karesi alırız? Sadece farkları toplasak yetmez mi?
 
 Veri analizinde, özellikle iki veri seti arasındaki "uzaklığı" veya "hatayı" ölçerken, farkların karesini almak standart bir yaklaşımdır. Peki, neden farkların mutlak değerlerini toplamakla yetinmeyip, karesini alma zahmetine giriyoruz? Bu sorunun cevabı, ölçümün hassasiyeti ve büyük hatalara verdiği önemde yatmaktadır.
 
@@ -2060,7 +2056,7 @@ Bu durumu, sunulan iki örnek üzerinden inceleyelim.
 
 ---
 
-#### **Örnek 1**
+##### 28.2.7.1. Örnek 1
 
 *   **Veri Setleri:** `(5, 7, 9)` ve `(1, 4, 3)`
 *   **Mutlak Farklar:**
@@ -2070,7 +2066,7 @@ Bu durumu, sunulan iki örnek üzerinden inceleyelim.
 *   **Farkların Toplamı:** `4 + 3 + 6 = 13`
 *   **Farkların Kareleri Toplamı:** `4² + 3² + 6² = 16 + 9 + 36 = 61`
 
-#### **Örnek 2**
+##### 28.2.7.2. Örnek 2
 
 *   **Veri Setleri:** `(12, 2, 4)` ve `(1, 1, 3)`
 *   **Mutlak Farklar:**
@@ -2082,7 +2078,7 @@ Bu durumu, sunulan iki örnek üzerinden inceleyelim.
 
 ---
 
-### Sonuç
+##### 28.2.7.3. Sonuç
 
 Dikkat edilmesi gereken en önemli nokta, her iki örnekte de **Farkların Toplamı**'nın `13` olmasıdır. Eğer ölçütümüz sadece bu toplam olsaydı, iki durumdaki veri setlerinin birbirinden "eşit uzaklıkta" olduğu gibi yanıltıcı bir sonuca varırdık.
 
@@ -2093,7 +2089,7 @@ Ancak **Farkların Kareleri Toplamı**'na baktığımızda gerçek durum ortaya 
 
 Bu sonuçlar, ikinci durumdaki veri setleri arasındaki toplam farkın, birinciye göre çok daha anlamlı ve büyük olduğunu gösterir.
 
-#### Neden Bu Fark Oluşuyor?
+##### 28.2.7.4. Neden Bu Fark Oluşuyor?
 
 Farkların karesini almanın temel işlevi, **büyük farkları orantısal olarak daha fazla cezalandırmaktır.**
 
@@ -2112,11 +2108,11 @@ Peki, bu "yakınlığı" nasıl ölçeriz? İşte burada, amaca ve verinin yapı
 
 ***
 
-### Sayısal Verilerde Uzaklık Ölçümleri (Numerical/Metric Data Measures)
+#### 28.2.8. Sayısal Verilerde Uzaklık Ölçümleri (Numerical/Metric Data Measures)
 
 Kümeleme algoritmaları, veri noktaları (gözlemler) arasındaki mesafeleri hesaplayarak işe başlar. En yakın olanları aynı kümeye dahil etme eğilimindedirler. Sayısal veriler için geometrik uzaklık kavramlarını kullanırız. Bu süreçte en yaygın olarak kullanılan üç temel uzaklık ölçüsünü inceleyelim.
 
-#### 1. Öklid Uzaklığı (Euclidean Distance)
+##### 28.2.8.1. Öklid Uzaklığı (Euclidean Distance)
 
 Bu, hepimizin sezgisel olarak bildiği, en temel ve en yaygın kullanılan uzaklık ölçüsüdür. İki nokta arasındaki **"kuş uçuşu"** mesafeyi ifade eder. Düz bir çizgi çektiğinizde o çizginin uzunluğu ne ise, Öklid uzaklığı da odur.
 
@@ -2152,7 +2148,7 @@ Bu formülü, veri setimizdeki 'p' adet özelliğe (boyuta) genelleyebiliriz. A 
 
 *   **Neden Önemli?** Öklid uzaklığı, büyük farklara karşı oldukça hassastır. Bir özellikteki büyük bir fark, karesi alındığı için toplam mesafeyi ciddi şekilde artırır. Bu, aykırı değerlerin (outlier) kümeleme sonuçlarını önemli ölçüde etkileyebileceği anlamına gelir. Verileriniz yoğun ve küresel bir dağılıma sahipse genellikle çok iyi sonuçlar verir.
 
-#### 2. Manhattan veya City-Block Uzaklığı (Manhattan Distance / City Block Distance)
+##### 28.2.8.2. Manhattan veya City-Block Uzaklığı (Manhattan Distance / City Block Distance)
 
 İsmini, Manhattan gibi ızgara planlı bir şehirde bir yerden bir yere gitme probleminden alır. Binaların içinden geçemeyeceğiniz için, caddeler ve sokaklar boyunca yatay ve dikey olarak hareket etmek zorundasınızdır. Bu yüzden "şehir bloku" veya "taksimetre" uzaklığı olarak da bilinir.
 
@@ -2184,7 +2180,7 @@ Bu metrik, iki nokta arasındaki farkların **mutlak değerlerini** toplar.
 
 *   **Neden Önemli?** Bu yöntem, farkların karesini almadığı için Öklid uzaklığına göre aykırı değerlere karşı **daha dayanıklıdır (robust)**. Bir özellikteki büyük bir fark, toplam mesafeyi Öklid'deki kadar dramatik bir şekilde artırmaz. Özellikle, özellikler arasındaki "köşegen" bir hareketin anlamlı olmadığı durumlarda (örneğin, bir eksen yaş, diğer eksen alışveriş adedi ise bu ikisi arasında doğrudan bir geçiş anlamsızdır) veya çok yüksek boyutlu veri setlerinde tercih edilebilir.
 
-#### 3. Minkowski Uzaklığı (Minkowski Distance)
+##### 28.2.8.3. Minkowski Uzaklığı (Minkowski Distance)
 
 Minkowski uzaklığı, aslında bir "üst metrik" veya "genelleştirilmiş" bir formüldür. Öklid ve Manhattan uzaklıklarını özel durumlar olarak içinde barındırır.
 
@@ -2217,7 +2213,7 @@ Daha ileri düzey analizlerde, probleme özgü uzaklık tanımları yapmak için
 
 *   **Neden Önemli?** Minkowski uzaklığı, bize esneklik kazandırır. `p` parametresini değiştirerek, büyük farklara ne kadar önem vereceğimizi ayarlayabiliriz. `p` değeri arttıkça, en büyük farkın toplam mesafe üzerindeki etkisi de o kadar artar. Bu, analizcinin problemine en uygun uzaklık ölçüsünü deneyerek bulmasına olanak tanır.
 
-#### 4. Karma Veriler İçin Yaklaşımlar (Mixed Data Approaches)
+##### 28.2.8.4. Karma Veriler İçin Yaklaşımlar (Mixed Data Approaches)
 
 Gerçek hayatta veriler genelde karışık tipte (mixed-type) olur. Bir müşteri verisinde hem yaş (sayısal/numerical) hem meslek (kategorik/categorical) olabilir. Bu durumda ne yapacağız?
 
@@ -2229,7 +2225,7 @@ Her öznitelik türü (attribute type) için ayrı uzaklık hesaplarız, sonra b
 
 Bu birleştirme işleminde dikkatli olmak gerekir. Bazı özellikler diğerlerinden daha önemli olabilir. Mesela kredi risk analizinde (credit risk analysis) gelir, hobilerden daha önemlidir. Bu durumda özellik ağırlıklandırması (feature weighting) yaparız.
 
-#### 5. Uzaklık Ölçütü Seçiminin Önemi
+##### 28.2.8.5. Uzaklık Ölçütü Seçiminin Önemi
 
 Yanlış uzaklık ölçütü seçmek, tamamen yanlış sonuçlara yol açabilir. Örneğin:
 
@@ -2237,7 +2233,7 @@ Yanlış uzaklık ölçütü seçmek, tamamen yanlış sonuçlara yol açabilir.
 *   Yüksek boyutlu verilerde (high-dimensional data) Manhattan uzaklığı bazen daha iyi sonuç verir.
 *   Aykırı değerlere (outliers) duyarlı olmamak için Mahalanobis uzaklığı tercih edilebilir.
 
-#### 6. Pratik Uygulamalar
+##### 28.2.8.6. Pratik Uygulamalar
 
 Farklı uzaklık ölçütlerini çeşitli platformlarda uygulayabiliriz:
 
@@ -2258,7 +2254,7 @@ Pratikte, farklı uzaklık ölçütlerini deneyip sonuçları karşılaştırmak
 
 Kümeleme analizinin kalitesi, bu temel kararlarla başlar. Verinizin yapısını anlayın, amacınızı belirleyin, sonra uygun ölçütü seçin. Varsayılan ayarları (default settings) körü körüne kullanmayın.
 
-### Özetle
+#### 28.2.9. Özetle
 
 *   **Öklid (p=2):** En yaygın, sezgisel "düz çizgi" mesafesi. Aykırı değerlere duyarlıdır.
 *   **Manhattan (p=1):** "Şehir blokları" mesafesi. Aykırı değerlere daha dayanıklıdır.
@@ -2270,7 +2266,7 @@ Doğru uzaklık metriğini seçmek, kümeleme analizinin kalitesini doğrudan et
 
 
 
-### Veri Madenciliği ve Kümeleme Analizi: Kümeleme Yöntemleri
+### 28.3. Veri Madenciliği ve Kümeleme Analizi: Kümeleme Yöntemleri
 
 Kümeleme algoritmaları, temel çalışma prensiplerine göre iki ana sınıfa ayrılır: **Hiyerarşik** ve **Hiyerarşik Olmayan** yöntemler. Bu ayrım, kümeleme sürecine nasıl yaklaştıklarının en temel farklılığını yansıtır.
 
@@ -2290,7 +2286,7 @@ graph TD
 
 ---
 
-### 1. Hiyerarşik Kümeleme
+#### 28.3.1. Hiyerarşik Kümeleme
 
 Bu yaklaşımın ana fikri, tek bir kümeleme sonucu üretmek yerine, bir dizi iç içe geçmiş kümeden oluşan bir **hiyerarşi** veya bir **ağaç yapısı (dendrogram)** oluşturmaktır. Başlangıçta kaç küme olması gerektiğini belirtmenize gerek yoktur. Algoritma size tüm olası küme birleşimlerini bir ağaç olarak sunar, siz de bu ağacı istediğiniz seviyeden "keserek" küme sayısını belirlersiniz.
 
@@ -2310,7 +2306,7 @@ Hiyerarşik yöntemler, verinin yapısı hakkında zengin bir görsel bilgi suna
 
 ---
 
-### 2. Hiyerarşik Olmayan Kümeleme
+#### 28.3.2. Hiyerarşik Olmayan Kümeleme
 
 Bu yaklaşımda amaç, veri setini önceden belirlenmiş **'K' adet** kümeye doğrudan bölmektir. Bir hiyerarşi oluşturulmaz; bunun yerine, veri noktaları belirli bir optimizasyon kriterine göre en uygun kümelere atanır. Genellikle hiyerarşik yöntemlerden daha hızlıdırlar ve bu nedenle büyük veri setleri için daha uygundurlar.
 
@@ -2325,7 +2321,7 @@ Bu sınıftaki bazı önemli alt başlıklar şunlardır:
 Sonuç olarak, hangi kümeleme yönteminin seçileceği; verinin yapısına, boyutuna, veri setinde gürültü olup olmamasına ve analizin nihai hedefine bağlıdır. Tek bir "en iyi" yöntem yoktur; her problemin doğası, en uygun yaklaşımın seçilmesini gerektirir.
 
 
-### Hiyerarşik Olmayan Kümeleme: K-Means Algoritması
+### 28.4. Hiyerarşik Olmayan Kümeleme: K-Means Algoritması
 
 Gençler, şimdi hiyerarşik olmayan yöntemlerin en popüler ve temel taşı olarak kabul edilen algoritmasını, **K-Means**'i inceleyeceğiz. Bu algoritmanın güzelliği, karmaşık bir problemi oldukça basit ve sezgisel adımlarla çözmesinde yatar.
 
@@ -2333,7 +2329,7 @@ Temel fikir şudur: Elimizdeki veri setini, önceden belirlediğimiz 'k' adet k�
 
 Algoritmayı, bir odaya dağılmış insanları 'k' adet gruba ayırmaya çalışan bir organizatöre benzetebiliriz. Organizatörün görevi, her grubun kendi içinde mümkün olduğunca sıkı ve birbirine yakın olmasını sağlamaktır.
 
-#### Algoritmanın Çalışma Prensibi
+#### 28.4.1. Algoritmanın Çalışma Prensibi
 
 K-Means, bu en iyi gruplamayı bulmak için yinelemeli (iterative) bir yaklaşım kullanır. Süreç, belirli bir denge durumuna ulaşana kadar kendini tekrar eden adımlardan oluşur.
 
@@ -2371,7 +2367,7 @@ graph TD
     end
 ```
 
-#### K-Means'in Matematiksel Hedefi: WCSS'yi Minimize Etmek
+#### 28.4.2. K-Means'in Matematiksel Hedefi: WCSS'yi Minimize Etmek
 
 Gençler, K-Means'in bu adımları rastgele atmadığını, aslında net bir matematiksel hedefi takip ettiğini bilmek önemlidir. Algoritmanın temel amacı, oluşturduğu kümeleri kendi içlerinde olabildiğince yoğun ve birbirine yakın tutmaktır. Her bir kümenin ne kadar "dağınık" olduğunu ölçen bir maliyet fonksiyonu düşünün. K-Means, her adımda bu toplam dağınıklığı, yani hatayı azaltmaya çalışır.
 
@@ -2396,15 +2392,15 @@ Algoritma, bu değeri daha fazla düşüremediği bir denge noktasına ulaştı�
 
 ***
 
-### Uygulama: Weka ile "insanlar.csv" Veri Seti Üzerinde Analiz
+### 28.5. Uygulama: Weka ile "insanlar.csv" Veri Seti Üzerinde Analiz
 
 Bu çalışmadaki amacımız, kişilerin fiziksel özelliklerine (`yas`, `boy`, `kilo`, `ayak_no`) bakarak aralarında doğal gruplar olup olmadığını keşfetmek ve ardından bu grupları tanımlayan kuralları ortaya çıkarmaktır.
 
 ---
 
-### **Bölüm 1: k-Means ile Keşifsel Kümeleme**
+#### 28.5.1. Bölüm 1: k-Means ile Keşifsel Kümeleme
 
-#### **Adım 1: Veri Setini Weka'ya Yükleme**
+##### 28.5.1.1. Adım 1: Veri Setini Weka'ya Yükleme
 
 Weka, yerel dosyaların yanı sıra doğrudan internet üzerindeki verilere de erişebilir.
 
@@ -2415,7 +2411,7 @@ Weka, yerel dosyaların yanı sıra doğrudan internet üzerindeki verilere de e
         `https://raw.githubusercontent.com/erkanozhan/datamining_lab_data/master/insanlar.csv`
     4.  Veri yüklendiğinde, "Attributes" panelinde `ad`, `yas`, `boy`, `kilo` ve `ayak_no` özniteliklerini göreceksiniz.
 
-#### **Adım 2: k-Means Algoritmasını Yapılandırma ve Çalıştırma**
+##### 28.5.1.2. Adım 2: k-Means Algoritmasını Yapılandırma ve Çalıştırma
 
 Kümeleme, nesneler arasındaki sayısal mesafelere dayalı bir analizdir. Veri setimizdeki `ad` özniteliği, her kişi için benzersiz bir tanımlayıcı olduğundan, iki kişi arasındaki mesafeyi hesaplarken anlamsal bir katkı sağlamaz. Bu tür tanımlayıcı öznitelikleri analizden çıkarmak, modelin daha anlamlı sonuçlar üretmesini sağlar. Weka'da bir özniteliği kalıcı olarak silmek yerine, kümeleme algoritmasının onu **göz ardı etmesini (ignore)** sağlayabiliriz.
 
@@ -2427,7 +2423,7 @@ Kümeleme, nesneler arasındaki sayısal mesafelere dayalı bir analizdir. Veri 
     5.  Açılan pencerede `(Nom) ad` özniteliğini seçin. Bu işlem, Weka'ya k-Means algoritmasını çalıştırırken bu sütunu mesafe hesaplamalarına dahil etmemesini söyler.
     6.  "Start" butonuna basarak kümeleme işlemini başlatın.
 
-#### **Adım 3: Sonuçları Yorumlama (Öklid Uzaklığı ile)**
+##### 28.5.1.3. Adım 3: Sonuçları Yorumlama (Öklid Uzaklığı ile)
 
 Weka'nın "Clusterer output" panelindeki sonuçları bu veri setine göre yorumlayalım. (Not: Rastgele başlangıç nedeniyle sizin sonuçlarınız küçük farklılıklar gösterebilir, ancak genel yapı benzer olacaktır.)
 
@@ -2454,11 +2450,11 @@ Weka'nın "Clusterer output" panelindeki sonuçları bu veri setine göre yoruml
 
 ---
 
-### **Bölüm 2: Küme Etiketlerinden Anlam Çıkarma (Sınıflandırma)**
+#### 28.5.2. Bölüm 2: Küme Etiketlerinden Anlam Çıkarma (Sınıflandırma)
 
 Şimdi, bu soyut "Küme 0", "Küme 1" etiketlerinin hangi somut kurallarla tanımlandığını bulalım.
 
-#### **Adım 1: Küme Etiketlerini Veriye Ekleme**
+##### 28.5.2.1. Adım 1: Küme Etiketlerini Veriye Ekleme
 
 *   **İşlem:**
     1.  "Preprocess" sekmesine dönün.
@@ -2466,7 +2462,7 @@ Weka'nın "Clusterer output" panelindeki sonuçları bu veri setine göre yoruml
     3.  Filtrenin ayarlarına girip kümeleyici olarak `SimpleKMeans`'i ve `numClusters`'ı **3** olarak yapılandırın.
     4.  "Apply" butonuna basın. Veri setinizin sonuna her bir kişinin hangi kümeye atandığını gösteren yeni bir `cluster` sütunu eklenecektir.
 
-#### **Adım 2: Karar Ağacı ile Kuralları Görselleştirme**
+##### 28.5.2.2. Adım 2: Karar Ağacı ile Kuralları Görselleştirme
 
 Bu küme etiketlerini hangi fiziksel özelliklerin belirlediğini bir ağaç yapısıyla görelim.
 
@@ -2490,7 +2486,7 @@ Bu küme etiketlerini hangi fiziksel özelliklerin belirlediğini bir ağaç yap
     ```
     *   **Yorum:** Bu ağaç bize, kümeleri ayıran en önemli özelliğin **boy** ve ardından **kilo** olduğunu net bir şekilde gösteriyor. Örneğin, 1.72m'den kısa ve 65kg'dan hafif kişilerin neredeyse tamamı Küme 0'a atanmış. Bu, kümeleme ile bulduğumuz soyut gruplara, insan tarafından okunabilir, somut ve işe yarar tanımlar getirmemizi sağlar.
 
-#### **Adım 3: Kural Tabanlı Algoritma ile Kuralları Listeleme**
+##### 28.5.2.3. Adım 3: Kural Tabanlı Algoritma ile Kuralları Listeleme
 
 Aynı işi bir de basit kural listesi olarak görelim.
 
@@ -2505,7 +2501,7 @@ Aynı işi bir de basit kural listesi olarak görelim.
 
     *   **Yorum:** Bu kurallar da bize aynı hikayeyi anlatıyor: Küme 0, kısa ve zayıf kişilerden oluşuyor. Küme 2, çok uzun veya çok kilolu kişileri kapsıyor. Geriye kalan herkes ise Küme 1'dir. Bu tür net kurallar, müşteri segmentasyonu gibi alanlarda pazarlama stratejileri geliştirmek için doğrudan kullanılabilir.
 *   
-### Weka'da Kümeleme Sonuçlarını Değerlendirme
+#### 28.5.3. Weka'da Kümeleme Sonuçlarını Değerlendirme
 
 Gençler, bir önceki bölümde k-Means ile veri setimizi anlamlı gruplara ayırdık ve hatta bu grupları tanımlayan kuralları karar ağaçları yardımıyla ortaya çıkardık. Bu noktada akla şu kritik soru geliyor: Yaptığımız bu kümeleme ne kadar "başarılı"?
 
@@ -2515,22 +2511,13 @@ Weka, bu konuda bize bazı araçlar sunar. En yaygın kullanılan ve en aydınla
 
 Bu yöntemin temel mantığı şudur: Kümeleme algoritmasının, analizde kullanmadığı harici bir etiket bilgisini ne kadar iyi yansıttığını kontrol ederiz. Yani, algoritmayı belirli özniteliklere göre çalıştırırız, ancak değerlendirme aşamasında, sürece hiç dahil etmediğimiz bir sınıf etiketini referans alırız. Eğer oluşturulan kümeler, bu referans etikete göre anlamlı bir şekilde ayrışıyorsa, kümelememizin veri içindeki gerçek bir yapıyı yakaladığını söyleyebiliriz.
 
-### Weka'da Kümeleme Sonuçlarını Değerlendirme
-Gençler, bir önceki bölümde k-Means ile veri setimizi anlamlı gruplara ayırdık. Bu noktada akla şu kritik soru geliyor: Yaptığımız bu kümeleme ne kadar "başarılı"?
-
-Sınıflandırmada işimiz kolaydı; elimizde "doğru cevaplar" (etiketler) vardı ve modelin başarısını bu etiketlerle karşılaştırarak ölçebiliyorduk. Ancak kümeleme, **gözetimsiz öğrenme (unsupervised learning)** alanına girer, yani elimizde doğru cevaplar yoktur. Peki, algoritmanın keşfettiği grupların kalitesini nasıl ölçeriz?
-
-Weka, bu konuda bize bazı araçlar sunar. En yaygın yöntemlerden biri, **"Classes to clusters evaluation"** (Sınıflara göre kümeleri değerlendirme) modudur.
-
-Bu yöntemin mantığı şudur: Kümeleme algoritmasının, analize **dahil etmediği** harici bir etiket bilgisini ne kadar iyi yansıttığını kontrol ederiz. Eğer oluşturulan kümeler, bu referans etikete göre anlamlı bir şekilde ayrışıyorsa, kümelememizin veri içindeki gerçek bir yapıyı yakaladığını söyleyebiliriz.
-
-### Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama: `AddCluster` Filtresi
+#### 28.5.4. Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama: `AddCluster` Filtresi
 
 Peki ya elimizde karşılaştıracak harici bir etiket yoksa? Bu durumda, kümelemenin kendi sonuçlarını kullanarak veriyi daha derinlemesine analiz edebiliriz. Weka'daki `AddCluster` filtresi tam da bu amaç için tasarlanmıştır.
 
 Bu filtre, kümeleme algoritmasını çalıştırır ve her bir veri noktasının (satırın) hangi kümeye atandığını gösteren **yeni bir sütunu** veri setimize ekler. Böylece, soyut bir kümeleme sonucu yerine, üzerinde analiz yapabileceğimiz somut bir "küme etiketi" sütunumuz olur.
 
-#### İşlem Adımları
+##### 28.5.4.1. İşlem Adımları
 
 "insanlar.csv" veri setimiz üzerinden süreci adım adım uygulayalım:
 
@@ -2541,7 +2528,7 @@ Bu filtre, kümeleme algoritmasını çalıştırır ve her bir veri noktasını
     *   Küme sayısını (`numClusters`) **3** olarak ayarlayın.
 4.  **Uygulayın:** "Apply" butonuna basın. Weka, arka planda K-Means algoritmasını çalıştıracak ve veri tablonuza her bir satır için "cluster0", "cluster1" gibi değerler içeren `cluster` adında yeni bir sütun ekleyecektir.
 
-#### Sonuçları Yorumlama
+##### 28.5.4.2. Sonuçları Yorumlama
 
 Artık elimizde küme etiketlerini içeren bir sütun var. Bu yeni sütun sayesinde, her bir kümenin karakteristiğini ortaya çıkarmak için çeşitli analizler yapabiliriz.
 
@@ -2559,7 +2546,7 @@ Bu yöntem, sadece "veriyi 3 gruba ayırdık" demekten çok daha fazlasını sun
 
 ---
 
-### Keşiften Kurala: Küme Etiketleri ile Sınıflandırma Modeli Eğitmek
+#### 28.5.5. Keşiften Kurala: Küme Etiketleri ile Sınıflandırma Modeli Eğitmek
 
 Peki, `AddCluster` ile elde ettiğimiz bu küme etiketlerini bir sınıflandırma modelini eğitmek için kullanabilir miyiz? **Kesinlikle evet!** Bu, veri madenciliğinde oldukça güçlü ve yaygın bir tekniktir.
 
@@ -2578,7 +2565,7 @@ EĞER boy < 1.65 ve ayak_no < 40 İSE -> cluster0
 DEĞİLSE -> cluster1
 ```
 
-#### Bu Yaklaşım Bize Ne Kazandırır?
+##### 28.5.5.1. Bu Yaklaşım Bize Ne Kazandırır?
 
 *   **Yorumlanabilirlik:** Kümeleme size grupları verir, sınıflandırma ise bu grupların **neden** oluştuğunu açıklayan net kurallar üretir.
 *   **Verimlilik:** Yeni bir veri geldiğinde, tüm kümeleme sürecini baştan çalıştırmak yerine, eğittiğimiz bu hızlı sınıflandırma modelini kullanarak o verinin hangi kümeye ait olduğunu anında tahmin edebiliriz.
@@ -2588,9 +2575,7 @@ DEĞİLSE -> cluster1
 
 
 
-# Metin Madenciliği (Text Mining)
-
-# Metin Madenciliği (Text Mining)
+## 29. Metin Madenciliği (Text Mining)
 
 Gençler, şimdiye kadar genellikle sayılardan veya net kategorilerden oluşan, yani "yapılandırılmış" verilerle çalıştık. Her bilginin yeri belliydi: bir tablo, bir satır, bir sütun. Ancak dijital dünyanın büyük bir kısmı böyle düzenli değil. E-postalar, sosyal medya gönderileri, haber makaleleri, müşteri yorumları, kitaplar... Bunların hepsi, insan dilinin esnekliği ve karmaşıklığıyla dolu "yapılandırılmamış" metinlerdir.
 
@@ -2620,11 +2605,11 @@ Metin Madenciliği (Text Mining), bu yapılandırılmamış metin yığınların
 
 ***
 
-### Metin Madenciliği (Text Mining)
+### 29.1. Metin Madenciliği (Text Mining)
 
 Metin madenciliği, ham metin verisini bilgisayarların anlayabileceği ve üzerine analiz yapabileceği bir formata dönüştürerek, bu veriden anlamlı sonuçlar çıkarma disiplinidir. Bu süreç, genellikle dört ana aşamadan oluşan bir boru hattı (pipeline) olarak düşünülebilir.
 
-#### **Aşama 1: Metin Koleksiyonu Oluşturma (Corpus Building)**
+#### 29.1.1. Aşama 1: Metin Koleksiyonu Oluşturma (Corpus Building)
 
 Her veri projesinde olduğu gibi, ilk adım üzerinde çalışacağımız veriyi toplamaktır. Metin madenciliğinde, bu toplanan dokümanlar bütününe **"corpus"** veya **"derlem"** denir. Bu aşamanın amacı, analiz hedefimize uygun, ilgili ve yeterli miktarda metin verisini bir araya getirmektir.
 
@@ -2634,7 +2619,7 @@ Her veri projesinde olduğu gibi, ilk adım üzerinde çalışacağımız veriyi
 *   **Neden Önemli?**
     Toplanan verinin kalitesi ve ilgililiği, projenin başarısını doğrudan etkiler. Yanlış veya ilgisiz bir metin koleksiyonu ile başlanırsa, sonraki tüm aşamalar anlamını yitirecektir.
 
-#### **Aşama 2: Metin Önişleme (Text Preprocessing)**
+#### 29.1.2. Aşama 2: Metin Önişleme (Text Preprocessing)
 
 Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıdır. Ham metin, bilgisayarlar için anlamsız bir karakter dizisidir. Amacımız, bu "kirli" ve yapılandırılmamış metni, makine öğrenmesi algoritmalarının işleyebileceği temiz, standart ve **sayısal** bir formata dönüştürmektir.
 
@@ -2716,7 +2701,7 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
         *   IDF("metin") = log_e(3/1) = log_e(3) ≈ 1.10
     *   "uygulama": D2'de geçiyor (1 doküman)
         *   IDF("uygulama") = log_e(3/1) = log_e(3) ≈ 1.10
-    *   "raporlama": D3'te geçiyor (1 doküman)
+    *   "raporlama": D3'de geçiyor (1 doküman)
         *   IDF("raporlama") = log_e(3/1) = log_e(3) ≈ 1.10
 
     **Adım 3: TF-IDF Değerlerinin Hesaplaması (TF x IDF)**
@@ -2755,99 +2740,4 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
     *   **Not:** TF-IDF hesaplamalarında kullanılan normalizasyon yöntemleri (örneğin, L2 normalizasyonu) veya logaritma tabanı farklılık gösterebilir. Bu durum, farklı araçlar veya kütüphaneler arasında küçük sayısal farklılıklara yol açabilir, ancak temel mantık ve kelimelerin göreceli önemi aynı kalır.
 
-    *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir. Artık bu sayısal matris üzerinde kümeleme veya sınıflandırma gibi algoritmaları çalıştırabiliriz.
-
-#### **Aşama 3: Veri Madenciliği (Pattern Discovery)**
-
-Önişleme aşamasında yapısal hale getirdiğimiz sayısal veri matrisi üzerinde artık bildiğimiz veri madenciliği algoritmalarını uygulayabiliriz. Bu aşamada metnin içindeki örüntüler, ilişkiler ve yapılar ortaya çıkarılır.
-
-*   **Yaygın Görevler:**
-    *   **Metin Sınıflandırma (Text Classification):** Metinleri önceden tanımlanmış kategorilere atama. En popüler örneği **Duygu Analizi (Sentiment Analysis)**'dir. Müşteri yorumlarının "pozitif", "negatif" veya "nötr" olarak etiketlenmesi bu kapsama girer.
-    *   **Metin Kümeleme (Text Clustering):** Benzer metinleri etiket olmaksızın doğal gruplarına ayırma. Örneğin, haber makalelerini konu başlıklarına göre (spor, siyaset, ekonomi) otomatik olarak gruplamak.
-    *   **Konu Modellemesi (Topic Modeling):** Bir metin koleksiyonunda gizli olan soyut "konuları" ve bu konuların hangi kelimelerle ifade edildiğini istatistiksel olarak keşfetmek.
-
-#### **Aşama 4: Değerlendirme ve Yorumlama**
-
-Son aşama, elde edilen sonuçların kalitesini ölçmek ve bu sonuçları anlamlı, eyleme dönüştürülebilir bilgilere çevirmektir.
-
-*   **Değerlendirme:**
-    *   Modelin performansı sayısal metriklerle ölçülür. Sınıflandırma için **doğruluk (accuracy), hassasiyet (precision)** gibi metrikler kullanılır. Kümeleme sonuçlarının kalitesi ise genellikle daha dolaylı yöntemlerle veya uzman görüşüyle değerlendirilir.
-*   **Yorumlama:**
-    Bu, teknik bulguların iş diline tercüme edildiği yerdir.
-    *   *Örnek:* "Duygu analizi modelimiz, son ürün lansmanından sonraki hafta negatif yorumların %30 arttığını gösterdi. TF-IDF analizine göre, bu negatif yorumlarda en çok öne çıkan kelimeler 'pil ömrü' ve 'yavaşlama' oldu."
-    *   Bu teknik sonuç, "Yeni ürünün pil performansı konusunda ciddi bir müşteri memnuniyetsizliği var ve acilen müdahale edilmesi gerekiyor" şeklinde eyleme geçirilebilir bir bilgiye dönüşür.
-
-Bu dört aşamalı süreç, metin gibi karmaşık bir veri türünden bile sistematik bir şekilde değer yaratmamızı sağlar.
-
-## Örnek Uygulama: SMS Spam Tespiti Naive Bayes ile
-Gençler,
-
-Aşağıda SMS spam örneğini Weka ile adım adım, önce uygulamada yapılacak temel işler sonra dikkat edilmesi gereken teknik ayrıntılar şeklinde açıklıyorum. Her adımı sırasıyla uygulayın; gerektiğinde küçük ayarlarla deney yapın.
-
-1) Veri edinme ve açma
-- Veri kaynağı: https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip  
-ZIP'i indirin, açın ve içindeki SMSSpamCollection dosyasını alın. Bu dosya genelde her satırda "label<TAB>message" formatındadır. Gerekirse CSV/ARFF’e dönüştürün (Weka Explorer’da Open file... ile CSV yüklenebilir).
-- Dosyayı açarken sınıf (label) sütununun nominal (spam/ham) olduğundan emin olun.
-
-2) Metni sayısallaştırma (ön işlem)
-- Preprocess sekmesinde StringToWordVector filtresini seçin.
-- Önemli ayarlar:
-    - lowerCaseTokens = True (Küçük harfe çevir)
-    - outputWordCounts = True (kelime frekanslarını kullan) — NaiveBayesMultinomial ile genelde tercih edilir.
-    - wordsToKeep = 1000–5000 (ilk deneme için 1000 iyi bir başlangıç)
-    - useStoplist = True (standart stop-word listesi)
-    - stemmer = PorterStemmer (isteğe bağlı; kelime çeşitlemesini azaltır)
-    - tokenizer: WordTokenizer veya NGramTokenizer (tek kelime ile başlayın; gerekirse 2-gram deneyin)
-    - TF/IDF: önce sayılarla çalışın; TF-IDF kullanımı farklı davranış verebilir (deneyin).
-- Apply ile filtreyi uyguladıktan sonra veri setiniz artık birçok sayısal öznitelikten oluşacaktır. Sınıf özniteliğinin (spam/ham) korunup korunmadığını kontrol edin.
-
-3) Sınıflandırıcı seçimi ve eğitim
-- Classify sekmesine geçin.
-- Choose -> weka.classifiers.bayes.NaiveBayesMultinomial seçin (metin frekansları için uygun).
-- Test options: 10-fold cross-validation seçin (varsayılan olarak stratified olur). Random seed = 1 gibi sabit bir değer kullanın.
-- Start ile eğitimi başlatın.
-
-4) Sonuçları okuma ve yorumlama
-- Confusion matrix: dört hücreyi okuyun (True Negatives, False Positives, False Negatives, True Positives). 
-    - False Positive = normal mesajın (ham) yanlışlıkla spam işaretlenmesi — kullanıcı açısından daha maliyetli olabilir.
-    - False Negative = spam’in kaçması — güvenlik/başarı açısından önemli.
-- Raporta Accuracy, Precision, Recall, F1 ve ROC AUC değerlerine bakın.
-    - Spam tespitte genelde Precision (etiketlenen spam’lerin gerçekten spam olma oranı) ile Recall arasında tercih/denge gerekir; kullanım senaryonuza göre öncelik belirleyin.
-- Eğer sınıflar dengesizse (genelde ham çok daha fazladır), accuracy yanıltıcı olabilir; Precision/Recall ve AUC tercih edin.
-
-5) Basit iyileştirmeler ve pratik kontroller
-- Eğer çok fazla false positive görürseniz:
-    - threshold veya maliyet matrisi uygulamayı düşünün (Weka’da CostSensitiveClassifier ya da resampling).
-    - sınıf ağırlıklarını değiştirin veya yanlış sınıf cezalarını ayarlayın.
-- Daha iyi performans için deneyler:
-    - wordsToKeep’i değiştirin (1000 → 3000).
-    - n-gram (1 vs 2-gram) deneyin.
-    - stemming ve stoplist varyasyonlarını test edin.
-    - outputWordCounts yerine boolean (present/absent) ile karşılaştırın.
-    - TF-IDF’yi deneyin; bazı durumlarda Multinomial yerine Bernoulli/naive bayes versiyonları farklı sonuç verir.
-
-- Neden NaiveBayesMultinomial? Kelime frekanslarını (counts) direkt modelleyen formülü içerir; metin verilerinde sıklıkla daha stabil ve hızlıdır.
-- Smoothing (Laplace): Çok nadir görülen kelimeler veya hiç görülmeyen kelimeler için sıfır olasılığı engelleyen düzeltme gereklidir; Multinomial uygulamalar genelde smoothing içerir.
-- Log-olasılık: Gerçek uygulamalarda P(X|C) çarpımları çok küçük sayılar üretir; algoritma iç hesaplamalarda log-probabilities ile çalışır (numerik kararlılık).
-- Tokenizasyon ve özellik uzayı: Hangi tokenizasyonu kullandığınız ve kaç kelime tuttuğunuz model kapasitesini doğrudan etkiler. Çok geniş sözlük → daha yüksek varyans; çok dar → yüksek bias.
-- Özellik seçimi: Bilgi kazancı (InfoGain) veya chi-square ile öznitelik seçimi yaparak gürültüyü azaltmak performansı artırabilir.
-- Değerlendirme güvenilirliği: 10-fold CV iyi bir başlangıçtır; model tuning (hiperparametre araması) yaparken iç içe (nested) CV veya ayrı doğrulama kümesi kullanın.
-
-7) Hızlı kontrol listesi (uygulamaya başlamadan önce)
-- Dosyayı düzgün yüklediniz mi? (label ve message doğru kolonlarda)
-- Sınıf etiketi nominal mi?
-- StringToWordVector’da outputWordCounts ve lowerCaseTokens doğru mu?
-- Classify bölümünde NaiveBayesMultinomial seçili mi?
-- 10-fold CV ile değerlendirme yaptınız mı?
-- Confusion matrix’i ve Precision/Recall/F1’i incelediniz mi?
-
-Not: Her ayar değişikliğinden sonra yalnızca bir parametreyi değiştirip sonucu karşılaştırın. Böylece hangi değişikliğin etkili olduğunu açıkça görürsünüz.
-
-Kısa örnek deney sırası (pratik):
-1. Orijinal pipeline ile temel sonuç alın (wordsToKeep=1000, unigrams, stemmer on).
-2. wordsToKeep=3000 ile tekrar çalıştırın; değişim kaydedin.
-3. Unigrams → unigrams+2‑grams ile tekrar çalıştırın.
-4. outputWordCounts = False (sadece var/yok) ile tekrar karşılaştırın.
-5. En iyi sonuç veren kombinasyonda bilgi kazancı ile üst 500 özelliği seçip tekrar test edin.
-
-Bu adımları takip ederek Weka’da SMS spam sınıflandırmasını hem uygulamalı hem de bilinçli bir şekilde deneyimleyebilirsiniz. Her adımda sonuçları kaydedin ve küçük değişikliklerin etkisini not edin; model iyileştirme sistematik, ölçülebilir denemelerle yapılır.
+    *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir. Artık
