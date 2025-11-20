@@ -2515,74 +2515,76 @@ Weka, bu konuda bize bazı araçlar sunar. En yaygın kullanılan ve en aydınla
 
 Bu yöntemin temel mantığı şudur: Kümeleme algoritmasının, analizde kullanmadığı harici bir etiket bilgisini ne kadar iyi yansıttığını kontrol ederiz. Yani, algoritmayı belirli özniteliklere göre çalıştırırız, ancak değerlendirme aşamasında, sürece hiç dahil etmediğimiz bir sınıf etiketini referans alırız. Eğer oluşturulan kümeler, bu referans etikete göre anlamlı bir şekilde ayrışıyorsa, kümelememizin veri içindeki gerçek bir yapıyı yakaladığını söyleyebiliriz.
 
-Weka'daki Filters Bölümünde bulunan AddCluster eklentisi ile insanları kümelere ayıralım.
+### Weka'da Kümeleme Sonuçlarını Değerlendirme
+Gençler, bir önceki bölümde k-Means ile veri setimizi anlamlı gruplara ayırdık. Bu noktada akla şu kritik soru geliyor: Yaptığımız bu kümeleme ne kadar "başarılı"?
 
-Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama
-Önceki "insanlar.csv" veri setimizle devam edelim. Bu sette kişilerin yas, boy, kilo ve ayak_no gibi fiziksel ölçüleri vardı. Amacımız, bu kişileri sadece bu ölçümlere göre gruplara ayırmak ve ardından bu grupların ne gibi ortak özelliklere sahip olduğunu anlamlandırmaktır. Bu defa, karşılaştırma yapabileceğimiz harici bir etiketimiz olmadığını varsayıyoruz.
+Sınıflandırmada işimiz kolaydı; elimizde "doğru cevaplar" (etiketler) vardı ve modelin başarısını bu etiketlerle karşılaştırarak ölçebiliyorduk. Ancak kümeleme, **gözetimsiz öğrenme (unsupervised learning)** alanına girer, yani elimizde doğru cevaplar yoktur. Peki, algoritmanın keşfettiği grupların kalitesini nasıl ölçeriz?
 
-Bu senaryoda, Weka gibi bir araçta bulunan AddCluster filtresi oldukça kullanışlı bir hale gelir. Bu filtre, kümeleme algoritmasını çalıştırdıktan sonra, her bir veri noktasının hangi kümeye atandığını gösteren yeni bir sütunu veri setimize ekler. Böylece, soyut bir kümeleme sonucu yerine, üzerinde analiz yapabileceğimiz somut bir "küme etiketi" sütunumuz olur.
+Weka, bu konuda bize bazı araçlar sunar. En yaygın yöntemlerden biri, **"Classes to clusters evaluation"** (Sınıflara göre kümeleri değerlendirme) modudur.
 
-İşlem Adımları:
+Bu yöntemin mantığı şudur: Kümeleme algoritmasının, analize **dahil etmediği** harici bir etiket bilgisini ne kadar iyi yansıttığını kontrol ederiz. Eğer oluşturulan kümeler, bu referans etikete göre anlamlı bir şekilde ayrışıyorsa, kümelememizin veri içindeki gerçek bir yapıyı yakaladığını söyleyebiliriz.
 
-Süreci zihnimizde canlandıralım. Veri setimizi 3 gruba ayırmak istediğimizi düşünelim.
+### Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama: `AddCluster` Filtresi
 
-"insanlar.csv" veri setimizi Weka'ya yükleriz.
-"Preprocess" (Önişleme) sekmesindeyken "Filter" (Filtre) menüsünü açarız. Buradan unsupervised -> attribute -> AddCluster filtresini seçeriz.
-Filtrenin ayarlarına tıkladığımızda, içinde kullanılacak kümeleme algoritmasını seçmemiz istenir. SimpleKMeans algoritmasını seçip, küme sayısını (numClusters) 3 olarak ayarlarız.
-Filtreyi uyguladığımızda ("Apply" butonu), Weka arka planda K-Means algoritmasını çalıştırır, her bir kişiyi en uygun kümeye atar ve veri tablomuza cluster adında yeni bir sütun ekler. Bu sütun, her bir satır için "cluster0", "cluster1" veya "cluster2" gibi değerler içerecektir.
-Sonuçların Yorumlanması:
+Peki ya elimizde karşılaştıracak harici bir etiket yoksa? Bu durumda, kümelemenin kendi sonuçlarını kullanarak veriyi daha derinlemesine analiz edebiliriz. Weka'daki `AddCluster` filtresi tam da bu amaç için tasarlanmıştır.
 
-Artık elimizde, orijinal verilerimize ek olarak bir de küme etiketi sütunu var. Bu bize ne kazandırır? Bu yeni sütun sayesinde, her bir kümenin karakteristiğini ortaya çıkarmak için çeşitli analizler yapabiliriz.
+Bu filtre, kümeleme algoritmasını çalıştırır ve her bir veri noktasının (satırın) hangi kümeye atandığını gösteren **yeni bir sütunu** veri setimize ekler. Böylece, soyut bir kümeleme sonucu yerine, üzerinde analiz yapabileceğimiz somut bir "küme etiketi" sütunumuz olur.
 
-Örneğin, Weka'nın "Visualize" (Görselleştir) sekmesine geçip, farklı özniteliklerin dağılımını bu yeni cluster sütununa göre renklendirerek inceleyebiliriz.
+#### İşlem Adımları
 
-Karşımıza şöyle bir tablo çıkabilir:
+"insanlar.csv" veri setimiz üzerinden süreci adım adım uygulayalım:
 
-boy ve kilo eksenlerini seçtiğimizde, "cluster0" etiketli noktaların grafiğin sol alt köşesinde (düşük boy, düşük kilo), "cluster2" etiketli noktaların ise sağ üst köşede (yüksek boy, yüksek kilo) yoğunlaştığını görebiliriz. "cluster1" ise bu iki grubun arasında bir yerde konumlanabilir.
-Benzer şekilde, yas ve ayak_no eksenlerine baktığımızda da kümeler arasında belirgin ayrışmalar gözlemleyebiliriz.
-Bu görsel analizler bize şunu söyler: Algoritma, bizim yönlendirmemiz olmadan, veriyi üç gruba ayırmıştır. Yaptığımız incelemeler sonucunda bu grupları şu şekilde isimlendirebiliriz:
+1.  **Veriyi Yükleyin:** "insanlar.csv" veri setini Weka'ya yükleyin.
+2.  **Filtreyi Seçin:** "Preprocess" sekmesinde, `Filter -> Choose -> unsupervised -> attribute -> AddCluster` yolunu izleyin.
+3.  **Filtreyi Yapılandırın:** Filtre adına tıklayarak ayarlarını açın.
+    *   Kullanılacak kümeleyici olarak `SimpleKMeans`'i seçin.
+    *   Küme sayısını (`numClusters`) **3** olarak ayarlayın.
+4.  **Uygulayın:** "Apply" butonuna basın. Weka, arka planda K-Means algoritmasını çalıştıracak ve veri tablonuza her bir satır için "cluster0", "cluster1" gibi değerler içeren `cluster` adında yeni bir sütun ekleyecektir.
 
-Küme 0: Genç ve daha minyon yapılı bireyler.
-Küme 1: Orta yaşlı ve ortalama fiziksel ölçülere sahip bireyler.
-Küme 2: İleri yaşlı ve daha yapılı bireyler.
-Gördüğünüz gibi gençler, elimizde dış bir etiket olmasa bile, kümeleme sonuçlarını veri setine dahil ederek ve ardından bu yeni etiket üzerinden veriyi analiz ederek son derece anlamlı sonuçlar çıkarabiliriz. Bu yöntem, sadece "veriyi 3 gruba ayırdık" demekten çok daha fazlasını sunar; bu grupların kimler olduğunu ve onları birbirinden ayıran temel özelliklerin neler olduğunu anlamamızı sağlar. Kümelemenin asıl değeri, bu şekilde keşfedilen ve yorumlanabilen örüntülerde yatmaktadır.
+#### Sonuçları Yorumlama
 
-Weka'da AddCluster filtresi ile elde edilen küme etiketlerini kullanarak bir sınıflandırma modeli eğitilebilir mi? Bu ne anlama gelir?
+Artık elimizde küme etiketlerini içeren bir sütun var. Bu yeni sütun sayesinde, her bir kümenin karakteristiğini ortaya çıkarmak için çeşitli analizler yapabiliriz.
 
-Evet, Weka'da AddCluster filtresi ile elde edilen küme etiketlerini kullanarak bir sınıflandırma modeli eğitmek kesinlikle mümkündür ve bu, veri madenciliğinde oldukça güçlü bir tekniktir.
+*   **Görsel Analiz:** Weka'nın "Visualize" sekmesine geçin. `boy` ve `kilo` eksenlerini seçip, noktaları yeni `cluster` sütununa göre renklendirin.
+    *   **cluster0** etiketli noktaların grafiğin sol alt köşesinde (düşük boy, düşük kilo).
+    *   **cluster2** etiketli noktaların ise sağ üst köşede (yüksek boy, yüksek kilo) yoğunlaştığını görebilirsiniz.
+    *   **cluster1** ise bu iki grubun arasında bir yerde konumlanacaktır.
 
-Peki, bu ne anlama gelir ve neden böyle bir şey yaparız? Gelin bu süreci adım adım inceleyelim.
+Bu görsel analizler bize, algoritmanın veriyi anlamlı bir şekilde üç gruba ayırdığını gösterir. Artık bu grupları isimlendirebiliriz:
+*   **Küme 0:** Genç ve daha minyon yapılı bireyler.
+*   **Küme 1:** Ortalama fiziksel ölçülere sahip bireyler.
+*   **Küme 2:** Daha yapılı bireyler.
 
-Sürecin Anlamı: Keşiften Kurala Geçiş
-Bu işlemi iki aşamalı bir süreç olarak düşünebiliriz:
+Bu yöntem, sadece "veriyi 3 gruba ayırdık" demekten çok daha fazlasını sunar; bu grupların kimler olduğunu ve onları ayıran temel özelliklerin neler olduğunu anlamamızı sağlar.
 
-Keşif Aşaması (Unsupervised Learning - Gözetimsiz Öğrenme): İlk adımda, elimizdeki veride doğal olarak var olan, ancak bizim önceden bilmediğimiz grupları bulmak için kümeleme algoritmasını (K-Means gibi) kullanırız. AddCluster filtresi tam olarak bunu yapar. Veriyi analiz eder ve her bir bireyi (veri satırını) en uygun olduğu kümeye atayarak "cluster0", "cluster1" gibi etiketler oluşturur. Bu aşamada yaptığımız şey, verinin içindeki gizli yapıyı keşfetmektir.
+---
 
-Kural Çıkarma Aşaması (Supervised Learning - Gözetimli Öğrenme): İkinci adımda ise, bir önceki aşamada oluşturduğumuz bu küme etiketlerini, sanki en başından beri var olan "doğru cevaplar" gibi kabul ederiz. Artık elimizde etiketlenmiş bir veri seti vardır. Bu noktadan sonra bir sınıflandırma algoritması (örneğin bir Karar Ağacı - J48) kullanarak bu etiketleri tahmin etmeye yönelik bir model eğitiriz.
+### Keşiften Kurala: Küme Etiketleri ile Sınıflandırma Modeli Eğitmek
 
-Bu ikinci aşamanın amacı şudur: "Bir bireyin 'cluster1' grubuna ait olmasının kuralları nelerdir?" sorusuna cevap bulmak.
+Peki, `AddCluster` ile elde ettiğimiz bu küme etiketlerini bir sınıflandırma modelini eğitmek için kullanabilir miyiz? **Kesinlikle evet!** Bu, veri madenciliğinde oldukça güçlü ve yaygın bir tekniktir.
 
-Sınıflandırma modeli, bu soruyu cevaplamak için veriyi inceler ve şöyle kurallar bütünü oluşturabilir:
+Bu yaklaşım, **keşiften kural çıkarmaya** geçişi sağlar.
 
-plaintext
-EĞER boy > 180 cm VE kilo > 85 kg İSE
-  -> cluster: cluster2
-EĞER boy < 165 cm VE ayak_no < 40 İSE
-  -> cluster: cluster0
-DEĞİLSE
-  -> cluster: cluster1
-Gördüğünüz gibi, başlangıçta sadece soyut birer grup olan kümeler, şimdi somut ve yorumlanabilir kurallara dönüşmüştür.
+1.  **Keşif Aşaması (Gözetimsiz Öğrenme):** K-Means ile verideki doğal grupları bulduk. Bu, verinin içindeki gizli yapıyı keşfetmektir.
+2.  **Kural Çıkarma Aşaması (Gözetimli Öğrenme):** Şimdi, oluşturduğumuz bu küme etiketlerini sanki en başından beri var olan "doğru cevaplar" gibi kabul ediyoruz. Bir sınıflandırma algoritması (örneğin Karar Ağacı - **J48**) kullanarak bu etiketleri tahmin etmeye yönelik bir model eğitiyoruz.
 
-Bu Yaklaşım Bize Ne Kazandırır?
-Bu tekniğin birkaç önemli faydası vardır:
+Bu ikinci aşamanın amacı şudur: **"Bir bireyin 'cluster1' grubuna ait olmasının kuralları nelerdir?"** sorusuna net bir cevap bulmak.
 
-Yorumlanabilirlik: Kümeleme algoritmaları (özellikle K-Means) size grupları verir ama bu grupların neden oluştuğunu doğrudan söylemez. Sınıflandırma modeli ise bu "neden" sorusunu cevaplayan açık kurallar üretir. Bu, keşfedilen örüntüleri iş bilgisine veya alan uzmanlığına dönüştürmeyi çok kolaylaştırır.
+Sınıflandırma modeli, bu soruyu cevaplamak için veriyi inceler ve şöyle yorumlanabilir kurallar bütünü oluşturabilir:
 
-Verimlilik ve Hız: Yeni bir veri geldiğinde, o verinin hangi kümeye ait olduğunu bulmak için tüm kümeleme sürecini baştan çalıştırmak yerine, eğittiğimiz bu hafif ve hızlı sınıflandırma modelini kullanabiliriz. Model, gelen yeni kişinin (örneğin boyu 190 cm, kilosu 95 kg) özelliklerine bakarak "Bu kişi 'cluster2' grubuna aittir" tahminini anında yapabilir.
+```
+EĞER boy > 1.80 ve kilo > 85 İSE -> cluster2
+EĞER boy < 1.65 ve ayak_no < 40 İSE -> cluster0
+DEĞİLSE -> cluster1
+```
 
-Segmentasyon ve Profilleme: Bu yöntem, müşteri segmentasyonu gibi alanlarda çok kullanılır. Müşterileri satın alma davranışlarına göre kümelersiniz (örneğin "Tasarruflu Müşteriler", "Lüks Tüketiciler"). Ardından bu küme etiketlerini kullanarak bir sınıflandırma modeli eğitirsiniz. Model size, bir müşterinin hangi segmente ait olduğunu belirleyen demografik veya davranışsal kuralları (örneğin "30 yaş altı ve ayda 5'ten fazla alışveriş yapıyorsa 'Lüks Tüketici'dir") verir. Bu kurallar, pazarlama stratejileri geliştirmek için doğrudan kullanılabilir.
+#### Bu Yaklaşım Bize Ne Kazandırır?
 
-Özetle, kümeleme ile keşfettiğiniz grupları, sınıflandırma ile tanımlanabilir ve uygulanabilir kurallara dönüştürürsünüz. Bu, gözetimsiz öğrenmenin keşif gücünü, gözetimli öğrenmenin tahmin ve kural çıkarma yeteneğiyle birleştiren son derece pratik ve güçlü bir yaklaşımdır.
+*   **Yorumlanabilirlik:** Kümeleme size grupları verir, sınıflandırma ise bu grupların **neden** oluştuğunu açıklayan net kurallar üretir.
+*   **Verimlilik:** Yeni bir veri geldiğinde, tüm kümeleme sürecini baştan çalıştırmak yerine, eğittiğimiz bu hızlı sınıflandırma modelini kullanarak o verinin hangi kümeye ait olduğunu anında tahmin edebiliriz.
+*   **Segmentasyon ve Profilleme:** Bu yöntem, müşteri segmentasyonu gibi alanlarda paha biçilmezdir. Müşterileri davranışlarına göre kümelersiniz, ardından bu küme etiketlerini kullanarak her bir segmentin profilini (örneğin, "30 yaş altı ve ayda 5'ten fazla alışveriş yapıyorsa 'Sadık Müşteri'dir") çıkaran kurallar elde edersiniz.
+
+> Özetle, kümeleme ile **keşfettiğiniz** grupları, sınıflandırma ile **tanımlanabilir ve uygulanabilir kurallara** dönüştürürsünüz. Bu, gözetimsiz öğrenmenin keşif gücünü, gözetimli öğrenmenin tahmin ve kural çıkarma yeteneğiyle birleştiren son derece pratik bir yaklaşımdır.
 
 
 
