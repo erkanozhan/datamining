@@ -2650,14 +2650,15 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
     2.  **Ters Doküman Frekansı (Inverse Document Frequency - IDF):** Bir kelimenin tüm doküman koleksiyonu (corpus) içinde ne kadar nadir olduğunu ölçer. Nadir kelimeler daha yüksek IDF değerine sahip olur, çünkü bu kelimeler dokümanı daha iyi ayırt eder.
         $$
-        IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)
+            IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)
         $$
-        (Bazı uygulamalarda paydada `(t terimini içeren doküman sayısı + 1)` kullanılır veya logaritma tabanı 2 olabilir.)
 
-    3.  **TF-IDF Değeri:** Bir kelimenin bir doküman için önemini gösteren nihai değerdir.
+    3.  **TF-IDF Değeri:**
         $$
-        TF-IDF(t, d) = TF(t, d) \times IDF(t)
+            TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)
         $$
+            
+        TF-IDF, bir kelimenin bir doküman için önemini gösteren nihai değerdir. IDF formülünde, bazı uygulamalarda sıfıra bölme hatasını önlemek için paydada `(t terimini içeren doküman sayısı + 1)` kullanılır veya logaritma tabanı 2 olabilir.
 
     **Örnek Üzerinden Adım Adım Hesaplama:**
 
@@ -2692,17 +2693,29 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
     **Adım 2: Ters Doküman Frekansı (IDF) Hesaplaması**
 
     *   "veri": D1, D3'te geçiyor (2 doküman)
-        *   IDF("veri") = log_e(3/2) = log_e(1.5) ≈ 0.41
+        $$
+        IDF(\text{"veri"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
+        $$
     *   "madencilik": D1, D2'de geçiyor (2 doküman)
-        *   IDF("madencilik") = log_e(3/2) = log_e(1.5) ≈ 0.41
+        $$
+        IDF(\text{"madencilik"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
+        $$
     *   "analiz": D1, D3'te geçiyor (2 doküman)
-        *   IDF("analiz") = log_e(3/2) = log_e(1.5) ≈ 0.41
+        $$
+        IDF(\text{"analiz"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
+        $$
     *   "metin": D2'de geçiyor (1 doküman)
-        *   IDF("metin") = log_e(3/1) = log_e(3) ≈ 1.10
+        $$
+        IDF(\text{"metin"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
+        $$
     *   "uygulama": D2'de geçiyor (1 doküman)
-        *   IDF("uygulama") = log_e(3/1) = log_e(3) ≈ 1.10
+        $$
+        IDF(\text{"uygulama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
+        $$
     *   "raporlama": D3'de geçiyor (1 doküman)
-        *   IDF("raporlama") = log_e(3/1) = log_e(3) ≈ 1.10
+        $$
+        IDF(\text{"raporlama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
+        $$
 
     **Adım 3: TF-IDF Değerlerinin Hesaplaması (TF x IDF)**
 
@@ -2740,4 +2753,4 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
     *   **Not:** TF-IDF hesaplamalarında kullanılan normalizasyon yöntemleri (örneğin, L2 normalizasyonu) veya logaritma tabanı farklılık gösterebilir. Bu durum, farklı araçlar veya kütüphaneler arasında küçük sayısal farklılıklara yol açabilir, ancak temel mantık ve kelimelerin göreceli önemi aynı kalır.
 
-    *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir. Artık
+    *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir.
