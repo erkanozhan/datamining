@@ -1,0 +1,55 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
+# Elbow Yöntemi İle Optimum Küme Sayısını Hesaplama
+## Gerekli Paketler Yükleniyor. Paketlerin yüklenmesi için başlarındaki # işaretlerini kaldırınız.
+
+```{r}
+# install.packages("factoextra")
+# install.packages("NbClust")
+# install.packages("cluster")
+
+```
+### Gerekli paketler koda bağlanıyor
+```{r}
+library(factoextra)
+library(NbClust)
+library(cluster)
+```
+# Veri Seti Yükleme
+```{r}
+veri<-data("iris")
+head(iris)
+veri_sinifyok<-iris[,1:4]
+veri_sinifyok = as.matrix(scale(veri_sinifyok))
+```
+# Çeşitli Kümeleme Yöntemleri
+## 1- Elbow Metodunu Çalıştırma
+```{r}
+fviz_nbclust(veri_sinifyok,kmeans,method = "wss",k.max = 24)+
+  theme_minimal()+ggtitle("Elbow Yöntemi İle Optimum Küme Sayısı")+
+  geom_vline(xintercept = 3,linetype=2)
+
+```
+## 2- GAP Yöntemi
+```{r}
+fviz_nbclust(veri_sinifyok,kmeans,method = "gap",k.max = 24)+
+  theme_minimal()+ggtitle("Gap Yöntemi İle Optimum Küme Sayısı")
+```
+## 3- Silhouette Yöntemi
+```{r}
+fviz_nbclust(veri_sinifyok,kmeans,method = "silhouette",k.max = 24)+
+  theme_minimal()+ggtitle("Silhouette Yöntemi İle Optimum Küme Sayısı")
+```
+
+## Not:
+```{r}
+nb <- NbClust(veri_sinifyok, diss=NULL, distance = "euclidean", 
+              min.nc=2, max.nc=10, method = "kmeans", 
+              index = "all", alphaBeale = 0.1)
+hist(nb$Best.nc[1,], breaks = max(na.omit(nb$Best.nc[1,])))
+```
