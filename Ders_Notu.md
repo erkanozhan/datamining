@@ -2511,6 +2511,168 @@ Weka, bu konuda bize bazı araçlar sunar. En yaygın kullanılan ve en aydınla
 
 Bu yöntemin temel mantığı şudur: Kümeleme algoritmasının, analizde kullanmadığı harici bir etiket bilgisini ne kadar iyi yansıttığını kontrol ederiz. Yani, algoritmayı belirli özniteliklere göre çalıştırırız, ancak değerlendirme aşamasında, sürece hiç dahil etmediğimiz bir sınıf etiketini referans alırız. Eğer oluşturulan kümeler, bu referans etikete göre anlamlı bir şekilde ayrışıyorsa, kümelememizin veri içindeki gerçek bir yapıyı yakaladığını söyleyebiliriz.
 
+```r
+# Gerekli Kütüphanelerin Yüklenmesi
+library(factoextra)
+library(NbClust)
+library(ggplot2)
+library(cluster)
+
+# Veri Yükleme
+data(iris)
+
+# Veri Ön İşleme
+# 5. sütun olan 'Species' kategorik değişkeni çıkarılır
+df <- iris[, -5]
+
+# Standardizasyon (Ortalama=0, Standart Sapma=1)
+df_scaled <- scale(df)
+
+# İlk 5 satırın kontrolü
+head(df_scaled)
+```
+
+**Analiz:** İris verisinde ölçüm birimleri aynı (cm) olsa da, varyansları eşitlemek için ölçeklendirme yapılmıştır. Bu, Öklid uzaklığının, varyansı büyük olan değişken (Petal Length) tarafından domine edilmesini engeller.
+
+### **4.2 Elbow Yöntemi Uygulaması ve Sonuçları**
+
+fviz_nbclust fonksiyonu method = "wss" argümanı ile çalıştırılır.
+
+```r
+set.seed(123) # Tekrarlanabilirlik için
+fviz_nbclust(df_scaled, kmeans, method = "wss") +
+    geom_vline(xintercept = 3, linetype = 2) +
+    labs(title = "Elbow Yöntemi (İris Veri Seti)",
+             subtitle = "Toplam WCSS'in Küme Sayısına Göre Değişimi",
+             x = "Küme Sayısı (k)", y = "Toplam WCSS")
+```
+
+Bulgular ve Yorum:
+Grafik incelendiğinde, WCSS değerinin $k=1$'den $k=2$'ye geçerken çok keskin bir düşüş gösterdiği görülür. Bu, Setosa türünün diğerlerinden ayrılmasının yarattığı büyük varyans azalmasıdır.
+
+*   **$k=2$ noktası:** Çok belirgin bir kırılma vardır.
+*   **$k=3$ noktası:** İkinci, daha yumuşak bir kırılma (dirsek) görülür. Bu da *Versicolor* ve *Virginica* ayrımını temsil eder.
+*   **Sonuç:** Elbow yöntemi İris veri setinde belirsizdir (ambiguous). Matematiksel olarak en büyük kazanç 2'de olsa da, 3 noktasındaki dirsek de göz ardı edilemez. Literatürde bu durum genellikle $k=2$ veya $k=3$ adayı olarak yorumlanır.3
+
+### **4.3 Silhouette Yöntemi Uygulaması ve Sonuçları**
+
+fviz_nbclust fonksiyonu method = "silhouette" argümanı ile çalıştırılır.
+
+```r
+fviz_nbclust(df_scaled, kmeans, method = "silhouette") +
+    labs(title = "Silhouette Analizi",
+             subtitle = "Ortalama Silhouette Genişliği",
+             x = "Küme Sayısı (k)", y = "Ortalama Silhouette Genişliği")
+```
+
+Bulgular ve Yorum:
+Silhouette analizi sonuçları genellikle çok daha keskindir:
+
+*   **$k=2$:** Ortalama Silhouette Genişliği (ASW) en yüksek değerine ulaşır (yaklaşık 0.58).
+*   **$k=3$:** ASW değeri düşer (yaklaşık 0.46).
+
+Neden $k=2$?
+Silhouette indeksi, kümelerin ne kadar ayrık (separated) olduğunu ödüllendirir. Setosa kümesi çok ayrıktır ($s(i)$ değeri 1'e yakındır). Ancak $k=3$ yapıldığında, Versicolor ve Virginica kümeleri birbirine çok yakın olduğu ve sınırda birçok nokta bulunduğu için bu bölgelerdeki noktaların $s(i)$ değerleri düşer (sıfıra yaklaşır veya negatif olur). Bu durum genel ortalamayı aşağı çeker. Dolayısıyla Silhouette yöntemi, matematiksel olarak en iyi ayrışımın 2 küme ile sağlandığını (Setosa ve Diğerleri) iddia eder.9
+
+### **4.4 NbClust Çoğunluk Kuralı Uygulaması ve Sonuçları**
+
+En kapsamlı analiz için NbClust fonksiyonu çalıştırılır. İris verisi için $k$ aralığı 2 ile 10 arasında belirlenir.
+
+```r
+nb_res <- NbClust(data = df_scaled,
+                                    distance = "euclidean",
+                                    min.nc = 2, max.nc = 10,
+                                    method = "kmeans",
+                                    index = "all")
+
+# Sonuçların görselleştirilmesi
+fviz_nbclust(nb_res) +
+    labs(title = "NbClust Çoğunluk Kuralı Sonuçları")
+```
+
+Bulgular ve Yorum:
+NbClust çıktısı, 30 indeksin her birinin önerisini listeler. Tipik bir İris analizi çıktısı şu şekildedir 22:
+
+*   **Hubert, D-index:** Genellikle grafiksel yöntemlerdir.
+*   **Silhouette, Dunn, Gap Statistic:** Genellikle $k=2$ önerir.
+*   **Pseudo-T2, Frey, Hartigan:** Bazen $k=3$ veya daha yüksek değerler önerebilir.
+
+Oylama Sonucu:
+Çoğu durumda, indekslerin büyük bir kısmı (örneğin 30 indeksin 10-12 tanesi) $k=2$ önerisinde bulunur. İkinci en popüler öneri ise (örneğin 8-9 indeks) $k=3$ olur.
+NbClust fonksiyonunun konsol çıktısı şuna benzer bir ifadeyle biter:
+"Among all indices: 10 proposed 2 as the best number of clusters. 8 proposed 3 as the best number of clusters. Conclusion: According to the majority rule, the best number of clusters is 2.".18
+
+#### 28.5.4. Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama: `AddCluster` Filtresi
+
+Peki ya elimizde karşılaştıracak harici bir etiket yoksa? Bu durumda, kümelemenin kendi sonuçlarını kullanarak veriyi daha derinlemesine analiz edebiliriz. Weka'daki `AddCluster` filtresi tam da bu amaç için tasarlanmıştır.
+
+Bu filtre, kümeleme algoritmasını çalıştırır ve her bir veri noktasının (satırın) hangi kümeye atandığını gösteren **yeni bir sütunu** veri setimize ekler. Böylece, soyut bir kümeleme sonucu yerine, üzerinde analiz yapabileceğimiz somut bir "küme etiketi" sütunumuz olur.
+
+##### 28.5.4.1. İşlem Adımları
+
+"insanlar.csv" veri setimiz üzerinden süreci adım adım uygulayalım:
+
+1.  **Veriyi Yükleyin:** "insanlar.csv" veri setini Weka'ya yükleyin.
+2.  **Filtreyi Seçin:** "Preprocess" sekmesinde, `Filter -> Choose -> unsupervised -> attribute -> AddCluster` yolunu izleyin.
+3.  **Filtreyi Yapılandırın:** Filtre adına tıklayarak ayarlarını açın.
+        *   Kullanılacak kümeleyici olarak `SimpleKMeans`'i seçin.
+        *   Küme sayısını (`numClusters`) **3** olarak ayarlayın.
+4.  **Uygulayın:** "Apply" butonuna basın. Weka, arka planda K-Means algoritmasını çalıştıracak ve veri tablonuza her bir satır için "cluster0", "cluster1" gibi değerler içeren `cluster` adında yeni bir sütun ekleyecektir.
+
+##### 28.5.4.2. Sonuçları Yorumlama
+
+Artık elimizde küme etiketlerini içeren bir sütun var. Bu yeni sütun sayesinde, her bir kümenin karakteristiğini ortaya çıkarmak için çeşitli analizler yapabiliriz.
+
+*   **Görsel Analiz:** Weka'nın "Visualize" sekmesine geçin. `boy` ve `kilo` eksenlerini seçip, noktaları yeni `cluster` sütununa göre renklendirin.
+        *   **cluster0** etiketli noktaların grafiğin sol alt köşesinde (düşük boy, düşük kilo).
+        *   **cluster2** etiketli noktaların ise sağ üst köşede (yüksek boy, yüksek kilo) yoğunlaştığını görebilirsiniz.
+        *   **cluster1** ise bu iki grubun arasında bir yerde konumlanacaktır.
+
+Bu görsel analizler bize, algoritmanın veriyi anlamlı bir şekilde üç gruba ayırdığını gösterir. Artık bu grupları isimlendirebiliriz:
+*   **Küme 0:** Genç ve daha minyon yapılı bireyler.
+*   **Küme 1:** Ortalama fiziksel ölçülere sahip bireyler.
+*   **Küme 2:** Daha yapılı bireyler.
+
+Bu yöntem, sadece "veriyi 3 gruba ayırdık" demekten çok daha fazlasını sunar; bu grupların kimler olduğunu ve onları ayıran temel özelliklerin neler olduğunu anlamamızı sağlar.
+
+Bu ders notunun hazırlanmasında aşağıdaki kaynaklar ve R paketleri temel alınmıştır:
+
+* **NbClust Paketi ve İndeksleri:** 6  
+* **Silhouette ve Elbow Yöntemleri:** 3  
+* **Görselleştirme ve Factoextra:** 5  
+* **İris Veri Seti Analizleri:** 2  
+* **Standardizasyonun Önemi:** 14
+
+#### **Alıntılanan çalışmalar**
+
+1. Practical Guide To Cluster Analysis in R \- XSLiuLab.github.io, erişim tarihi Aralık 10, 2025, [https://xsliulab.github.io/Workshop/2021/week10/r-cluster-book.pdf](https://xsliulab.github.io/Workshop/2021/week10/r-cluster-book.pdf)  
+2. K-means Clustering: Complete Guide with Algorithm, Implementation & Best Practices \- Interactive | Michael Brenndoerfer, erişim tarihi Aralık 10, 2025, [https://mbrenndoerfer.com/writing/kmeans-clustering-complete-guide](https://mbrenndoerfer.com/writing/kmeans-clustering-complete-guide)  
+3. Determining the optimal number of clusters: 3 must known methods \- Unsupervised Machine Learning \- Easy Guides \- Wiki \- STHDA, erişim tarihi Aralık 10, 2025, [https://www.sthda.com/english/wiki/wiki.php?id\_contents=7923](https://www.sthda.com/english/wiki/wiki.php?id_contents=7923)  
+4. Clustering Distance Measures \- GeeksforGeeks, erişim tarihi Aralık 10, 2025, [https://www.geeksforgeeks.org/machine-learning/clustering-distance-measures/](https://www.geeksforgeeks.org/machine-learning/clustering-distance-measures/)  
+5. fviz\_nbclust: Dertermining and Visualizing the Optimal Number of Clusters in factoextra: Extract and Visualize the Results of Multivariate Data Analyses \- rdrr.io, erişim tarihi Aralık 10, 2025, [https://rdrr.io/cran/factoextra/man/fviz\_nbclust.html](https://rdrr.io/cran/factoextra/man/fviz_nbclust.html)  
+6. NbClust package for determining the number of clusters in a dataset \- ResearchGate, erişim tarihi Aralık 10, 2025, [https://www.researchgate.net/profile/Malika-Charrad/publication/275463140\_Determining\_the\_number\_of\_clusters\_using\_NbClust\_package/links/553cf5b10cf2c415bb0d0b8a/Determining-the-number-of-clusters-using-NbClust-package.pdf?origin=scientificContributions](https://www.researchgate.net/profile/Malika-Charrad/publication/275463140_Determining_the_number_of_clusters_using_NbClust_package/links/553cf5b10cf2c415bb0d0b8a/Determining-the-number-of-clusters-using-NbClust-package.pdf?origin=scientificContributions)  
+7. Clustering Iris Species Using an Unsupervised Learning Approach: K-Means and Principal Component Analysis (PCA) \- ResearchGate, erişim tarihi Aralık 10, 2025, [https://www.researchgate.net/publication/391437962\_Clustering\_Iris\_Species\_Using\_an\_Unsupervised\_Learning\_Approach\_K-Means\_and\_Principal\_Component\_Analysis\_PCA](https://www.researchgate.net/publication/391437962_Clustering_Iris_Species_Using_an_Unsupervised_Learning_Approach_K-Means_and_Principal_Component_Analysis_PCA)  
+8. Explore the Basics of K-means Clustering in R based on iris dataset \- Medium, erişim tarihi Aralık 10, 2025, [https://medium.com/data-and-beyond/explore-the-basics-of-k-means-clustering-in-r-based-on-iris-dataset-4aab016a9771](https://medium.com/data-and-beyond/explore-the-basics-of-k-means-clustering-in-r-based-on-iris-dataset-4aab016a9771)  
+9. K-Means Clustering Analysis of Iris Morphological Features \- RPubs, erişim tarihi Aralık 10, 2025, [https://rpubs.com/Cherry\_Chan/1377363](https://rpubs.com/Cherry_Chan/1377363)  
+10. Clustering trees: a visualisation for evaluating clusterings at multiple resolutions \- bioRxiv, erişim tarihi Aralık 10, 2025, [https://www.biorxiv.org/content/10.1101/274035v1.full.pdf](https://www.biorxiv.org/content/10.1101/274035v1.full.pdf)  
+11. Iris Dataset Clustering Analysis \- RPubs, erişim tarihi Aralık 10, 2025, [https://rpubs.com/aakashaldankar/1236510](https://rpubs.com/aakashaldankar/1236510)  
+12. STAT 5230 \- k-means clustering \- iris data \- RPubs, erişim tarihi Aralık 10, 2025, [https://rpubs.com/jmartin/1148365](https://rpubs.com/jmartin/1148365)  
+13. NbClust: Determining the Best Number of Clusters in a Data Set, erişim tarihi Aralık 10, 2025, [https://cran.r-project.org/web/packages/NbClust/NbClust.pdf](https://cran.r-project.org/web/packages/NbClust/NbClust.pdf)  
+14. Standardization in Cluster Analysis \- Alteryx Knowledge Base, erişim tarihi Aralık 10, 2025, [https://knowledge.alteryx.com/index/s/article/Standardization-in-Cluster-Analysis-1583461087248](https://knowledge.alteryx.com/index/s/article/Standardization-in-Cluster-Analysis-1583461087248)  
+15. Data Standardization: How to Do It and Why It Matters | Built In, erişim tarihi Aralık 10, 2025, [https://builtin.com/data-science/when-and-why-standardize-your-data](https://builtin.com/data-science/when-and-why-standardize-your-data)  
+16. Why and When to Standardize Your Data in Machine Learning: A Comprehensive Guide | by JABERI Mohamed Habib | Medium, erişim tarihi Aralık 10, 2025, [https://medium.com/@jaberi.mohamedhabib/why-and-when-to-standardize-your-data-in-machine-learning-a-comprehensive-guide-9e4ca063c050](https://medium.com/@jaberi.mohamedhabib/why-and-when-to-standardize-your-data-in-machine-learning-a-comprehensive-guide-9e4ca063c050)  
+17. how to print the optimal number of clusters using fviz\_nbclust \- Stack Overflow, erişim tarihi Aralık 10, 2025, [https://stackoverflow.com/questions/40821591/how-to-print-the-optimal-number-of-clusters-using-fviz-nbclust](https://stackoverflow.com/questions/40821591/how-to-print-the-optimal-number-of-clusters-using-fviz-nbclust)  
+18. Determining The Optimal Number Of Clusters: 3 Must Know Methods \- Articles \- STHDA, erişim tarihi Aralık 10, 2025, [https://www.sthda.com/english/articles/index.php?url=/29-cluster-validation-essentials/96-determining-the-optimal-number-of-clusters-3-must-known-methods/](https://www.sthda.com/english/articles/index.php?url=/29-cluster-validation-essentials/96-determining-the-optimal-number-of-clusters-3-must-known-methods/)  
+19. Silhouette Package \- cran \- R-universe, erişim tarihi Aralık 10, 2025, [https://cran.r-universe.dev/articles/Silhouette/Silhouette.html](https://cran.r-universe.dev/articles/Silhouette/Silhouette.html)  
+20. NbClust/R/NbClust.R at master · cran/NbClust \- GitHub, erişim tarihi Aralık 10, 2025, [https://github.com/cran/NbClust/blob/master/R/NbClust.R](https://github.com/cran/NbClust/blob/master/R/NbClust.R)  
+21. Retrieve best number of clusters from NbClust \- Stack Overflow, erişim tarihi Aralık 10, 2025, [https://stackoverflow.com/questions/37292878/retrieve-best-number-of-clusters-from-nbclust](https://stackoverflow.com/questions/37292878/retrieve-best-number-of-clusters-from-nbclust)  
+22. R: NbClust package gives different optimal number of clusters using the same dataset with the random order of rows, erişim tarihi Aralık 10, 2025, [https://stackoverflow.com/questions/64510649/r-nbclust-package-gives-different-optimal-number-of-clusters-using-the-same-dat](https://stackoverflow.com/questions/64510649/r-nbclust-package-gives-different-optimal-number-of-clusters-using-the-same-dat)  
+23. NbClust: An R Package for Determining the Relevant Number of Clusters in a Data Set \- Journal of Statistical Software, erişim tarihi Aralık 10, 2025, [https://www.jstatsoft.org/article/view/v061i06/798](https://www.jstatsoft.org/article/view/v061i06/798)  
+24. Assessing Clustering Tendency in R | My thoughts & learnings \- WordPress.com, erişim tarihi Aralık 10, 2025, [https://edumine.wordpress.com/2015/05/13/assessing-clustering-tendency-in-r/](https://edumine.wordpress.com/2015/05/13/assessing-clustering-tendency-in-r/)  
+25. Dertermining and Visualizing the Optimal Number of Clusters \- R, erişim tarihi Aralık 10, 2025, [https://search.r-project.org/CRAN/refmans/factoextra/html/fviz\_nbclust.html](https://search.r-project.org/CRAN/refmans/factoextra/html/fviz_nbclust.html)  
+26. factoextra source: R/fviz\_nbclust.R \- rdrr.io, erişim tarihi Aralık 10, 2025, [https://rdrr.io/cran/factoextra/src/R/fviz\_nbclust.R](https://rdrr.io/cran/factoextra/src/R/fviz_nbclust.R)  
+27. What is Feature Scaling and Why is it Important? \- Analytics Vidhya, erişim tarihi Aralık 10, 2025, [https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/](https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/)
+
 #### 28.5.4. Kümeleme Sonuçlarını Veri Setine Ekleyerek Yorumlama: `AddCluster` Filtresi
 
 Peki ya elimizde karşılaştıracak harici bir etiket yoksa? Bu durumda, kümelemenin kendi sonuçlarını kullanarak veriyi daha derinlemesine analiz edebiliriz. Weka'daki `AddCluster` filtresi tam da bu amaç için tasarlanmıştır.
@@ -2754,3 +2916,132 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
     *   **Not:** TF-IDF hesaplamalarında kullanılan normalizasyon yöntemleri (örneğin, L2 normalizasyonu) veya logaritma tabanı farklılık gösterebilir. Bu durum, farklı araçlar veya kütüphaneler arasında küçük sayısal farklılıklara yol açabilir, ancak temel mantık ve kelimelerin göreceli önemi aynı kalır.
 
     *   **Yorum:** Bu tablo, her bir dokümanı (satır) artık bir sayı vektörü olarak temsil etmektedir. Örneğin, D1 dokümanı `[0.21, 0.10, 0.10, 0.00, 0.00, 0.00]` vektörü ile ifade edilir. Değerler, o kelimenin o doküman için ne kadar "karakteristik" olduğunu gösterir. "Raporlama" kelimesi sadece D3'te geçtiği için yüksek bir ağırlığa (0.36) sahiptir. "Veri" kelimesi D1'de iki kez geçtiği için (yüksek terim frekansı), D1 için diğer kelimelere göre daha yüksek bir ağırlığa (0.21) sahiptir.
+***
+
+### Weka'da Text Mining Uygulaması:
+Weka, metin madenciliği için güçlü araçlar sunar. Şimdi, Weka kullanarak basit bir metin madenciliği projesi nasıl yapılır, adım adım inceleyelim. 
+# **Weka Laboratuvar Uygulaması: Reuters Haberlerini Sınıflandırma**
+
+Gençler, bugünkü dersimizde sizlerle verinin biraz daha "dağınık" tarafına, yani metin madenciliğine odaklanacağız. Şimdiye kadar satırları ve sütunları belli, düzenli tablolarla çalıştık. Ancak dışarıdaki dünyada veri her zaman bu kadar uslu durmaz; çoğu zaman karşımıza bir haber metni, bir e-posta veya bir sosyal medya mesajı olarak çıkar. Bizim işimiz, bu harf yığınlarını bilgisayarın anlayabileceği matematiksel bir dile çevirmek.
+
+Bugün elimizde "ReutersGrain" adında gerçek bir veri seti var. Amacımız şu: Bilgisayara binlerce haber metnini okutacağız ve ona hangi haberin "tahıl" (grain) konusuyla ilgili olup olmadığını ayırt etmeyi öğreteceğiz.
+
+Hazırsanız Weka'yı açalım ve başlayalım.
+
+## ---
+
+**1\. Hazırlık: Veri Setini Tanıyalım**
+
+Weka'nın kurulu olduğu dizindeki data klasöründe iki önemli dosya göreceksiniz:
+
+1. **ReutersGrain-train.arff**: Bu bizim "ders kitabımız". Modeli bununla eğiteceğiz.  
+2. **ReutersGrain-test.arff**: Bu da "sınav kağıdımız". Modelin gerçekten öğrenip öğrenmediğini bu dosya ile test edeceğiz.
+
+Bu dosyalarda her satır bir haberdir. Genellikle sadece bir metin (string) ve sonunda o haberin sınıfını belirten bir etiket (class) bulunur. Etiketimiz basit: Ya grain (tahıl ile ilgili) ya da not-grain (değil).
+
+## ---
+
+**2\. Altın Kural: Veri Sızıntısını Önlemek**
+
+Metin madenciliğine başlarken yapılan en büyük acemi hatası şudur: Eğitim ve test verilerini birbirinden bağımsız olarak kelimelere ayırmak. Eğer bunu yaparsanız, test setindeki kelimelerle eğitim setindeki kelimeler eşleşmez ve "Incompatible types" hatası alırsınız.
+
+Bunu çözmek için Weka'da çok akıllıca bir araç kullanacağız: FilteredClassifier.  
+Bu araç, eğitim setine uyguladığımız kelime sözlüğünü ve kuralları hafızasında tutar ve test seti geldiğinde birebir aynısını ona da uygular. Böylece modelimiz şaşırmaz.
+
+### **Kurulum**
+
+1. Weka **Explorer** ekranını açın.  
+2. Open file... diyerek **ReutersGrain-train.arff** dosyasını yükleyin.  
+3. Yukarıdan **Classify** sekmesine geçin.  
+4. Sol üstteki Classifier butonuna tıklayın ve listeden **meta \> FilteredClassifier** seçeneğini bulun.
+
+Şimdi bu sınıflandırıcının içine girip ince ayarlarımızı yapacağız. FilteredClassifier yazısının üzerine tıklayın; karşınıza bir ayar penceresi gelecek.
+
+## ---
+
+**3\. Modeli İnşa Etmek: Kelimelerden Sayılara**
+
+Ayar penceresinde iki temel bölüm var: classifier (sınıflandırıcı) ve filter (filtre).
+
+### **A. Sınıflandırıcı Seçimi**
+
+Metin sınıflandırmada, kelimelerin geçme sıklığına dayalı olasılık hesapları yapan algoritmalar çok iyi çalışır.
+
+* classifier kısmına tıklayın ve **bayes \> NaiveBayesMultinomial** seçin. Bu algoritma, metin dünyasının emektar ve güçlü bir işçisidir.
+
+### **B. Filtre Ayarları (Vektörleştirme)**
+
+Şimdi metni parçalayıp sayıya çevireceğiz.
+
+* filter kısmına tıklayın ve **unsupervised \> attribute \> StringToWordVector** seçin.  
+* Şimdi bu filtrenin detaylarına girmek için StringToWordVector yazısına tıklayın.
+
+Burada yapacağımız ayarlar, modelimizin başarısını doğrudan etkileyecek kritik kararlardır.
+
+#### **Kritik Hamle: Rakamları Temizlemek (Alphabetical Stemming)**
+
+Haber metinlerinde tarihler (1990), fiyatlar ($500) veya oranlar (%20) çok sık geçer. Ancak "1990" yılı, bir haberin tahılla ilgili olup olmadığını belirlemede genellikle yanıltıcıdır; çünkü petrol krizi haberi de 1990'da yazılmış olabilir. Biz sadece kelimelere odaklanmak istiyoruz.
+
+Bunun için **Tokenizer** ayarını değiştireceğiz:
+
+1. tokenizer satırındaki butona tıklayın ve **AlphabeticTokenizer** seçin.  
+2. Bu seçim, metindeki sayıları, noktalama işaretlerini ve özel karakterleri tamamen atar. Sadece "a"dan "z"ye olan harf dizilerini alır. Bu, bir nevi temizlik (stemming) işlemidir ve modelin kafasının karışmasını önler.
+
+## ---
+
+**4\. Senaryo 1: Basit Kelime Sayımı (Word Counts)**
+
+İlk deneyimizde şu mantığı kuruyoruz: "Bir kelime ne kadar çok geçiyorsa, o kadar önemlidir."
+
+StringToWordVector ayarlarında şunları yapın:
+
+* **outputWordCounts**: **True**. (Sadece var/yok değil, kaç kere geçtiğini sayacağız).  
+* **IDFTransform**: **False**. (Şimdilik ağırlıklandırma yapmıyoruz).  
+* **TFTransform**: **False**.  
+* **attributeIndices**: first-last (Varsayılan kalabilir).
+
+**Testi Başlatma:**
+
+1. Ayarlara OK diyerek çıkın.  
+2. Classify ekranında **Test options** bölümüne gelin.  
+3. Supplied test set seçeneğini işaretleyin ve Set... butonundan **ReutersGrain-test.arff** dosyasını gösterin.  
+4. **Start** butonuna basın.
+
+Sonuçları Okumak:  
+Sağ taraftaki çıktı ekranına (Classifier Output) bakın. Correctly Classified Instances oranı muhtemelen yüksek çıkacaktır. Ancak "Confusion Matrix"e (Karmaşıklık Matrisi) dikkat edin. Tahıl haberlerini (grain) doğru bulabilmiş mi? Yoksa her şeye "tahıl değil" deyip geçiştirmiş mi?
+
+## ---
+
+**5\. Senaryo 2: Kelime Ağırlıklandırma (TF-IDF)**
+
+İkinci deneyimizde stratejimizi değiştiriyoruz. Gençler, "ve", "veya", "bir" gibi kelimeler her metinde yüzlerce kez geçer ama bize hiçbir bilgi vermez. Buna karşılık "hasat" kelimesi az geçer ama çok şey anlatır.
+
+Şimdi sık geçen boş kelimelerin sesini kısıp, nadir ve değerli kelimelerin sesini açacağız. Buna **TF-IDF** (Term Frequency \- Inverse Document Frequency) diyoruz.
+
+Tekrar FilteredClassifier \-\> filter \-\> StringToWordVector ayarlarına dönün:
+
+* **IDFTransform**: **True** yapın.  
+* **TFTransform**: **True** yapın.  
+* **outputWordCounts**: **True** kalmalı.  
+* Tokenizer yine **AlphabeticTokenizer** olarak kalsın (rakamları istemiyoruz).
+
+Karşılaştırma:  
+Tekrar Start butonuna basın. Sonuçları ilk senaryo ile kıyaslayın.  
+Genellikle göreceksiniz ki, TF-IDF kullandığımızda modelimiz gürültülü kelimelerden daha az etkilenir. Ancak, NaiveBayesMultinomial algoritması aslında tam sayılarla (kelime adetleriyle) çalışmayı sever. TF-IDF ise ondalıklı sayılar üretir. Weka bunu halleder ama bazen saf kelime sayımı (Senaryo 1), bu spesifik veri setinde daha kararlı sonuçlar verebilir.
+
+## ---
+
+**6\. Değerlendirme**
+
+Gençler, bugün bir metin yığınının içinden anlamlı örüntüler çıkardık. Rakamları atarak (AlphabeticTokenizer) veriyi sadeleştirdik ve iki farklı matematiksel yaklaşımla (Word Count vs TF-IDF) modelimizi sınadık.
+
+Bu dersten cebinize koymanızı istediğim en önemli şey şu: Makine öğrenmesinde "sihirli bir buton" yoktur. Verinizi ne kadar iyi temizler ve probleminize uygun şekilde temsil ederseniz (sayım mı, ağırlık mı?), modeliniz o kadar zeki olur.
+
+Bir sonraki laboratuvarımızda bu sonuçları daha da iyileştirmek için farklı algoritmalar deneyeceğiz. Şimdilik bu adımları kendi bilgisayarlarınızda tekrarlayıp sonuçları not alın. Hepinize iyi çalışmalar.
+
+
+
+
+### R Yazılımında Uygulamalar
+Sütunlar Üzerinde Düzenleme, Arama, Mutation ve çok kullanılan Fonksiyonlar ve uygulamalı örnekler
+
