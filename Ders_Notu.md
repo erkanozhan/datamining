@@ -3041,7 +3041,813 @@ Bir sonraki laboratuvarımızda bu sonuçları daha da iyileştirmek için farkl
 
 
 
+---
 
-### R Yazılımında Uygulamalar
-Sütunlar Üzerinde Düzenleme, Arama, Mutation ve çok kullanılan Fonksiyonlar ve uygulamalı örnekler
+# R Yazılımında Uygulamalar: Sütunlar Üzerinde Düzenleme, Arama, Mutation ve Temel Fonksiyonlar
+
+---
+
+## Giriş
+
+R dilinde veri analizi yaparken en sık yapacağımız işlemler sütunları seçmek, filtrelemek, yeni değişkenler türetmek ve verileri özetlemektir. Bu işlemler için hem base R (temel R) fonksiyonlarını hem de **dplyr** paketini kullanacağız. dplyr paketi, Hadley Wickham tarafından geliştirilmiş ve veri manipülasyonunu son derece okunabilir hale getiren bir araçtır.
+
+Önce temel kavramları ele alalım, ardından daha sofistike uygulamalara geçeceğiz.
+
+---
+
+## 1. Veri Çerçevesi ile Çalışmaya Başlamak
+
+R'da veriler genellikle **data frame** (veri çerçevesi) yapısında tutulur. Bunu Excel tablosu gibi düşünebilirsiniz: satırlar gözlemleri, sütunlar değişkenleri temsil eder.
+
+Örnek bir veri seti oluşturalım:
+
+```r
+# Basit bir hasta veri seti
+hastalar <- data.frame(
+  hasta_id = 1:6,
+  yas = c(45, 32, 58, 29, 67, 41),
+  cinsiyet = c("E", "K", "E", "K", "E", "K"),
+  tansiyon = c(120, 110, 145, 105, 155, 118),
+  kolesterol = c(200, 180, 240, 170, 260, 195),
+  sigara = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)
+)
+
+hastalar
+```
+
+Çıktı:
+```
+  hasta_id yas cinsiyet tansiyon kolesterol sigara
+1        1  45        E      120        200   TRUE
+2        2  32        K      110        180  FALSE
+3        3  58        E      145        240   TRUE
+4        4  29        K      105        170  FALSE
+5        5  67        E      155        260   TRUE
+6        6  41        K      118        195  FALSE
+```
+
+---
+
+## 2. Sütun Seçimi (Column Selection)
+
+### 2.1 Base R ile Sütun Seçimi
+
+Veri çerçevesinden belirli sütunları seçmenin birkaç yolu vardır:
+
+```r
+# Tek sütun seçimi - $ operatörü ile
+hastalar$yas
+
+# Tek sütun seçimi - köşeli parantez ile
+hastalar[, "yas"]
+hastalar[, 2]  # 2. sütun
+
+# Birden fazla sütun seçimi
+hastalar[, c("yas", "tansiyon")]
+hastalar[, c(2, 4)]  # 2. ve 4. sütunlar
+
+# Sütun hariç tutma (negatif indeks)
+hastalar[, -1]  # hasta_id hariç tümü
+hastalar[, -c(1, 6)]  # 1. ve 6. sütunlar hariç
+```
+
+Köşeli parantez notasyonunda virgülün solunda satır, sağında sütun belirtilir. Virgülün solunu boş bırakmak "tüm satırlar" anlamına gelir.
+
+### 2.2 dplyr ile Sütun Seçimi: select()
+
+**dplyr** paketindeki `select()` fonksiyonu, sütun seçimini çok daha okunabilir hale getirir. "Select" kelimesi Latince *seligere* (ayırmak, seçmek) kökünden gelir.
+
+```r
+library(dplyr)
+
+# Temel sütun seçimi
+select(hastalar, yas, tansiyon)
+
+# Sütun aralığı seçimi
+select(hastalar, yas:kolesterol)
+
+# Sütun hariç tutma
+select(hastalar, -hasta_id)
+select(hastalar, -c(hasta_id, sigara))
+```
+
+`select()` fonksiyonunun güçlü yardımcı fonksiyonları vardır:
+
+```r
+# starts_with(): Belirli bir önekle başlayan sütunlar
+select(hastalar, starts_with("t"))  # tansiyon
+
+# ends_with(): Belirli bir sonekle biten sütunlar
+select(hastalar, ends_with("ol"))  # kolesterol
+
+# contains(): Belirli bir ifade içeren sütunlar
+select(hastalar, contains("si"))  # cinsiyet, sigara
+
+# everything(): Kalan tüm sütunlar (sıralama için kullanışlı)
+select(hastalar, cinsiyet, everything())  # cinsiyet'i başa al
+
+# where(): Koşula göre sütun seçimi
+select(hastalar, where(is.numeric))  # sadece sayısal sütunlar
+```
+
+---
+
+## 3. Satır Filtreleme (Row Filtering)
+
+### 3.1 Base R ile Filtreleme
+
+Satırları filtrelemek için mantıksal koşullar kullanırız:
+
+```r
+# Yaşı 50'den büyük hastalar
+hastalar[hastalar$yas > 50, ]
+
+# Erkek hastalar
+hastalar[hastalar$cinsiyet == "E", ]
+
+# Birden fazla koşul (VE - &)
+hastalar[hastalar$yas > 40 & hastalar$tansiyon > 120, ]
+
+# Birden fazla koşul (VEYA - |)
+hastalar[hastalar$yas < 30 | hastalar$yas > 60, ]
+```
+
+### 3.2 dplyr ile Filtreleme: filter()
+
+`filter()` fonksiyonu, adından da anlaşılacağı gibi verileri süzer. Latince *filtrum* (süzgeç) kelimesinden türemiştir.
+
+```r
+# Temel filtreleme
+filter(hastalar, yas > 50)
+
+# Çoklu koşullar (virgül VE anlamına gelir)
+filter(hastalar, yas > 40, tansiyon > 120)
+
+# VEYA koşulu
+filter(hastalar, yas < 30 | yas > 60)
+
+# %in% operatörü ile çoklu değer kontrolü
+filter(hastalar, yas %in% c(32, 45, 67))
+
+# between() fonksiyonu
+filter(hastalar, between(yas, 30, 50))
+```
+
+---
+
+## 4. Mutation: Yeni Değişken Oluşturma
+
+**Mutation** (dönüşüm/değişim), var olan değişkenlerden yeni değişkenler türetme işlemidir. Latince *mutare* (değiştirmek) fiilinden gelir; biyolojideki mutasyon terimiyle aynı kökü paylaşır.
+
+### 4.1 Base R ile Yeni Değişken
+
+```r
+# Yeni sütun ekleme
+hastalar$yas_grubu <- ifelse(hastalar$yas >= 50, "Yaşlı", "Genç")
+
+# Matematiksel dönüşüm
+hastalar$tansiyon_normalize <- (hastalar$tansiyon - mean(hastalar$tansiyon)) / sd(hastalar$tansiyon)
+```
+
+### 4.2 dplyr ile Mutation: mutate()
+
+`mutate()` fonksiyonu, veri çerçevesine yeni sütunlar ekler veya mevcut sütunları dönüştürür:
+
+```r
+# Yeni değişken oluşturma
+hastalar <- mutate(hastalar,
+  risk_skoru = tansiyon * 0.3 + kolesterol * 0.2 + yas * 0.5
+)
+
+# Birden fazla değişken aynı anda
+hastalar <- mutate(hastalar,
+  yas_kare = yas^2,
+  tan_kol_oran = tansiyon / kolesterol,
+  yuksek_risk = ifelse(tansiyon > 130 & kolesterol > 200, "Evet", "Hayır")
+)
+
+# Koşullu değişken: case_when()
+hastalar <- mutate(hastalar,
+  yas_kategori = case_when(
+    yas < 30 ~ "Genç",
+    yas < 50 ~ "Orta Yaş",
+    yas < 65 ~ "Orta-İleri Yaş",
+    TRUE ~ "İleri Yaş"  # Geri kalan tümü
+  )
+)
+```
+
+`case_when()` fonksiyonu, iç içe `ifelse()` yazmaktan kurtarır ve kodu çok daha okunabilir kılar.
+
+### 4.3 transmute(): Sadece Yeni Değişkenleri Tut
+
+`mutate()` tüm sütunları korurken, `transmute()` sadece oluşturulan yeni sütunları döndürür:
+
+```r
+transmute(hastalar,
+  hasta_id,
+  risk_skoru = tansiyon * 0.3 + kolesterol * 0.2
+)
+```
+
+---
+
+## 5. Sıralama (Sorting/Ordering)
+
+### 5.1 Base R ile Sıralama
+
+```r
+# Yaşa göre artan sıralama
+hastalar[order(hastalar$yas), ]
+
+# Yaşa göre azalan sıralama
+hastalar[order(hastalar$yas, decreasing = TRUE), ]
+
+# Birden fazla değişkene göre sıralama
+hastalar[order(hastalar$cinsiyet, hastalar$yas), ]
+```
+
+### 5.2 dplyr ile Sıralama: arrange()
+
+`arrange()` fonksiyonu, Latince *ad* (doğru) + *rangier* (sıralamak) kökünden gelir.
+
+```r
+# Artan sıralama
+arrange(hastalar, yas)
+
+# Azalan sıralama
+arrange(hastalar, desc(yas))
+
+# Çoklu sıralama
+arrange(hastalar, cinsiyet, desc(yas))
+```
+
+---
+
+## 6. Veri Özetleme (Summarization)
+
+### 6.1 Base R ile Özetleme
+
+```r
+# Temel özet istatistikler
+mean(hastalar$yas)
+median(hastalar$tansiyon)
+sd(hastalar$kolesterol)
+summary(hastalar)
+```
+
+### 6.2 dplyr ile Özetleme: summarise() / summarize()
+
+`summarise()` fonksiyonu (Amerikan İngilizcesinde `summarize()` olarak da yazılabilir), veriyi özetler ve tek satırlık sonuç döndürür:
+
+```r
+summarise(hastalar,
+  ort_yas = mean(yas),
+  ort_tansiyon = mean(tansiyon),
+  max_kolesterol = max(kolesterol),
+  hasta_sayisi = n()
+)
+```
+
+Çıktı:
+```
+  ort_yas ort_tansiyon max_kolesterol hasta_sayisi
+1   45.33       125.5            260            6
+```
+
+### 6.3 Gruplama ile Özetleme: group_by()
+
+`group_by()` fonksiyonu, verileri kategorilere ayırarak grup bazlı hesaplama yapmanızı sağlar:
+
+```r
+hastalar %>%
+  group_by(cinsiyet) %>%
+  summarise(
+    ort_yas = mean(yas),
+    ort_tansiyon = mean(tansiyon),
+    n = n()
+  )
+```
+
+Çıktı:
+```
+  cinsiyet ort_yas ort_tansiyon     n
+1        E   56.67        140.0     3
+2        K   34.00        111.0     3
+```
+
+---
+
+## 7. Pipe Operatörü: %>% ve |>
+
+Şimdiye kadar fonksiyonları ayrı ayrı kullandık. Ancak gerçek analizlerde birden fazla işlemi zincirleme yapmak gerekir. İşte burada **pipe** (boru) operatörü devreye girer.
+
+Pipe operatörü, soldaki çıktıyı sağdaki fonksiyonun ilk argümanı olarak aktarır. Bunu su borusundan akan veri gibi düşünebilirsiniz.
+
+```r
+# Pipe olmadan (iç içe fonksiyonlar - okunması zor)
+summarise(filter(select(hastalar, yas, tansiyon, cinsiyet), yas > 40), ort_tan = mean(tansiyon))
+
+# Pipe ile (okunması kolay)
+hastalar %>%
+  select(yas, tansiyon, cinsiyet) %>%
+  filter(yas > 40) %>%
+  summarise(ort_tan = mean(tansiyon))
+```
+
+R 4.1 sürümünden itibaren base R'da da native pipe operatörü `|>` mevcuttur:
+
+```r
+hastalar |>
+  filter(yas > 40) |>
+  summarise(ort_tan = mean(tansiyon))
+```
+
+Gençler, pipe operatörü kodunuzu hikaye gibi okunabilir kılar: "Hastalar verisini al, 40 yaş üstünü filtrele, ortalama tansiyonu hesapla."
+
+---
+
+## 8. Sık Kullanılan Yardımcı Fonksiyonlar
+
+### 8.1 Eksik Veri İşlemleri
+
+```r
+# Eksik veri kontrolü
+is.na(hastalar$yas)
+sum(is.na(hastalar$yas))  # Kaç eksik var?
+
+# Eksik verileri çıkarma
+na.omit(hastalar)
+
+# dplyr ile
+hastalar %>% drop_na()
+hastalar %>% drop_na(yas, tansiyon)  # Belirli sütunlarda
+
+# Eksik değer doldurma
+hastalar %>%
+  mutate(yas = replace_na(yas, mean(yas, na.rm = TRUE)))
+```
+
+### 8.2 Tekrar Eden Satırlar
+
+```r
+# Tekrar kontrolü
+duplicated(hastalar)
+
+# Tekrarları çıkarma (base R)
+unique(hastalar)
+
+# dplyr ile benzersiz satırlar
+distinct(hastalar)
+distinct(hastalar, cinsiyet, .keep_all = TRUE)  # Her cinsiyetten bir tane
+```
+
+### 8.3 Sütun Yeniden Adlandırma
+
+```r
+# Base R
+names(hastalar)[names(hastalar) == "yas"] <- "age"
+
+# dplyr ile
+rename(hastalar, age = yas, gender = cinsiyet)
+```
+
+### 8.4 Satır Numarası Ekleme
+
+```r
+hastalar %>%
+  mutate(satir_no = row_number())
+```
+
+---
+
+## 9. Kapsamlı Bir Örnek
+
+Öğrendiklerimizi birleştirelim. Diyelim ki şu soruyu yanıtlamak istiyoruz: "Sigara içen ve içmeyen gruplar arasında ortalama tansiyon ve kolesterol farklılıkları nelerdir? Her gruptan kaç kişi var ve en yüksek risk skoruna sahip hastalar kimler?"
+
+```r
+# Önce risk skorunu hesaplayalım
+analiz_sonuc <- hastalar %>%
+  # Yeni değişkenler oluştur
+  mutate(
+    risk_skoru = tansiyon * 0.4 + kolesterol * 0.3 + yas * 0.3,
+    sigara_durum = ifelse(sigara, "İçiyor", "İçmiyor")
+  ) %>%
+  # Sigara durumuna göre grupla
+  group_by(sigara_durum) %>%
+  # Özet istatistikleri hesapla
+  summarise(
+    hasta_sayisi = n(),
+    ort_yas = round(mean(yas), 1),
+    ort_tansiyon = round(mean(tansiyon), 1),
+    ort_kolesterol = round(mean(kolesterol), 1),
+    ort_risk = round(mean(risk_skoru), 1),
+    max_risk = round(max(risk_skoru), 1)
+  ) %>%
+  # Risk skoruna göre sırala
+  arrange(desc(ort_risk))
+
+print(analiz_sonuc)
+```
+
+Çıktı:
+```
+  sigara_durum hasta_sayisi ort_yas ort_tansiyon ort_kolesterol ort_risk max_risk
+1       İçiyor            3    56.7        140.0          233.3    143.0    166.0
+2      İçmiyor            3    34.0        111.0          181.7    109.9    122.7
+```
+
+---
+
+## 10. Özet Tablo: Temel dplyr Fonksiyonları
+
+| Fonksiyon | İşlevi | Örnek |
+|-----------|--------|-------|
+| `select()` | Sütun seçimi | `select(veri, col1, col2)` |
+| `filter()` | Satır filtreleme | `filter(veri, col > 5)` |
+| `mutate()` | Yeni değişken | `mutate(veri, yeni = col * 2)` |
+| `arrange()` | Sıralama | `arrange(veri, col)` |
+| `summarise()` | Özetleme | `summarise(veri, ort = mean(col))` |
+| `group_by()` | Gruplama | `group_by(veri, kategori)` |
+| `rename()` | Yeniden adlandırma | `rename(veri, yeni = eski)` |
+| `distinct()` | Benzersiz satırlar | `distinct(veri, col)` |
+
+---
+
+## 11. Veri Birleştirme: Join İşlemleri
+
+Gerçek dünyada veriler nadiren tek bir tabloda bulunur. Hastane örneğimize devam edersek: hasta demografik bilgileri bir tabloda, laboratuvar sonuçları başka bir tabloda, tedavi kayıtları üçüncü bir tabloda olabilir. Bu tabloları anlamlı şekilde birleştirmek veri analizinin temel becerilerinden biridir.
+
+**Join** (birleştirme) terimi, İngilizce'de "katılmak, birleşmek" anlamına gelir. Veritabanı terminolojisinde ise iki veya daha fazla tabloyu ortak bir anahtar (key) üzerinden birleştirme işlemini ifade eder. SQL dilinden R'a geçmiş bir kavramdır.
+
+### 11.1 Örnek Veri Setleri
+
+Birleştirme işlemlerini göstermek için birbiriyle ilişkili üç tablo oluşturalım:
+
+```r
+# Hasta demografik bilgileri
+hastalar <- data.frame(
+  hasta_id = c(101, 102, 103, 104, 105),
+  ad = c("Ahmet", "Ayşe", "Mehmet", "Fatma", "Ali"),
+  yas = c(45, 32, 58, 29, 67),
+  cinsiyet = c("E", "K", "E", "K", "E")
+)
+
+# Laboratuvar sonuçları (bazı hastalar eksik)
+lab_sonuclari <- data.frame(
+  hasta_id = c(101, 102, 103, 106, 107),
+  hemoglobin = c(14.2, 12.8, 15.1, 13.5, 11.9),
+  glukoz = c(95, 88, 142, 101, 76),
+  tarih = c("2024-01-15", "2024-01-16", "2024-01-15", "2024-01-17", "2024-01-18")
+)
+
+# Tedavi kayıtları
+tedaviler <- data.frame(
+  hasta_id = c(101, 101, 102, 103, 108),
+  ilac = c("Aspirin", "Metformin", "Parol", "Metformin", "Aspirin"),
+  doz_mg = c(100, 500, 500, 1000, 100)
+)
+```
+
+Dikkat ederseniz tablolar arasında tam bir örtüşme yok: bazı hastalar lab sonuçlarında var ama hasta listesinde yok (106, 107), bazıları tedavi kayıtlarında var ama hasta listesinde yok (108). Bu durum gerçek verilerde oldukça yaygındır.
+
+### 11.2 Join Türleri
+
+dplyr paketi dört temel join fonksiyonu sunar. Her birinin davranışı farklıdır ve doğru olanı seçmek analiz sonuçlarınızı doğrudan etkiler.
+
+#### Inner Join: Kesişim
+
+`inner_join()` sadece her iki tabloda da bulunan kayıtları döndürür. Küme teorisindeki kesişim (∩) işlemine benzer.
+
+```r
+library(dplyr)
+
+# Sadece her iki tabloda da olan hastalar
+inner_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet hemoglobin glukoz      tarih
+1      101  Ahmet  45        E       14.2     95 2024-01-15
+2      102   Ayşe  32        K       12.8     88 2024-01-16
+3      103 Mehmet  58        E       15.1    142 2024-01-15
+```
+
+Hasta 104 ve 105 sonuçta yok çünkü lab kayıtları bulunmuyor. Hasta 106 ve 107 de yok çünkü hasta listesinde kayıtlı değiller.
+
+#### Left Join: Sol Tablo Öncelikli
+
+`left_join()` sol tablodaki (ilk argüman) tüm kayıtları korur, sağ tablodan eşleşenleri ekler. Eşleşme yoksa NA değeri atanır. Latince *sinister* (sol) ile alakası olmasa da, "left" burada "birincil, ana tablo" anlamında kullanılır.
+
+```r
+# Tüm hastalar, lab sonuçları varsa ekle
+left_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet hemoglobin glukoz      tarih
+1      101  Ahmet  45        E       14.2     95 2024-01-15
+2      102   Ayşe  32        K       12.8     88 2024-01-16
+3      103 Mehmet  58        E       15.1    142 2024-01-15
+4      104  Fatma  29        K         NA     NA       <NA>
+5      105    Ali  67        E         NA     NA       <NA>
+```
+
+Fatma ve Ali'nin lab sonuçları NA olarak görünüyor. Bu join türü, "ana tablodaki tüm kayıtları kaybetmeden zenginleştirme" yapmak istediğinizde kullanılır.
+
+#### Right Join: Sağ Tablo Öncelikli
+
+`right_join()` tam tersi mantıkla çalışır: sağ tablodaki tüm kayıtları korur.
+
+```r
+# Tüm lab sonuçları, hasta bilgisi varsa ekle
+right_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet hemoglobin glukoz      tarih
+1      101  Ahmet  45        E       14.2     95 2024-01-15
+2      102   Ayşe  32        K       12.8     88 2024-01-16
+3      103 Mehmet  58        E       15.1    142 2024-01-15
+4      106   <NA>  NA     <NA>       13.5    101 2024-01-17
+5      107   <NA>  NA     <NA>       11.9     76 2024-01-18
+```
+
+Hasta 106 ve 107'nin demografik bilgileri NA, çünkü hasta listesinde kayıtlı değiller ama lab sonuçları var.
+
+#### Full Join: Birleşim
+
+`full_join()` her iki tablodaki tüm kayıtları korur. Küme teorisindeki birleşim (∪) işlemine karşılık gelir.
+
+```r
+# Her iki tablodaki tüm kayıtlar
+full_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet hemoglobin glukoz      tarih
+1      101  Ahmet  45        E       14.2     95 2024-01-15
+2      102   Ayşe  32        K       12.8     88 2024-01-16
+3      103 Mehmet  58        E       15.1    142 2024-01-15
+4      104  Fatma  29        K         NA     NA       <NA>
+5      105    Ali  67        E         NA     NA       <NA>
+6      106   <NA>  NA     <NA>       13.5    101 2024-01-17
+7      107   <NA>  NA     <NA>       11.9     76 2024-01-18
+```
+
+### 11.3 Farklı Sütun İsimleriyle Birleştirme
+
+Tablolardaki anahtar sütunların isimleri farklı olabilir. Bu durumda `by` parametresinde eşleştirme belirtilir:
+
+```r
+# Sütun isimleri farklıysa
+randevular <- data.frame(
+  patient_no = c(101, 102, 103),
+  randevu_tarihi = c("2024-02-01", "2024-02-03", "2024-02-05"),
+  bolum = c("Dahiliye", "Kardiyoloji", "Dahiliye")
+)
+
+# Farklı isimli sütunları eşleştirme
+left_join(hastalar, randevular, by = c("hasta_id" = "patient_no"))
+```
+
+### 11.4 Birden Fazla Anahtar ile Birleştirme
+
+Bazen tek bir sütun benzersiz eşleşme sağlamaz. Örneğin, aynı hastanın farklı tarihlerdeki kayıtlarını eşleştirmek için hem hasta_id hem de tarih kullanılabilir:
+
+```r
+# Günlük ölçümler
+olcumler_sabah <- data.frame(
+  hasta_id = c(101, 101, 102),
+  tarih = c("2024-01-15", "2024-01-16", "2024-01-15"),
+  tansiyon_sabah = c(120, 118, 110)
+)
+
+olcumler_aksam <- data.frame(
+  hasta_id = c(101, 101, 102),
+  tarih = c("2024-01-15", "2024-01-16", "2024-01-15"),
+  tansiyon_aksam = c(125, 122, 108)
+)
+
+# İki anahtar ile birleştirme
+inner_join(olcumler_sabah, olcumler_aksam, by = c("hasta_id", "tarih"))
+```
+
+Çıktı:
+```
+  hasta_id      tarih tansiyon_sabah tansiyon_aksam
+1      101 2024-01-15            120            125
+2      101 2024-01-16            118            122
+3      102 2024-01-15            110            108
+```
+
+### 11.5 Base R ile Join İşlemleri: merge()
+
+dplyr kullanmadan da birleştirme yapılabilir. `merge()` fonksiyonu base R'ın sunduğu çözümdür:
+
+```r
+# Inner join (varsayılan)
+merge(hastalar, lab_sonuclari, by = "hasta_id")
+
+# Left join
+merge(hastalar, lab_sonuclari, by = "hasta_id", all.x = TRUE)
+
+# Right join
+merge(hastalar, lab_sonuclari, by = "hasta_id", all.y = TRUE)
+
+# Full join
+merge(hastalar, lab_sonuclari, by = "hasta_id", all = TRUE)
+```
+
+`merge()` fonksiyonu işlevsel olarak yeterli olsa da dplyr fonksiyonları daha okunabilir ve pipe zincirleriyle daha uyumludur.
+
+### 11.6 Filtering Joins: semi_join() ve anti_join()
+
+Bu iki fonksiyon birleştirme yapmaz, filtreleme yapar. Sonuç tablosunda sadece sol tablonun sütunları bulunur.
+
+#### semi_join(): Eşleşenleri Filtrele
+
+`semi_join()` sol tabloda, sağ tabloda karşılığı olan satırları döndürür:
+
+```r
+# Lab sonucu olan hastaları filtrele (lab sütunlarını ekleme)
+semi_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet
+1      101  Ahmet  45        E
+2      102   Ayşe  32        K
+3      103 Mehmet  58        E
+```
+
+#### anti_join(): Eşleşmeyenleri Filtrele
+
+`anti_join()` tam tersi: sol tabloda, sağ tabloda karşılığı olmayan satırları döndürür. Eksik verileri tespit etmek için çok kullanışlıdır.
+
+```r
+# Lab sonucu olmayan hastalar
+anti_join(hastalar, lab_sonuclari, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id    ad yas cinsiyet
+1      104 Fatma  29        K
+2      105   Ali  67        E
+```
+
+```r
+# Hasta kaydı olmayan lab sonuçları
+anti_join(lab_sonuclari, hastalar, by = "hasta_id")
+```
+
+Çıktı:
+```
+  hasta_id hemoglobin glukoz      tarih
+1      106       13.5    101 2024-01-17
+2      107       11.9     76 2024-01-18
+```
+
+### 11.7 Üç veya Daha Fazla Tabloyu Birleştirme
+
+Gerçek analizlerde genellikle ikiden fazla tablo birleştirilir. Pipe operatörü bu işlemi zincirleme yapmayı kolaylaştırır:
+
+```r
+# Üç tabloyu birleştir
+tam_veri <- hastalar %>%
+  left_join(lab_sonuclari, by = "hasta_id") %>%
+  left_join(tedaviler, by = "hasta_id")
+
+print(tam_veri)
+```
+
+Çıktı:
+```
+  hasta_id     ad yas cinsiyet hemoglobin glukoz      tarih      ilac doz_mg
+1      101  Ahmet  45        E       14.2     95 2024-01-15   Aspirin    100
+2      101  Ahmet  45        E       14.2     95 2024-01-15 Metformin    500
+3      102   Ayşe  32        K       12.8     88 2024-01-16     Parol    500
+4      103 Mehmet  58        E       15.1    142 2024-01-15 Metformin   1000
+5      104  Fatma  29        K         NA     NA       <NA>      <NA>     NA
+6      105    Ali  67        E         NA     NA       <NA>      <NA>     NA
+```
+
+Dikkat: Ahmet'in iki satırı var çünkü iki farklı ilaç kullanıyor. Bu davranış, **one-to-many** (birden çoğa) ilişkilerde beklenen sonuçtur.
+
+### 11.8 Join İşlemlerinde Dikkat Edilecek Noktalar
+
+**Duplike anahtar sorunu:** Anahtar sütunda tekrar eden değerler varsa, satır sayısı beklenmedik şekilde artabilir. Her iki tabloda da duplike varsa kartezyen çarpım oluşur.
+
+```r
+# Tehlikeli durum örneği
+tablo_a <- data.frame(id = c(1, 1), a = c("x", "y"))
+tablo_b <- data.frame(id = c(1, 1), b = c("m", "n"))
+inner_join(tablo_a, tablo_b, by = "id")
+```
+
+Çıktı (4 satır!):
+```
+  id a b
+1  1 x m
+2  1 x n
+3  1 y m
+4  1 y n
+```
+
+**Sütun ismi çakışması:** Her iki tabloda aynı isimde (anahtar olmayan) sütunlar varsa, dplyr otomatik olarak `.x` ve `.y` sonekleri ekler:
+
+```r
+# Her iki tabloda da "tarih" sütunu var
+tablo1 <- data.frame(id = 1, tarih = "2024-01-01", deger = 10)
+tablo2 <- data.frame(id = 1, tarih = "2024-01-05", sonuc = 20)
+
+inner_join(tablo1, tablo2, by = "id")
+```
+
+Çıktı:
+```
+  id    tarih.x deger    tarih.y sonuc
+1  1 2024-01-01    10 2024-01-05    20
+```
+
+Bu durumu önlemek için `suffix` parametresi kullanılabilir:
+
+```r
+inner_join(tablo1, tablo2, by = "id", suffix = c("_baslangic", "_bitis"))
+```
+
+### 11.9 Join Türleri Özet Tablosu
+
+| Fonksiyon | Açıklama | Sonuçta Kim Var? |
+|-----------|----------|------------------|
+| `inner_join()` | Kesişim | Her iki tabloda eşleşenler |
+| `left_join()` | Sol öncelikli | Sol tablonun tamamı + sağdan eşleşenler |
+| `right_join()` | Sağ öncelikli | Sağ tablonun tamamı + soldan eşleşenler |
+| `full_join()` | Birleşim | Her iki tablonun tamamı |
+| `semi_join()` | Filtre (var) | Sol tablodan, sağda karşılığı olanlar |
+| `anti_join()` | Filtre (yok) | Sol tablodan, sağda karşılığı olmayanlar |
+
+### 11.10 Kapsamlı Join Örneği
+
+Bir hastane senaryosunda, diyabet hastalarının son lab sonuçlarını ve aktif tedavilerini tek bir tabloda görmek istediğimizi düşünelim:
+
+```r
+# Diyabet hastaları (glukoz > 126)
+diyabet_raporu <- hastalar %>%
+  # Lab sonuçlarını ekle
+  inner_join(lab_sonuclari, by = "hasta_id") %>%
+  # Yüksek glukozlu hastaları filtrele
+  filter(glukoz > 100) %>%
+  # Tedavi bilgilerini ekle
+  left_join(tedaviler, by = "hasta_id") %>%
+  # Sadece Metformin kullananlar
+  filter(ilac == "Metformin" | is.na(ilac)) %>%
+  # İstenen sütunları seç ve düzenle
+  select(hasta_id, ad, yas, glukoz, ilac, doz_mg) %>%
+  # Glukoz değerine göre sırala
+  arrange(desc(glukoz))
+
+print(diyabet_raporu)
+```
+
+---
+
+## 12. Alıştırmalar
+
+### Temel Alıştırmalar
+
+1. `mtcars` veri setinden sadece 6 silindirli araçları filtreleyip, ortalama yakıt tüketimini (mpg) hesaplayın.
+
+2. `iris` veri setinde her tür için ortalama petal uzunluğunu bulun ve azalan sırada listeleyin.
+
+3. Kendi oluşturduğunuz bir öğrenci veri setinde (isim, not1, not2, not3 sütunları), ortalama notu hesaplayıp "Geçti/Kaldı" şeklinde yeni bir değişken ekleyin.
+
+### Join Alıştırmaları
+
+4. Aşağıdaki iki tabloyu oluşturun ve farklı join türlerinin sonuçlarını karşılaştırın:
+   - Ürünler: urun_id, urun_adi, kategori
+   - Satislar: satis_id, urun_id, miktar, tarih
+
+5. `anti_join()` kullanarak hiç satışı olmayan ürünleri bulun.
+
+6. Üç tablo oluşturun (ogrenciler, dersler, notlar) ve bunları birleştirerek her öğrencinin aldığı dersleri ve notlarını gösteren bir rapor hazırlayın.
+
+---
+
+## Kaynaklar
+
+- Wickham, H. & Grolemund, G. (2017). R for Data Science. O'Reilly Media.
+- dplyr paketi dokümantasyonu: https://dplyr.tidyverse.org/
+- RStudio Cheat Sheets: https://posit.co/resources/cheatsheets/
+
+---
+
+*Bu ders notunda temel veri manipülasyonu ve birleştirme işlemlerini ele aldık. Bir sonraki bölümde veri dönüştürme (reshaping) ve tidyr paketi konularını inceleyeceğiz.*
+
 
