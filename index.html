@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Makine Öğrenmesi Ders Notları</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .mermaid {
+      text-align: center;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Yükleniyor...</div>
+  <script>
+    window.$docsify = {
+      name: 'Makine Öğrenmesi',
+      repo: 'https://github.com/erkanozhan/datamining',
+      loadSidebar: false,
+      homepage: 'Ders_Notu.md',
+      auto2top: true,
+      executeScript: true,
+      markdown: {
+        renderer: {
+          code: function(code, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + code + '</div>';
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Docsify -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  
+  <!-- KaTeX - Formüller için -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@1.4.4/dist/docsify-katex.js"></script>
+  
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ 
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true
+      }
+    });
+    
+    // Docsify hook to render mermaid after page load
+    if (window.$docsify) {
+      window.$docsify.plugins = [].concat(function(hook) {
+        hook.doneEach(function() {
+          mermaid.run({
+            querySelector: '.mermaid'
+          });
+        });
+      }, window.$docsify.plugins || []);
+    }
+  </script>
+  
+  <!-- Kod renklendirme -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-r.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  
+  <!-- Arama -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  
+  <!-- Sayfa içi navigasyon -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+</body>
+</html>
