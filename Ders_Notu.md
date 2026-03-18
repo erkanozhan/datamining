@@ -1308,8 +1308,6 @@ $$
 \displaystyle \text{score}_c \;=\; \log P(C=c) \;+\; \sum_{i=1}^{n} \log P(x_i \mid C=c)
 $$
 
-Gençler,
-
  Birden fazla küçük olasılığı (ör. pek çok kelime için P( kelime | sınıf )) birbirleriyle çarptığınızda ortaya çıkan sayı bilgisayarın ondalık gösterim aralığının çok altına düşebilir — buna "alt akış" (underflow) denir. Bu durumda çarpım sıfıra yuvarlanır ve bilgiler kaybolur. Log almak bu sorunu çözer: çarpma işlemi toplamaya dönüşür (log(a·b)=log a + log b), böylece çok küçük çarpımlar yerine makul büyüklükte sayılarla toplama yaparsınız ve sayısal kararlılığı korursunuz. Ayrıca argmax ile sınıflandırma yapıyorsanız, hangi sınıfın skoru daha büyük olduğunu bulmak için log almamız sonucu değiştirmez; çarpımların log'larını toplamak yeterlidir.
 
 Bilgisayarlarda kayan nokta (floating-point) aritmetiği sınırlı dinamik aralığa sahiptir; örneğin 10^(-300) civarındaki değerler güvenli olsa da 10^(-1000) gibi değerler sıfıra yuvarlanır. Naive Bayes'te çok sayıda bağımsız özellik için P(X|C)=∏i P(xi|C) hesaplanırken bu durum sık meydana gelir. Log-olasılık kullanmak şöyle avantajlar sağlar:
@@ -1339,7 +1337,7 @@ Sonuç: Yorumlaması kolay, hızlı ve az veri ile çalışabilen bir yöntemdir
 ## 26. Örnek Uygulama: Bilgisayar Satın Alma Tahmini
 Slaytlardaki örneğimiz üzerinden gidelim. Bir bilgisayar mağazasının elinde geçmiş müşterilerine ait bir tablo var. Bu tabloda müşterilerin yaşı, geliri, öğrenci olup olmadığı ve kredi notu gibi bilgiler ile en sonunda bilgisayar alıp almadıkları (`evet` ya da `hayır`) yazıyor.
 
-### 26.1. Bilgisayar Satın Alma Veri Seti
+### Örnek 1: Bilgisayar Satın Alma Veri Seti
 
 | yas | gelir | ogrencimi | kredibilite | bilgisayar_alimi |
 | :--- | :--- | :--- | :--- | :--- |
@@ -1425,6 +1423,87 @@ Bu formüldeki terimleri bizim örneğimize uyarlayalım:
 *   `P(C)`: **Önsel Olasılık (Prior Probability):** Herhangi bir veri görmeden önce `C` sınıfının genel olasılığı. (Adım 1'de hesapladığımız 9/14 ve 5/14 değerleri).
 *   `P(X|C)`: **Olabilirlik (Likelihood):** `C` sınıfı doğruysa, `X` verisini gözlemleme olasılığımız.
 *   `P(X)`: **Kanıt Olasılığı (Evidence):** `X` verisini gözlemlemenin genel olasılığı. Bu değer, tüm sınıflar için sabittir, bu yüzden sınıflandırma yaparken karşılaştırma amacıyla genellikle ihmal edilebilir. Bizim için önemli olan `P(X|C) * P(C)` çarpımını maksimize etmektir.
+  
+### Örnek 2: Bilgisayar Riski Tahmini
+
+Gerçek dünyada veri madenciliği (Data Mining) algoritmaları on binlerce, hatta milyonlarca kayıt üzerinden beslenir. Veri kelimesinin İngilizcesi olan *data*, Latince *datum* (verilen şey, bilinen gerçek) kelimesinin çoğuludur. Sisteme ne kadar çok ve tutarlı "bilinen gerçek" verirsek, modelimizin belirsizliği o oranda azalır.
+
+İş dünyasında şirketlerin genellikle antivirüs kullandığı, güvenlik bilinci düşük kullanıcıların eski tip tarayıcılarla daha çok risk barındırdığı gibi senaryoları tabloya alalım.
+
+| meslek | isl sistemi | Antivirüs Kullanıyor? | Yaş | Browser | Risk |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| ogrenci | win | Evet | Genc | IE | Yuksek |
+| ev | win | Hayir | Orta | Chrome | Yuksek |
+| sirket | mac | Evet | Yasli | Safari | Dusuk |
+| ev | mac | Hayir | Orta | Safari | Dusuk |
+| ogrenci | mac | Hayir | Genc | Firefox | Yuksek |
+| ogrenci | Linux | Hayir | Genc | Firefox | Dusuk |
+| sirket | win | Evet | Genc | Chrome | Dusuk |
+| sirket | win | Hayir | Yasli | IE | Yuksek |
+| ogrenci | win | Evet | Orta | IE | Dusuk |
+| sirket | win | Evet | Orta | Chrome | Dusuk |
+| ev | Linux | Hayir | Genc | Chrome | Dusuk |
+| ogrenci | mac | Evet | Genc | Safari | Dusuk |
+| ev | win | Hayir | Yasli | IE | Yuksek |
+| sirket | mac | Evet | Orta | Safari | Dusuk |
+| ogrenci | win | Hayir | Genc | Chrome | Yuksek |
+| ev | win | Evet | Orta | Firefox | Dusuk |
+| sirket | Linux | Evet | Yasli | Firefox | Dusuk |
+| ogrenci | Linux | Evet | Orta | Chrome | Dusuk |
+| ev | mac | Hayir | Yasli | Safari | Dusuk |
+| ev | win | Hayir | Orta | IE | Yuksek |
+
+Test edeceğimiz hedef kaydımız ($X$) değişmiyor:
+$X = \{\text{meslek: ogrenci, işletim Sistemi: win, Ant: Hayir, Yaş: Orta, Browser: IE}\}$
+
+Genişleyen bu yeni veri evreninde Naive Bayes algoritmasının adımlarını baştan işletelim.
+
+### 1. Önsel Olasılıkların (Prior Probabilities) Hesaplanması
+
+Yeni tablomuzda toplam 20 kayıt bulunmaktadır.
+* Risk seviyesi "Yüksek" olan kayıt sayısı: 7
+* Risk seviyesi "Düşük" olan kayıt sayısı: 13
+
+Bu durumda temel önsel olasılıklarımız şu şekildedir:
+$$P(\text{Yüksek}) = \frac{7}{20}$$
+$$P(\text{Düşük}) = \frac{13}{20}$$
+
+### 2. Koşullu Olasılıkların (Likelihood) Hesaplanması
+
+Hedef kaydımızdaki ($X$) değişkenlerin, yüksek ve düşük risk gruplarındaki yeni dağılımlarına bakıyoruz.
+
+**Riskin "Yüksek" Olduğu Durumlar İçin (Toplam 7 kayıt):**
+* Yüksek riskli kayıtlarda mesleği öğrenci olanların olasılığı: $P(\text{ogrenci} | \text{Yüksek}) = \frac{3}{7}$
+* Yüksek riskli kayıtlarda Windows kullananların olasılığı: $P(\text{win} | \text{Yüksek}) = \frac{6}{7}$
+* Yüksek riskli kayıtlarda Antivirüs kullanmayanların (Hayir) olasılığı: $P(\text{Hayir} | \text{Yüksek}) = \frac{6}{7}$
+* Yüksek riskli kayıtlarda yaşı orta olanların olasılığı: $P(\text{Orta} | \text{Yüksek}) = \frac{2}{7}$
+* Yüksek riskli kayıtlarda IE kullananların olasılığı: $P(\text{IE} | \text{Yüksek}) = \frac{4}{7}$
+
+**Riskin "Düşük" Olduğu Durumlar İçin (Toplam 13 kayıt):**
+* Düşük riskli kayıtlarda mesleği öğrenci olanların olasılığı: $P(\text{ogrenci} | \text{Düşük}) = \frac{4}{13}$
+* Düşük riskli kayıtlarda Windows kullananların olasılığı: $P(\text{win} | \text{Düşük}) = \frac{4}{13}$
+* Düşük riskli kayıtlarda Antivirüs kullanmayanların (Hayir) olasılığı: $P(\text{Hayir} | \text{Düşük}) = \frac{4}{13}$
+* Düşük riskli kayıtlarda yaşı orta olanların olasılığı: $P(\text{Orta} | \text{Düşük}) = \frac{6}{13}$
+* Düşük riskli kayıtlarda IE kullananların olasılığı: $P(\text{IE} | \text{Düşük}) = \frac{1}{13}$
+
+### 3. Sonsal Olasılıkların (Posterior Probabilities) Hesaplanması
+
+Gözlemlediğimiz özelliklerin bir araya gelmesiyle ortaya çıkan nihai olasılıkları hesaplıyoruz.
+
+**Yüksek Sınıfı İçin Çarpım:**
+$$P(X | \text{Yüksek}) \cdot P(\text{Yüksek}) = \left(\frac{3}{7}\right) \cdot \left(\frac{6}{7}\right) \cdot \left(\frac{6}{7}\right) \cdot \left(\frac{2}{7}\right) \cdot \left(\frac{4}{7}\right) \cdot \left(\frac{7}{20}\right)$$
+
+$$P(X | \text{Yüksek}) \cdot P(\text{Yüksek}) = \frac{6048}{336140} \approx 0.01799$$
+
+**Düşük Sınıfı İçin Çarpım:**
+$$P(X | \text{Düşük}) \cdot P(\text{Düşük}) = \left(\frac{4}{13}\right) \cdot \left(\frac{4}{13}\right) \cdot \left(\frac{4}{13}\right) \cdot \left(\frac{6}{13}\right) \cdot \left(\frac{1}{13}\right) \cdot \left(\frac{13}{20}\right)$$
+
+$$P(X | \text{Düşük}) \cdot P(\text{Düşük}) = \frac{4992}{7425860} \approx 0.00067$$
+
+### Değerlendirme
+
+Hesaplamalarımız sonucunda $0.01799 > 0.00067$ bulduk. Veri setini büyütüp örüntüleri daha belirgin hale getirdiğimizde de modelimiz $X$ kaydının **Yüksek** risk grubunda olduğuna karar verdi. Hatta dikkat ederseniz, iki olasılık arasındaki makas daha da açıldı. Bunun sebebi, yeni verilerde antivirüs kullanmamanın ve Windows + IE kombinasyonunun risk ile olan korelasyonunun istatistiksel olarak daha güçlü bir şekilde desteklenmesidir. Modelimiz, ona verdiğimiz yeni *datum*lar sayesinde çok daha net bir sınır çizebildi.
+
 
 ### 26.2. "Naive" (Saf) Varsayım:
 Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, ..., x_n`) sınıf verildiğinde **koşullu olarak bağımsız** olduğunu varsaymasıdır. Bu, `P(X|C)` terimini basitleştirmemizi sağlar:

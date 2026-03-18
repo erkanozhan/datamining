@@ -1,0 +1,21 @@
+meslek,isl sistemi,Antivirüs Kullanıyor?,Yaş,Browser,Risk
+ogrenci,win,Evet,Genc,IE,Yuksek
+ev,win,Hayir,Orta,Chrome,Yuksek
+sirket,mac,Evet,Yasli,Safari,Dusuk
+ev,mac,Hayir,Orta,Safari,Dusuk
+ogrenci,mac,Hayir,Genc,Firefox,Yuksek
+ogrenci,Linux,Hayir,Genc,Firefox,Dusuk
+sirket,win,Evet,Genc,Chrome,Dusuk
+sirket,win,Hayir,Yasli,IE,Yuksek
+ogrenci,win,Evet,Orta,IE,Dusuk
+sirket,win,Evet,Orta,Chrome,Dusuk
+ev,Linux,Hayir,Genc,Chrome,Dusuk
+ogrenci,mac,Evet,Genc,Safari,Dusuk
+ev,win,Hayir,Yasli,IE,Yuksek
+sirket,mac,Evet,Orta,Safari,Dusuk
+ogrenci,win,Hayir,Genc,Chrome,Yuksek
+ev,win,Evet,Orta,Firefox,Dusuk
+sirket,Linux,Evet,Yasli,Firefox,Dusuk
+ogrenci,Linux,Evet,Orta,Chrome,Dusuk
+ev,mac,Hayir,Yasli,Safari,Dusuk
+ev,win,Hayir,Orta,IE,Yuksek
