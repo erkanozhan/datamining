@@ -8,7 +8,7 @@ Bilgisayar Mühendisliği Bölümü
 
 E-posta: erkanozhan@gmail.com / eozhan@nku.edu.tr  
 Tel: +90 282 250 23 84  
-Ofis: Çorlu Mühendislik Fakültesi, 4.Kat A-410 ---
+Ofis: Çorlu Mühendislik Fakültesi, 4.Kat B-410 ---
 Görüşme Saatleri: Her hafta Perşembe 09:30-12:30 arası.
 
 ## 1. Veri Nedir? (What is Data?)
