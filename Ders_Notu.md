@@ -1281,11 +1281,11 @@ Temel Bayes bağıntısı:
 - x_i: X gözleminin i'inci bileşeni (özelliği). Yani X = (x_1, ..., x_n).
 - Ürün (∏): Koşullu bağımsızlık varsayımı altında
 
-    $\displaystyle P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)\thinspace .$
+    $\displaystyle P(X\mid C)=\prod_ {i=1}^{n}P(x_i\mid C)\thinspace .$
 
 - Hesaplama notu: Sayısal stabilite için genellikle log alınır:
 
-    $\displaystyle \text{score}_c=\log P(C=c)+\sum_{i=1}^{n}\log P(x_i\mid C=c)\thinspace .$
+    $\displaystyle \text{score}_c=\log P(C=c)+\sum_ {i=1}^{n}\log P(x_i\mid C=c)\thinspace .$
 
 Sınıflandırma karar kuralı (özellikle P(X) ihmal edilince):
 ```math
@@ -1588,9 +1588,9 @@ Model eğitimi tamamlandığında, "Classifier output" penceresinde detaylı son
     *   **F1-Score:** Precision ve Recall'ın harmonik ortalamasıdır. Her iki metriğin de önemli olduğu durumlarda dengeli bir ölçüt sunar.
     *   **ROC Alanı (Area Under ROC Curve - AUC):** Modelin farklı eşik değerlerinde pozitif ve negatif sınıfları ne kadar iyi ayırt edebildiğini gösteren bir metriktir. 1'e yakın değerler daha iyi bir ayırt etme gücünü ifade eder.
 
-    $\displaystyle \underbrace{\text{Precision}}_{\text{hassasiyet}} = \frac{\overbrace{a}^{\substack{\text{doğru}\cr \text{"kaza var"}}}}{\underbrace{a + c}_{\substack{\text{modelin "kaza var"}\cr \text{dediği tüm durumlar}}}} \qquad \underbrace{\text{Recall}}_{\text{duyarlılık}} = \frac{\overbrace{a}^{\substack{\text{yakalanan}\cr \text{kazalar}}}}{\underbrace{a + b}_{\substack{\text{gerçekte olan}\cr \text{tüm kazalar}}}}$
+    $\displaystyle \underbrace{\text{Precision}}_ {\text{hassasiyet}} = \frac{\overbrace{a}^{\substack{\text{doğru}\cr \text{"kaza var"}}}}{\underbrace{a + c}_ {\substack{\text{modelin "kaza var"}\cr \text{dediği tüm durumlar}}}} \qquad \underbrace{\text{Recall}}_ {\text{duyarlılık}} = \frac{\overbrace{a}^{\substack{\text{yakalanan}\cr \text{kazalar}}}}{\underbrace{a + b}_ {\substack{\text{gerçekte olan}\cr \text{tüm kazalar}}}}$
 
-    $\displaystyle \underbrace{F_1}_{\text{F1-skoru}} = \underbrace{\frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}}_{\substack{\text{iki oranın}\cr \text{harmonik ortalaması}}} \qquad \underbrace{\text{Accuracy}}_{\text{doğruluk}} = \frac{\overbrace{a + d}^{\text{doğru tahminler}}}{\underbrace{a + b + c + d}_{\text{tüm gözlemler}}}$
+    $\displaystyle \underbrace{F_1}_ {\text{F1-skoru}} = \underbrace{\frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}}_ {\substack{\text{iki oranın}\cr \text{harmonik ortalaması}}} \qquad \underbrace{\text{Accuracy}}_ {\text{doğruluk}} = \frac{\overbrace{a + d}^{\text{doğru tahminler}}}{\underbrace{a + b + c + d}_ {\text{tüm gözlemler}}}$
 
     **Nasıl okunur?** "Precision eşittir a bölü a artı c. Recall eşittir a bölü a artı b. F1 eşittir, iki çarpı precision çarpı recall, bölü precision artı recall. Accuracy eşittir, a artı d, bölü a artı b artı c artı d." Precision ile recall'ın payı aynıdır (a); fark paydadadır: Precision modelin "kaza var" dediklerine, recall gerçekte olan kazalara bakar. Örnek: Model 50 kez "kaza var" demiş ve bunların 40'ı gerçekten kazaysa (a = 40, c = 10) hassasiyet 40/50 = 0.80'dir. Gerçekte 60 kaza olmuşsa (b = 20) duyarlılık 40/60 ≈ 0.67'dir. F1 = 2 · 0.80 · 0.67 / (0.80 + 0.67) ≈ 0.73 olur. Harmonik ortalama küçük olan değere daha yakındır: Yalnızca birini yükseltip diğerini ihmal eden model yüksek F1 alamaz.
 
@@ -3010,7 +3010,7 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
         $\displaystyle TF(t, d) = \frac{\text{t teriminin d dokümanındaki geçiş sayısı}}{\text{d dokümanındaki toplam terim sayısı}}$
 
-        $\displaystyle \underbrace{TF(t, d)}_{\substack{\text{t teriminin}\cr \text{d'deki sıklığı}}} = \frac{\overbrace{\text{t'nin d'de geçiş sayısı}}^{\text{ham sayım}}}{\underbrace{\text{d'deki toplam terim sayısı}}_{\substack{\text{uzun dokümanlar avantaj}\cr \text{kazanmasın diye}}}}$
+        $\displaystyle \underbrace{TF(t, d)}_ {\substack{\text{t teriminin}\cr \text{d'deki sıklığı}}} = \frac{\overbrace{\text{t'nin d'de geçiş sayısı}}^{\text{ham sayım}}}{\underbrace{\text{d'deki toplam terim sayısı}}_ {\substack{\text{uzun dokümanlar avantaj}\cr \text{kazanmasın diye}}}}$
 
         **Nasıl okunur?** "t'nin d'deki terim frekansı eşittir, t'nin d'de geçiş sayısı bölü d'deki toplam terim sayısı." Burada t bir terim (kelime), d bir dokümandır. Örnek: D1'in 4 kelimesinden 2'si "veri"dir: TF = 2/4 = 0.50.
 
@@ -3018,7 +3018,7 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
         $\displaystyle IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)$
 
-        $\displaystyle \underbrace{IDF(t)}_{\substack{\text{t ne kadar}\cr \text{nadir?}}} = \log_e \left( \frac{\overbrace{N}^{\substack{\text{toplam}\cr \text{doküman sayısı}}}}{\underbrace{n_t}_{\substack{\text{t terimini içeren}\cr \text{doküman sayısı}}}} \right)$
+        $\displaystyle \underbrace{IDF(t)}_ {\substack{\text{t ne kadar}\cr \text{nadir?}}} = \log_e \left( \frac{\overbrace{N}^{\substack{\text{toplam}\cr \text{doküman sayısı}}}}{\underbrace{n_t}_ {\substack{\text{t terimini içeren}\cr \text{doküman sayısı}}}} \right)$
 
         **Nasıl okunur?** "t'nin ters doküman frekansı eşittir, log e tabanında, N bölü t terimini içeren doküman sayısı." $\log_e$ doğal logaritmadır (ln). Her dokümanda geçen bir kelime için oran 1'dir ve $\ln 1 = 0$: Böyle bir kelime hiç ayırt edici değildir. Logaritma oranı yumuşatır: 1000 dokümanın yalnızca 1'inde geçen bir kelimenin oranı 1000'dir ama IDF'i $\ln 1000 \approx 6.91$'dir. Örnek: "veri" 3 dokümanın 2'sinde geçer: $\ln(3/2) \approx 0.41$.
 
@@ -3026,7 +3026,7 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
 
         $\displaystyle TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)$
 
-        $\displaystyle \underbrace{TF\text{-}IDF(t, d)}_{\substack{\text{t'nin d için}\cr \text{önemi}}} = \overbrace{TF(t, d)}^{\text{d'de ne kadar sık?}} \times \underbrace{IDF(t)}_{\substack{\text{koleksiyonda ne}\cr \text{kadar nadir?}}}$
+        $\displaystyle \underbrace{TF\text{-}IDF(t, d)}_ {\substack{\text{t'nin d için}\cr \text{önemi}}} = \overbrace{TF(t, d)}^{\text{d'de ne kadar sık?}} \times \underbrace{IDF(t)}_ {\substack{\text{koleksiyonda ne}\cr \text{kadar nadir?}}}$
 
         **Nasıl okunur?** "t'nin d'deki TF-IDF değeri eşittir, t'nin d'deki terim frekansı çarpı t'nin ters doküman frekansı." Yani: Bir kelime bir dokümanda sık, koleksiyonun genelinde ise nadir geçiyorsa o doküman için önemlidir. Aşağıdaki örnekte TF-IDF("veri", D1) = 0.50 × 0.41 ≈ 0.205 bulunur.
             
