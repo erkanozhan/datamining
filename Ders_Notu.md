@@ -1285,7 +1285,7 @@ Temel Bayes bağıntısı:
 
 - Hesaplama notu: Sayısal stabilite için genellikle log alınır:
 
-    $\displaystyle \text{score}_c=\log P(C=c)+\sum_ {i=1}^{n}\log P(x_i\mid C=c)\thinspace .$
+    $\displaystyle \text{score}_ c=\log P(C=c)+\sum_ {i=1}^{n}\log P(x_i\mid C=c)\thinspace .$
 
 Sınıflandırma karar kuralı (özellikle P(X) ihmal edilince):
 ```math
