@@ -675,7 +675,9 @@ $$
 Gini = 1 - \sum_{i=1}^{c} (p_i)^2
 $$
 
-$$\underbrace{Gini}_{\substack{\text{düğümün}\\\text{kirliliği}}} = 1 - \underbrace{\sum_{i=1}^{c} \overbrace{(p_i)^2}^{\substack{\text{i. sınıfın}\\\text{oranının karesi}}}}_{\substack{\text{c sınıfın hepsi için topla:}\\\text{doğru etiketleme olasılığı}}}$$
+```math
+\underbrace{Gini}_{\substack{\text{düğümün}\\\text{kirliliği}}} = 1 - \underbrace{\sum_{i=1}^{c} \overbrace{(p_i)^2}^{\substack{\text{i. sınıfın}\\\text{oranının karesi}}}}_{\substack{\text{c sınıfın hepsi için topla:}\\\text{doğru etiketleme olasılığı}}}
+```
 
 **Nasıl okunur?** "Gini eşittir, bir eksi, i eşittir 1'den c'ye kadar p alt i'nin karelerinin toplamı." Yani: Rastgele seçtiğimiz bir örneğe, düğümdeki sınıf oranlarına göre rastgele bir etiket verirsek etiketin doğru çıkma olasılığı $\sum (p_i)^2$'dir. Bunu 1'den çıkarınca **yanlış etiketleme olasılığı** kalır. Tenis verisinin kökünde (9 Evet, 5 Hayır): $1 - [(9/14)^2 + (5/14)^2] = 1 - [0.413 + 0.128] = 0.459$. Bu değeri aşağıdaki vaka analizinde (Adım 1) yeniden kullanacağız.
 
@@ -694,7 +696,9 @@ $$
 Entropy = - \sum_{i=1}^{c} p_i \log_2(p_i)
 $$
 
-$$\underbrace{Entropy}_{\substack{\text{düğümdeki}\\\text{belirsizlik (bit)}}} = \overbrace{-}^{\text{pozitif yapar}} \underbrace{\sum_{i=1}^{c}}_{\substack{\text{c sınıfın}\\\text{hepsi için topla}}} \overbrace{p_i}^{\substack{\text{i. sınıfın oranı}\\\text{(ağırlık)}}} \; \underbrace{\log_2(p_i)}_{\substack{\text{i. sınıfın}\\\text{"sürpriz" değeri}}}$$
+```math
+\underbrace{Entropy}_{\substack{\text{düğümdeki}\\\text{belirsizlik (bit)}}} = \overbrace{-}^{\text{pozitif yapar}} \underbrace{\sum_{i=1}^{c}}_{\substack{\text{c sınıfın}\\\text{hepsi için topla}}} \overbrace{p_i}^{\substack{\text{i. sınıfın oranı}\\\text{(ağırlık)}}} \; \underbrace{\log_2(p_i)}_{\substack{\text{i. sınıfın}\\\text{"sürpriz" değeri}}}
+```
 
 **Nasıl okunur?** "Entropi eşittir eksi, i eşittir 1'den c'ye kadar p alt i çarpı log iki tabanında p alt i'lerin toplamı."
 
@@ -733,7 +737,9 @@ $$
 Gain Ratio = \frac{\text{Information Gain}}{\text{Split Information}}
 $$
 
-$$\underbrace{\text{Gain Ratio}}_{\text{kazanç oranı}} = \frac{\overbrace{\text{Information Gain}}^{\substack{\text{bölmenin azalttığı}\\\text{belirsizlik}}}}{\underbrace{\text{Split Information}}_{\substack{\text{bölmenin kaç parçaya}\\\text{dağıldığı (ceza)}}}}$$
+```math
+\underbrace{\text{Gain Ratio}}_{\text{kazanç oranı}} = \frac{\overbrace{\text{Information Gain}}^{\substack{\text{bölmenin azalttığı}\\\text{belirsizlik}}}}{\underbrace{\text{Split Information}}_{\substack{\text{bölmenin kaç parçaya}\\\text{dağıldığı (ceza)}}}}
+```
 
 **Nasıl okunur?** "Kazanç oranı eşittir, bilgi kazancı bölü bölünme bilgisi." Bilgi kazancı, bölmeden önceki entropi eksi bölmeden sonraki dalların ağırlıklı ortalama entropisidir. Bölünme bilgisi ise dallara düşen örnek oranlarının entropisidir: Dal sayısı arttıkça büyür. Örnek: Tenis verisinde "Müşteri ID" gibi her güne ayrı dal açan bir nitelik düşünün. 14 yaprağın hepsi saf olur, bilgi kazancı kökün entropisinin tamamına (0.940) eşit çıkar. Ama 14 eşit dalın bölünme bilgisi $\log_2 14 \approx 3.807$'dir; kazanç oranı 0.940 / 3.807 ≈ **0.247**'ye iner.
 
@@ -1247,11 +1253,13 @@ Kısa tarihçe:
 Matematiksel temeli
 
 Temel Bayes bağıntısı:
-$$
+```math
 \displaystyle P(C \mid X) = \frac{P(X \mid C)\,P(C)}{P(X)}
-$$
+```
 
-$$\underbrace{P(C \mid X)}_{\substack{\text{sonsal: X'i gördükten}\\\text{sonra C'nin olasılığı}}} = \frac{\overbrace{P(X \mid C)}^{\text{olabilirlik}}\;\overbrace{P(C)}^{\text{önsel}}}{\underbrace{P(X)}_{\substack{\text{kanıt: X'i görme olasılığı}\\\text{(tüm sınıflar için aynı)}}}}$$
+```math
+\underbrace{P(C \mid X)}_{\substack{\text{sonsal: X'i gördükten}\\\text{sonra C'nin olasılığı}}} = \frac{\overbrace{P(X \mid C)}^{\text{olabilirlik}}\;\overbrace{P(C)}^{\text{önsel}}}{\underbrace{P(X)}_{\substack{\text{kanıt: X'i görme olasılığı}\\\text{(tüm sınıflar için aynı)}}}}
+```
 
 **Nasıl okunur?** "X verildiğinde C'nin olasılığı eşittir, C verildiğinde X'in olasılığı çarpı C'nin olasılığı, bölü X'in olasılığı." **Dikkat:** $P(C \mid X)$ ile $P(X \mid C)$ aynı şey değildir. "Spam bir e-postada 'kazandınız' kelimesinin geçme olasılığı" ile "'kazandınız' geçen bir e-postanın spam olma olasılığı" farklı sorulardır. Bayes teoremi, birinden diğerine geçmenin yoludur.
 
@@ -1260,26 +1268,33 @@ $$\underbrace{P(C \mid X)}_{\substack{\text{sonsal: X'i gördükten}\\\text{sonr
 - P(C): Prior — sınıf C'nin önsel olasılığı (veri kümesindeki frekansla tahmin edilir).
 - P(X): Evidence — X gözleminin toplam olasılığı (tüm sınıflara göre normalize eder; sınıfları karşılaştırırken sabittir, genelde ihmal edilir).
 
-$$
+```math
 \displaystyle P(X \mid C) \;=\; \prod_{i=1}^{n} P(x_i \mid C)
-$$
+```
 
-$$\underbrace{P(X \mid C)}_{\substack{\text{C sınıfında tüm özelliklerin}\\\text{birlikte görülme olasılığı}}} = \underbrace{\prod_{i=1}^{n}}_{\substack{\text{i = 1'den n'ye kadar}\\\text{hepsini çarp}}} \overbrace{P(x_i \mid C)}^{\substack{\text{C sınıfında i. özelliğin}\\\text{görülme olasılığı}}}$$
+```math
+\underbrace{P(X \mid C)}_{\substack{\text{C sınıfında tüm özelliklerin}\\\text{birlikte görülme olasılığı}}} = \underbrace{\prod_{i=1}^{n}}_{\substack{\text{i = 1'den n'ye kadar}\\\text{hepsini çarp}}} \overbrace{P(x_i \mid C)}^{\substack{\text{C sınıfında i. özelliğin}\\\text{görülme olasılığı}}}
+```
 
 **Nasıl okunur?** "C verildiğinde X'in olasılığı eşittir, i eşittir 1'den n'ye kadar, C verildiğinde x alt i'nin olasılıklarının çarpımı." Büyük $\Pi$ ("pi") burada 3.14 sayısı değildir; $\Sigma$'nın toplama yaptığı gibi çarpma yapar. Aşağıdaki bilgisayar satın alma örneğinde "evet" sınıfı için: $P(X \mid \text{evet}) = \frac{2}{9} \cdot \frac{4}{9} \cdot \frac{6}{9} \cdot \frac{6}{9} \approx 0.044$.
 
 - x_i: X gözleminin i'inci bileşeni (özelliği). Yani X = (x_1, ..., x_n).
 - Ürün (∏): Koşullu bağımsızlık varsayımı altında
-    $$P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)\,.$$
+
+    $\displaystyle P(X\mid C)=\prod_{i=1}^{n}P(x_i\mid C)\thinspace .$
+
 - Hesaplama notu: Sayısal stabilite için genellikle log alınır:
-    $$\text{score}_c=\log P(C=c)+\sum_{i=1}^{n}\log P(x_i\mid C=c)\,.$$
+
+    $\displaystyle \text{score}_c=\log P(C=c)+\sum_{i=1}^{n}\log P(x_i\mid C=c)\thinspace .$
 
 Sınıflandırma karar kuralı (özellikle P(X) ihmal edilince):
-$$
+```math
 \displaystyle \hat{C} = \arg\max_{c}\; P(C=c)\,\prod_{i=1}^{n} P(x_i \mid C=c)
-$$
+```
 
-$$\underbrace{\hat{C}}_{\substack{\text{tahmin edilen}\\\text{sınıf}}} = \underbrace{\arg\max_{c}}_{\substack{\text{değeri en büyük}\\\text{yapan c'yi seç}}}\; \overbrace{P(C=c)}^{\text{önsel}}\,\overbrace{\prod_{i=1}^{n} P(x_i \mid C=c)}^{\text{olasılıkların çarpımı}}$$
+```math
+\underbrace{\hat{C}}_{\substack{\text{tahmin edilen}\\\text{sınıf}}} = \underbrace{\arg\max_{c}}_{\substack{\text{değeri en büyük}\\\text{yapan c'yi seç}}}\; \overbrace{P(C=c)}^{\text{önsel}}\,\overbrace{\prod_{i=1}^{n} P(x_i \mid C=c)}^{\text{olasılıkların çarpımı}}
+```
 
 **Nasıl okunur?** "C şapka eşittir, C eşittir c'nin olasılığı çarpı i eşittir 1'den n'ye kadar C eşittir c verildiğinde x alt i'nin olasılıklarının çarpımı; bu değeri en büyük yapan c." Yani: Her sınıf için skoru hesapla, en büyük skoru veren sınıfı seç. $\arg\max$ skorun kendisini değil, **sınıfın adını** verir. Bayes formülündeki $P(X)$ paydası burada yoktur: Tüm sınıflar için aynı olduğundan sıralamayı değiştirmez. Bilgisayar örneğinde skorlar "evet" için ≈ 0.028, "hayır" için ≈ 0.0068'dir; dolayısıyla $\hat{C} = \text{evet}$.
 
@@ -1287,11 +1302,13 @@ $$\underbrace{\hat{C}}_{\substack{\text{tahmin edilen}\\\text{sınıf}}} = \unde
 
 Sayısal stabilite ve uygulamada yaygın form:
 
-$$
+```math
 \displaystyle \text{score}_c \;=\; \log P(C=c) \;+\; \sum_{i=1}^{n} \log P(x_i \mid C=c)
-$$
+```
 
-$$\underbrace{\text{score}_c}_{\substack{\text{c sınıfının}\\\text{log-skoru}}} = \overbrace{\log P(C=c)}^{\text{önselin log'u}} + \underbrace{\sum_{i=1}^{n} \log P(x_i \mid C=c)}_{\substack{\text{çarpım yerine}\\\text{log'ların toplamı}}}$$
+```math
+\underbrace{\text{score}_c}_{\substack{\text{c sınıfının}\\\text{log-skoru}}} = \overbrace{\log P(C=c)}^{\text{önselin log'u}} + \underbrace{\sum_{i=1}^{n} \log P(x_i \mid C=c)}_{\substack{\text{çarpım yerine}\\\text{log'ların toplamı}}}
+```
 
 **Nasıl okunur?** "Score alt c eşittir, log C eşittir c'nin olasılığı, artı i eşittir 1'den n'ye kadar log C eşittir c verildiğinde x alt i'nin olasılığının toplamı." Yani: $\log(a \cdot b) = \log a + \log b$ olduğu için çarpım toplama dönüşür. Olasılıklar 1'den küçük olduğundan log'ları **negatiftir**; en büyük (sıfıra en yakın) skor kazanır. Bilgisayar örneğinde doğal log ile "evet" skoru ≈ −3.568, "hayır" skoru ≈ −4.982 çıkar; yine "evet" kazanır. $e^{-3.568} \approx 0.028$ olduğuna dikkat edin: Çarpımla bulunan skorun aynısıdır.
 
@@ -1401,7 +1418,7 @@ Bu durumda dedektifimiz, yani Naive Bayes algoritmamız, eldeki tüm ipuçların
 
 Naive Bayes sınıflandırıcısı, temelini olasılık teorisindeki **Bayes Teoremi**'nden alır. Teorem bize, bir hipotezin olasılığını yeni kanıtlar ışığında nasıl güncelleyeceğimizi söyler. Formülümüz şöyledir:
 
-$P(C\mid X)=\dfrac{P(X\mid C)\,P(C)}{P(X)}$
+$P(C\mid X)=\dfrac{P(X\mid C)\thinspace P(C)}{P(X)}$
 
 Bu formüldeki terimleri bizim örneğimize uyarlayalım:
 *   `C`: Sınıf (yani `bilgisayar_alimi=evet` veya `bilgisayar_alimi=hayır`).
@@ -1441,7 +1458,7 @@ Gerçek dünyada veri madenciliği (Data Mining) algoritmaları on binlerce, hat
 | ev | win | Hayir | Orta | IE | Yuksek |
 
 Test edeceğimiz hedef kaydımız ($X$) değişmiyor:
-$X = \{\text{meslek: ogrenci, işletim Sistemi: win, Ant: Hayir, Yaş: Orta, Browser: IE}\}$
+$X = \lbrace \text{meslek: ogrenci, işletim Sistemi: win, Ant: Hayir, Yaş: Orta, Browser: IE}\rbrace $
 
 Genişleyen bu yeni veri evreninde Naive Bayes algoritmasının adımlarını baştan işletelim.
 
@@ -1453,6 +1470,7 @@ Yeni tablomuzda toplam 20 kayıt bulunmaktadır.
 
 Bu durumda temel önsel olasılıklarımız şu şekildedir:
 $$P(\text{Yüksek}) = \frac{7}{20}$$
+
 $$P(\text{Düşük}) = \frac{13}{20}$$
 
 ### 2. Koşullu Olasılıkların (Likelihood) Hesaplanması
@@ -1504,9 +1522,11 @@ Gençler, şimdi Naive Bayes'in en zarif hilelerinden birine, ama aynı zamanda 
 
 Bu yaklaşım, sadece pratik bir hile değil, aynı zamanda sağlam bir teorik temele de dayanır. Teknik olarak, **sıfır frekans problemi** olarak bilinen bu durum, olasılıkları doğrudan gözlem frekanslarından tahmin ettiğimizde ortaya çıkar. Laplace düzeltmesi, her olası sonuca küçük bir önsel olasılık atayarak bu sorunu çözer. Formülü `P = (sayım + 1) / (N + K)` olarak ifade ederiz. Burada `N` o sınıftaki toplam gözlem sayısı, `K` ise o özellikteki toplam benzersiz değer sayısıdır (örneğin, 'gelir' için 'düşük', 'orta', 'yüksek' olmak üzere K=3). Bu yöntem, modelin eğitim verisinde görmediği olaylara karşı daha esnek ve dayanıklı olmasını sağlar, yani genelleme yeteneğini artırır.
 
-$$\underbrace{P}_{\substack{\text{düzeltilmiş}\\\text{olasılık}}} = \frac{\overbrace{\text{sayım}}^{\substack{\text{değerin sınıfta}\\\text{görülme sayısı}}} + \overbrace{1}^{\text{sanal gözlem}}}{\underbrace{N}_{\substack{\text{sınıftaki}\\\text{gözlem sayısı}}} + \underbrace{K}_{\substack{\text{özelliğin farklı}\\\text{değer sayısı}}}}$$
+```math
+\underbrace{P}_{\substack{\text{düzeltilmiş}\\\text{olasılık}}} = \frac{\overbrace{\text{sayım}}^{\substack{\text{değerin sınıfta}\\\text{görülme sayısı}}} + \overbrace{1}^{\text{sanal gözlem}}}{\underbrace{N}_{\substack{\text{sınıftaki}\\\text{gözlem sayısı}}} + \underbrace{K}_{\substack{\text{özelliğin farklı}\\\text{değer sayısı}}}}
+```
 
-**Nasıl okunur?** "P eşittir, sayım artı bir, bölü N artı K." Paydaya neden K eklenir? Özelliğin K değerinin her birine 1 sanal gözlem eklediğimiz için toplam sayım K kadar artar; böylece olasılıkların toplamı yine 1 olur. Örnek: Bilgisayar satın alma verisinde "hayır" diyen 5 müşterinin hiçbiri orta yaşlı değildir: $P(\text{orta\_yaşlı} \mid \text{hayır}) = 0/5 = 0$. Yaşın 3 değeri olduğundan (K = 3) düzeltilmiş olasılık $(0 + 1)/(5 + 3) = 1/8 = 0.125$ olur.
+**Nasıl okunur?** "P eşittir, sayım artı bir, bölü N artı K." Paydaya neden K eklenir? Özelliğin K değerinin her birine 1 sanal gözlem eklediğimiz için toplam sayım K kadar artar; böylece olasılıkların toplamı yine 1 olur. Örnek: Bilgisayar satın alma verisinde "hayır" diyen 5 müşterinin hiçbiri orta yaşlı değildir: $P(\text{orta yaşlı} \mid \text{hayır}) = 0/5 = 0$. Yaşın 3 değeri olduğundan (K = 3) düzeltilmiş olasılık $(0 + 1)/(5 + 3) = 1/8 = 0.125$ olur.
 
 Sonuç olarak, elimizdeki ipuçları ve basit varsayımlarla yapılan hesaplama yeni müşterinin satın alma olasılığının daha yüksek olduğunu gösteriyor.
 
@@ -1568,9 +1588,9 @@ Model eğitimi tamamlandığında, "Classifier output" penceresinde detaylı son
     *   **F1-Score:** Precision ve Recall'ın harmonik ortalamasıdır. Her iki metriğin de önemli olduğu durumlarda dengeli bir ölçüt sunar.
     *   **ROC Alanı (Area Under ROC Curve - AUC):** Modelin farklı eşik değerlerinde pozitif ve negatif sınıfları ne kadar iyi ayırt edebildiğini gösteren bir metriktir. 1'e yakın değerler daha iyi bir ayırt etme gücünü ifade eder.
 
-    $$\underbrace{\text{Precision}}_{\text{hassasiyet}} = \frac{\overbrace{a}^{\substack{\text{doğru}\\\text{"kaza var"}}}}{\underbrace{a + c}_{\substack{\text{modelin "kaza var"}\\\text{dediği tüm durumlar}}}} \qquad \underbrace{\text{Recall}}_{\text{duyarlılık}} = \frac{\overbrace{a}^{\substack{\text{yakalanan}\\\text{kazalar}}}}{\underbrace{a + b}_{\substack{\text{gerçekte olan}\\\text{tüm kazalar}}}}$$
+    $\displaystyle \underbrace{\text{Precision}}_{\text{hassasiyet}} = \frac{\overbrace{a}^{\substack{\text{doğru}\cr \text{"kaza var"}}}}{\underbrace{a + c}_{\substack{\text{modelin "kaza var"}\cr \text{dediği tüm durumlar}}}} \qquad \underbrace{\text{Recall}}_{\text{duyarlılık}} = \frac{\overbrace{a}^{\substack{\text{yakalanan}\cr \text{kazalar}}}}{\underbrace{a + b}_{\substack{\text{gerçekte olan}\cr \text{tüm kazalar}}}}$
 
-    $$\underbrace{F_1}_{\text{F1-skoru}} = \underbrace{\frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}}_{\substack{\text{iki oranın}\\\text{harmonik ortalaması}}} \qquad \underbrace{\text{Accuracy}}_{\text{doğruluk}} = \frac{\overbrace{a + d}^{\text{doğru tahminler}}}{\underbrace{a + b + c + d}_{\text{tüm gözlemler}}}$$
+    $\displaystyle \underbrace{F_1}_{\text{F1-skoru}} = \underbrace{\frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}}_{\substack{\text{iki oranın}\cr \text{harmonik ortalaması}}} \qquad \underbrace{\text{Accuracy}}_{\text{doğruluk}} = \frac{\overbrace{a + d}^{\text{doğru tahminler}}}{\underbrace{a + b + c + d}_{\text{tüm gözlemler}}}$
 
     **Nasıl okunur?** "Precision eşittir a bölü a artı c. Recall eşittir a bölü a artı b. F1 eşittir, iki çarpı precision çarpı recall, bölü precision artı recall. Accuracy eşittir, a artı d, bölü a artı b artı c artı d." Precision ile recall'ın payı aynıdır (a); fark paydadadır: Precision modelin "kaza var" dediklerine, recall gerçekte olan kazalara bakar. Örnek: Model 50 kez "kaza var" demiş ve bunların 40'ı gerçekten kazaysa (a = 40, c = 10) hassasiyet 40/50 = 0.80'dir. Gerçekte 60 kaza olmuşsa (b = 20) duyarlılık 40/60 ≈ 0.67'dir. F1 = 2 · 0.80 · 0.67 / (0.80 + 0.67) ≈ 0.73 olur. Harmonik ortalama küçük olan değere daha yakındır: Yalnızca birini yükseltip diğerini ihmal eden model yüksek F1 alamaz.
 
@@ -1795,7 +1815,9 @@ Hesaplama yöntemi aynı kalacak (eşleşme için 1, farklılık için 0), ancak
 
 **Formül:** `Ağırlıklı Skor = (Eşleşme_Model * 3) + (Eşleşme_Ülke * 2) + (Eşleşme_Renk * 4)`
 
-$$\text{Ağırlıklı Skor} = \underbrace{\text{Eşleşme}_{\text{Model}}}_{\text{1 ya da 0}} \times \overbrace{3}^{\substack{\text{Model'in}\\\text{seçenek sayısı}}} + \underbrace{\text{Eşleşme}_{\text{Ülke}}}_{\text{1 ya da 0}} \times \overbrace{2}^{\substack{\text{Ülke'nin}\\\text{seçenek sayısı}}} + \underbrace{\text{Eşleşme}_{\text{Renk}}}_{\text{1 ya da 0}} \times \overbrace{4}^{\substack{\text{Renk'in}\\\text{seçenek sayısı}}}$$
+```math
+\text{Ağırlıklı Skor} = \underbrace{\text{Eşleşme}_{\text{Model}}}_{\text{1 ya da 0}} \times \overbrace{3}^{\substack{\text{Model'in}\\\text{seçenek sayısı}}} + \underbrace{\text{Eşleşme}_{\text{Ülke}}}_{\text{1 ya da 0}} \times \overbrace{2}^{\substack{\text{Ülke'nin}\\\text{seçenek sayısı}}} + \underbrace{\text{Eşleşme}_{\text{Renk}}}_{\text{1 ya da 0}} \times \overbrace{4}^{\substack{\text{Renk'in}\\\text{seçenek sayısı}}}
+```
 
 **Nasıl okunur?** "Ağırlıklı skor eşittir, model eşleşmesi çarpı 3, artı ülke eşleşmesi çarpı 2, artı renk eşleşmesi çarpı 4." Yani: Eşleşen her özellik kendi ağırlığı kadar puan getirir, eşleşmeyen özellik 0 getirir. Örnek: 1. ve 5. müşteriler ülkede ve renkte eşleşir: $0 \times 3 + 1 \times 2 + 1 \times 4 = 6$.
 
@@ -1928,7 +1950,9 @@ Bu formülü, veri setimizdeki 'p' adet özelliğe (boyuta) genelleyebiliriz. A 
 
 **`Öklid(A, B) = √[ (a₁ - b₁)² + (a₂ - b₂)² + ... + (aₚ - bₚ)² ]`**
 
-$$\underbrace{\text{Öklid}(A, B)}_{\substack{\text{A ile B arasındaki}\\\text{kuş uçuşu uzaklık}}} = \sqrt{\underbrace{(a_1 - b_1)^2}_{\substack{\text{1. özellikteki}\\\text{farkın karesi}}} + \dots + \overbrace{(a_p - b_p)^2}^{\substack{\text{p. özellikteki}\\\text{farkın karesi}}}} = \sqrt{\underbrace{\sum_{i=1}^{p}}_{\substack{\text{p özelliğin}\\\text{hepsi için topla}}} (a_i - b_i)^2}$$
+```math
+\underbrace{\text{Öklid}(A, B)}_{\substack{\text{A ile B arasındaki}\\\text{kuş uçuşu uzaklık}}} = \sqrt{\underbrace{(a_1 - b_1)^2}_{\substack{\text{1. özellikteki}\\\text{farkın karesi}}} + \dots + \overbrace{(a_p - b_p)^2}^{\substack{\text{p. özellikteki}\\\text{farkın karesi}}}} = \sqrt{\underbrace{\sum_{i=1}^{p}}_{\substack{\text{p özelliğin}\\\text{hepsi için topla}}} (a_i - b_i)^2}
+```
 
 **Nasıl okunur?** "A ile B'nin Öklid uzaklığı eşittir, i eşittir 1'den p'ye kadar a alt i eksi b alt i'nin karelerinin toplamının karekökü." Yani: Her özellikteki farkın karesini al, topla, karekök al. Sağdaki $\Sigma$'lı yazım, üç noktalı uzun yazımın kısaltmasıdır. Karekök, kare almayla değişen birimi geri getirir (not² → not).
 
@@ -1970,7 +1994,9 @@ Bu metrik, iki nokta arasındaki farkların **mutlak değerlerini** toplar.
 
 **`Manhattan(A, B) = |a₁ - b₁| + |a₂ - b₂| + ... + |aₚ - bₚ|`**
 
-$$\underbrace{\text{Manhattan}(A, B)}_{\substack{\text{sokaklar boyunca}\\\text{gidilen uzaklık}}} = \overbrace{\lvert a_1 - b_1 \rvert}^{\substack{\text{1. özellikteki}\\\text{fark (işaretsiz)}}} + \dots + \overbrace{\lvert a_p - b_p \rvert}^{\substack{\text{p. özellikteki}\\\text{fark (işaretsiz)}}} = \underbrace{\sum_{i=1}^{p} \lvert a_i - b_i \rvert}_{\substack{\text{mutlak farkların}\\\text{toplamı}}}$$
+```math
+\underbrace{\text{Manhattan}(A, B)}_{\substack{\text{sokaklar boyunca}\\\text{gidilen uzaklık}}} = \overbrace{\lvert a_1 - b_1 \rvert}^{\substack{\text{1. özellikteki}\\\text{fark (işaretsiz)}}} + \dots + \overbrace{\lvert a_p - b_p \rvert}^{\substack{\text{p. özellikteki}\\\text{fark (işaretsiz)}}} = \underbrace{\sum_{i=1}^{p} \lvert a_i - b_i \rvert}_{\substack{\text{mutlak farkların}\\\text{toplamı}}}
+```
 
 **Nasıl okunur?** "A ile B'nin Manhattan uzaklığı eşittir, i eşittir 1'den p'ye kadar a alt i eksi b alt i'nin mutlak değerlerinin toplamı." Buradaki dikey çizgiler **mutlak değerdir**: $\lvert 3 - 7 \rvert = \lvert 7 - 3 \rvert = 4$. Mutlak değer alınmasaydı pozitif ve negatif farklar birbirini götürürdü.
 
@@ -2000,7 +2026,9 @@ Formülü şu şekildedir:
 
 **`Minkowski(A, B) = [ (|a₁ - b₁|)ᵖ + (|a₂ - b₂|)ᵖ + ... + (|aₚ - bₚ|)ᵖ ]¹/ᵖ`**
 
-$$\underbrace{\text{Minkowski}(A, B)}_{\substack{\text{genelleştirilmiş}\\\text{uzaklık}}} = \Bigg( \underbrace{\sum_{i=1}^{n}}_{\substack{\text{n özelliğin}\\\text{hepsi için topla}}} \overbrace{\lvert a_i - b_i \rvert}^{\substack{\text{i. özellikteki fark}\\\text{(işaretsiz)}}}{}^{\,p} \Bigg)^{1/p}$$
+```math
+\underbrace{\text{Minkowski}(A, B)}_{\substack{\text{genelleştirilmiş}\\\text{uzaklık}}} = \Bigg( \underbrace{\sum_{i=1}^{n}}_{\substack{\text{n özelliğin}\\\text{hepsi için topla}}} \overbrace{\lvert a_i - b_i \rvert}^{\substack{\text{i. özellikteki fark}\\\text{(işaretsiz)}}}{}^{\,p} \Bigg)^{1/p}
+```
 
 **Nasıl okunur?** "A ile B'nin Minkowski uzaklığı eşittir, i eşittir 1'den n'ye kadar a alt i eksi b alt i'nin mutlak değerinin p'inci kuvvetlerinin toplamının p'inci dereceden kökü." **Dikkat:** Yukarıdaki formülde p iki ayrı iş görür: $a_p$'deki p özellik sayısı, üsteki p ise Minkowski parametresidir. Karışmasın diye açıklamalı sürümde özellik sayısını n ile yazdık. p = 1 için Manhattan, p = 2 için Öklid uzaklığı elde edilir.
 
@@ -2193,7 +2221,9 @@ Bu toplam hatanın teknik adı **Küme İçi Hata Kareleri Toplamı (Within-Clus
     WCSS = &sum;<sub>i=1</sub><sup>k</sup> &sum;<sub>x &isin; C<sub>i</sub></sub> ||x - &mu;<sub>i</sub>||<sup>2</sup>
 </p>
 
-$$\text{WCSS} = \underbrace{\sum_{i=1}^{k}}_{\substack{\text{k kümenin}\\\text{hepsi için}}} \; \underbrace{\sum_{x \in C_i}}_{\substack{\text{i. kümedeki}\\\text{her x noktası için}}} \overbrace{\lVert x - \mu_i \rVert^2}^{\substack{\text{noktanın kendi merkezine}\\\text{uzaklığının karesi}}}$$
+```math
+\text{WCSS} = \underbrace{\sum_{i=1}^{k}}_{\substack{\text{k kümenin}\\\text{hepsi için}}} \; \underbrace{\sum_{x \in C_i}}_{\substack{\text{i. kümedeki}\\\text{her x noktası için}}} \overbrace{\lVert x - \mu_i \rVert^2}^{\substack{\text{noktanın kendi merkezine}\\\text{uzaklığının karesi}}}
+```
 
 **Nasıl okunur?** "WCSS eşittir, i eşittir 1'den k'ya kadar, C alt i'deki her x için, x eksi mü alt i'nin normunun karesinin toplamı." İç içe iki toplam vardır: İçteki toplam bir kümenin içini, dıştaki toplam ise bütün kümeleri toplar. Çift dikey çizgi (norm), iki nokta arasındaki Öklid uzaklığıdır.
 
@@ -2790,7 +2820,9 @@ $$
 \text{Lift}(A \rightarrow B) = \frac{\text{Confidence}(A \rightarrow B)}{\text{Support}(B)} = \frac{P(B|A)}{P(B)}
 $$
 
-$$\text{Lift}(A \rightarrow B) = \frac{\overbrace{\text{Confidence}(A \rightarrow B)}^{\substack{\text{A alanlarda}\\\text{B oranı}}}}{\underbrace{\text{Support}(B)}_{\substack{\text{tüm işlemlerde}\\\text{B oranı}}}} = \frac{\overbrace{P(B \mid A)}^{\substack{\text{A verildiğinde}\\\text{B'nin olasılığı}}}}{\underbrace{P(B)}_{\substack{\text{B'nin genel}\\\text{olasılığı}}}}$$
+```math
+\text{Lift}(A \rightarrow B) = \frac{\overbrace{\text{Confidence}(A \rightarrow B)}^{\substack{\text{A alanlarda}\\\text{B oranı}}}}{\underbrace{\text{Support}(B)}_{\substack{\text{tüm işlemlerde}\\\text{B oranı}}}} = \frac{\overbrace{P(B \mid A)}^{\substack{\text{A verildiğinde}\\\text{B'nin olasılığı}}}}{\underbrace{P(B)}_{\substack{\text{B'nin genel}\\\text{olasılığı}}}}
+```
 
 **Nasıl okunur?** "A ise B kuralının lift'i eşittir, A ise B kuralının güveni bölü B'nin desteği; yani A verildiğinde B'nin olasılığı bölü B'nin olasılığı." Yani: A alanlar B'yi, genel müşteri kitlesine göre **kaç kat** daha sık alıyor? $P(B \mid A)$ ile $P(A \mid B)$ genellikle farklıdır: Burada koşul ("verilen") A'dır.
 
@@ -2807,6 +2839,7 @@ Daha önce bulduğumuz `K=1 E=1 ==> Y=1` kuralını ele alalım:
 *   `Support(Y=1)`: 3/5 = 0.6 (Y ögesinin tüm işlemlerde görülme olasılığı %60)
 
 Şimdi Lift değerini hesaplayalım:
+
 $$
 \text{Lift}(K=1, E=1 \rightarrow Y=1) = \frac{0.75}{0.6} = 1.25
 $$
@@ -2974,29 +3007,26 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
     TF-IDF değeri, iki ana bileşenin çarpımıyla elde edilir: **Terim Frekansı (TF)** ve **Ters Doküman Frekansı (IDF)**.
 
     1.  **Terim Frekansı (Term Frequency - TF):** Bir kelimenin (terimin) belirli bir doküman içinde ne sıklıkla geçtiğini ölçer. Genellikle, kelimenin dokümandaki geçiş sayısının, o dokümandaki toplam kelime sayısına bölünmesiyle normalleştirilir.
-        $$
-        TF(t, d) = \frac{\text{t teriminin d dokümanındaki geçiş sayısı}}{\text{d dokümanındaki toplam terim sayısı}}
-        $$
 
-        $$\underbrace{TF(t, d)}_{\substack{\text{t teriminin}\\\text{d'deki sıklığı}}} = \frac{\overbrace{\text{t'nin d'de geçiş sayısı}}^{\text{ham sayım}}}{\underbrace{\text{d'deki toplam terim sayısı}}_{\substack{\text{uzun dokümanlar avantaj}\\\text{kazanmasın diye}}}}$$
+        $\displaystyle TF(t, d) = \frac{\text{t teriminin d dokümanındaki geçiş sayısı}}{\text{d dokümanındaki toplam terim sayısı}}$
+
+        $\displaystyle \underbrace{TF(t, d)}_{\substack{\text{t teriminin}\cr \text{d'deki sıklığı}}} = \frac{\overbrace{\text{t'nin d'de geçiş sayısı}}^{\text{ham sayım}}}{\underbrace{\text{d'deki toplam terim sayısı}}_{\substack{\text{uzun dokümanlar avantaj}\cr \text{kazanmasın diye}}}}$
 
         **Nasıl okunur?** "t'nin d'deki terim frekansı eşittir, t'nin d'de geçiş sayısı bölü d'deki toplam terim sayısı." Burada t bir terim (kelime), d bir dokümandır. Örnek: D1'in 4 kelimesinden 2'si "veri"dir: TF = 2/4 = 0.50.
 
     2.  **Ters Doküman Frekansı (Inverse Document Frequency - IDF):** Bir kelimenin tüm doküman koleksiyonu (corpus) içinde ne kadar nadir olduğunu ölçer. Nadir kelimeler daha yüksek IDF değerine sahip olur, çünkü bu kelimeler dokümanı daha iyi ayırt eder.
-        $$
-            IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)
-        $$
 
-        $$\underbrace{IDF(t)}_{\substack{\text{t ne kadar}\\\text{nadir?}}} = \log_e \left( \frac{\overbrace{N}^{\substack{\text{toplam}\\\text{doküman sayısı}}}}{\underbrace{n_t}_{\substack{\text{t terimini içeren}\\\text{doküman sayısı}}}} \right)$$
+        $\displaystyle IDF(t) = \log_e \left( \frac{\text{Toplam doküman sayısı (N)}}{\text{t terimini içeren doküman sayısı}} \right)$
+
+        $\displaystyle \underbrace{IDF(t)}_{\substack{\text{t ne kadar}\cr \text{nadir?}}} = \log_e \left( \frac{\overbrace{N}^{\substack{\text{toplam}\cr \text{doküman sayısı}}}}{\underbrace{n_t}_{\substack{\text{t terimini içeren}\cr \text{doküman sayısı}}}} \right)$
 
         **Nasıl okunur?** "t'nin ters doküman frekansı eşittir, log e tabanında, N bölü t terimini içeren doküman sayısı." $\log_e$ doğal logaritmadır (ln). Her dokümanda geçen bir kelime için oran 1'dir ve $\ln 1 = 0$: Böyle bir kelime hiç ayırt edici değildir. Logaritma oranı yumuşatır: 1000 dokümanın yalnızca 1'inde geçen bir kelimenin oranı 1000'dir ama IDF'i $\ln 1000 \approx 6.91$'dir. Örnek: "veri" 3 dokümanın 2'sinde geçer: $\ln(3/2) \approx 0.41$.
 
     3.  **TF-IDF Değeri:**
-        $$
-            TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)
-        $$
 
-        $$\underbrace{TF\text{-}IDF(t, d)}_{\substack{\text{t'nin d için}\\\text{önemi}}} = \overbrace{TF(t, d)}^{\text{d'de ne kadar sık?}} \times \underbrace{IDF(t)}_{\substack{\text{koleksiyonda ne}\\\text{kadar nadir?}}}$$
+        $\displaystyle TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)$
+
+        $\displaystyle \underbrace{TF\text{-}IDF(t, d)}_{\substack{\text{t'nin d için}\cr \text{önemi}}} = \overbrace{TF(t, d)}^{\text{d'de ne kadar sık?}} \times \underbrace{IDF(t)}_{\substack{\text{koleksiyonda ne}\cr \text{kadar nadir?}}}$
 
         **Nasıl okunur?** "t'nin d'deki TF-IDF değeri eşittir, t'nin d'deki terim frekansı çarpı t'nin ters doküman frekansı." Yani: Bir kelime bir dokümanda sık, koleksiyonun genelinde ise nadir geçiyorsa o doküman için önemlidir. Aşağıdaki örnekte TF-IDF("veri", D1) = 0.50 × 0.41 ≈ 0.205 bulunur.
             
@@ -3035,29 +3065,28 @@ Bu, metin madenciliğinin en kritik ve genellikle en çok zaman alan aşamasıd�
     **Adım 2: Ters Doküman Frekansı (IDF) Hesaplaması**
 
     *   "veri": D1, D3'te geçiyor (2 doküman)
-        $$
-        IDF(\text{"veri"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
-        $$
+
+        $\displaystyle IDF(\text{"veri"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41$
+
     *   "madencilik": D1, D2'de geçiyor (2 doküman)
-        $$
-        IDF(\text{"madencilik"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
-        $$
+
+        $\displaystyle IDF(\text{"madencilik"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41$
+
     *   "analiz": D1, D3'te geçiyor (2 doküman)
-        $$
-        IDF(\text{"analiz"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41
-        $$
+
+        $\displaystyle IDF(\text{"analiz"}) = \log_e\left(\frac{3}{2}\right) = \log_e(1.5) \approx 0.41$
+
     *   "metin": D2'de geçiyor (1 doküman)
-        $$
-        IDF(\text{"metin"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
-        $$
+
+        $\displaystyle IDF(\text{"metin"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10$
+
     *   "uygulama": D2'de geçiyor (1 doküman)
-        $$
-        IDF(\text{"uygulama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
-        $$
+
+        $\displaystyle IDF(\text{"uygulama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10$
+
     *   "raporlama": D3'de geçiyor (1 doküman)
-        $$
-        IDF(\text{"raporlama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10
-        $$
+
+        $\displaystyle IDF(\text{"raporlama"}) = \log_e\left(\frac{3}{1}\right) = \log_e(3) \approx 1.10$
 
     **Adım 3: TF-IDF Değerlerinin Hesaplaması (TF x IDF)**
 
