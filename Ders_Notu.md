@@ -804,10 +804,10 @@ Başlangıç kirliliğimiz 0.459. Amacımız, bu değeri en çok düşüren özn
     $Gini(\text{Yağmurlu}) = 1 - [(\frac{3}{5})^2 + (\frac{2}{5})^2] = 0.48$
 
 Şimdi bu özniteliğin ağırlıklı Gini ortalamasını hesaplayalım:
-$Gini_{Ağırlıklı}(\text{Hava Durumu}) = (\frac{5}{14}) \times 0.48 + (\frac{4}{14}) \times 0 + (\frac{5}{14}) \times 0.48 = 0.343$
+$Gini_{\text{Ağırlıklı}}(\text{Hava Durumu}) = (\frac{5}{14}) \times 0.48 + (\frac{4}{14}) \times 0 + (\frac{5}{14}) \times 0.48 = 0.343$
 
 Ve son olarak, Gini Kazancı:
-$Gain(\text{Hava Durumu}) = Gini(\text{Kök}) - Gini_{Ağırlıklı}(\text{Hava Durumu}) = 0.459 - 0.343 = \mathbf{0.116}$
+$Gain(\text{Hava Durumu}) = Gini(\text{Kök}) - Gini_{\text{Ağırlıklı}}(\text{Hava Durumu}) = 0.459 - 0.343 = \mathbf{0.116}$
 
 **B) Öznitelik: Rüzgar** (Hesaplamaları diğer öznitelikler için de tekrarlıyoruz)
 
@@ -817,7 +817,7 @@ $Gain(\text{Hava Durumu}) = Gini(\text{Kök}) - Gini_{Ağırlıklı}(\text{Hava 
     $Gini(\text{Var}) = 1 - [(\frac{3}{6})^2 + (\frac{3}{6})^2] = 0.5$
 
 Ağırlıklı Gini ve Kazanç:
-$Gini_{Ağırlıklı}(\text{Rüzgar}) = (\frac{8}{14}) \times 0.375 + (\frac{6}{14}) \times 0.5 = 0.428$
+$Gini_{\text{Ağırlıklı}}(\text{Rüzgar}) = (\frac{8}{14}) \times 0.375 + (\frac{6}{14}) \times 0.5 = 0.428$
 $Gain(\text{Rüzgar}) = 0.459 - 0.428 = \mathbf{0.031}$
 
 (Benzer hesaplamalar "Sıcaklık" ve "Nem" için de yapıldığında, onların kazançlarının daha düşük olduğu görülecektir.)
@@ -876,7 +876,7 @@ Bu 5 gözlemden oluşan mini veri setimizin başlangıç kirliliği, daha önce 
     $Gini(\text{Normal}) = 1 - [(\frac{2}{2})^2 + (\frac{0}{2})^2] = 0$ (Mükemmel saflık!)
 
 Ağırlıklı Gini ve Kazanç:
-$Gini_{Ağırlıklı}(\text{Nem}) = (\frac{3}{5}) \times 0 + (\frac{2}{5}) \times 0 = 0$
+$Gini_{\text{Ağırlıklı}}(\text{Nem}) = (\frac{3}{5}) \times 0 + (\frac{2}{5}) \times 0 = 0$
 $Gain(\text{Nem}) = 0.48 - 0 = \mathbf{0.48}$
 
 **B) Öznitelik: Rüzgar (Güneşli günlerde)**
@@ -887,7 +887,7 @@ $Gain(\text{Nem}) = 0.48 - 0 = \mathbf{0.48}$
     $Gini(\text{Var}) = 1 - [(\frac{1}{2})^2 + (\frac{1}{2})^2] = 0.5$
 
 Ağırlıklı Gini ve Kazanç:
-$Gini_{Ağırlıklı}(\text{Rüzgar}) = (\frac{3}{5}) \times 0.444 + (\frac{2}{5}) \times 0.5 = 0.466$
+$Gini_{\text{Ağırlıklı}}(\text{Rüzgar}) = (\frac{3}{5}) \times 0.444 + (\frac{2}{5}) \times 0.5 = 0.466$
 $Gain(\text{Rüzgar}) = 0.48 - 0.466 = \mathbf{0.014}$
 
 **Karar Anı: "Güneşli" Dalı İçin En İyi Soru**
