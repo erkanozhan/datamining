@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Makine Öğrenmesi Ders Notları</title>
+  <title>Veri Madenciliği Ders Notları</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
@@ -10,23 +10,67 @@
       text-align: center;
       margin: 20px 0;
     }
+    .math-blok {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    /* GitHub uyarı kutuları (> [!NOTE], > [!WARNING], > [!CAUTION] …) */
+    .markdown-section blockquote.uyari { border-left: 5px solid; border-radius: 4px; padding: 10px 16px; margin: 16px 0; color: #24292f; }
+    .markdown-section blockquote.uyari p { margin: 6px 0; font-weight: 400; }
+    .uyari .uyari-baslik { display: block; font-weight: 700; margin-bottom: 4px; }
+    .markdown-section blockquote.uyari-note { border-color: #0969da; background: #ddf4ff; } .uyari-note .uyari-baslik      { color: #0969da; }
+    .markdown-section blockquote.uyari-tip { border-color: #1a7f37; background: #dafbe1; } .uyari-tip .uyari-baslik       { color: #1a7f37; }
+    .markdown-section blockquote.uyari-important { border-color: #8250df; background: #fbefff; } .uyari-important .uyari-baslik { color: #8250df; }
+    .markdown-section blockquote.uyari-warning { border-color: #9a6700; background: #fff8c5; } .uyari-warning .uyari-baslik   { color: #9a6700; }
+    .markdown-section blockquote.uyari-caution { border-color: #cf222e; background: #ffebe9; } .uyari-caution .uyari-baslik   { color: #cf222e; }
   </style>
 </head>
 <body>
   <div id="app">Yükleniyor...</div>
   <script>
     window.$docsify = {
-      name: 'Makine Öğrenmesi',
+      name: 'Veri Madenciliği',
       repo: 'https://github.com/erkanozhan/datamining',
       loadSidebar: false,
+      // Kenar çubuğunda sayfa içi içindekiler: ## ve ### başlıkları
+      maxLevel: 3,
       homepage: 'Ders_Notu.md',
       auto2top: true,
       executeScript: true,
+      search: {
+        placeholder: 'Ara',
+        noData: 'Sonuç bulunamadı'
+      },
+      plugins: [
+        // GitHub uyarı kutularını (> [!CAUTION] vb.) docsify'da da renkli göster
+        function (hook) {
+          var basliklar = { NOTE: 'Not', TIP: 'İpucu', IMPORTANT: 'Önemli', WARNING: 'Uyarı', CAUTION: 'Dikkat' };
+          hook.afterEach(function (html) {
+            return html.replace(/<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(<br\s*\/?>)?/g, function (_, tur) {
+              return '<blockquote class="uyari uyari-' + tur.toLowerCase() + '"><p><span class="uyari-baslik">' + basliklar[tur] + '</span>';
+            });
+          });
+        },
+        // Sayfa her çizildiğinde mermaid diyagramlarını oluştur
+        function (hook) {
+          hook.doneEach(function () {
+            if (window.mermaid) {
+              window.mermaid.run({ querySelector: '.mermaid' });
+            }
+          });
+        }
+      ],
       markdown: {
         renderer: {
-          code: function(code, lang) {
+          code: function (code, lang) {
             if (lang === 'mermaid') {
               return '<div class="mermaid">' + code + '</div>';
+            }
+            // ```math blokları (GitHub'ın display formül biçimi) → KaTeX ile çiz
+            if (lang === 'math' && window.katex) {
+              return '<div class="math-blok">' +
+                window.katex.renderToString(code, { displayMode: true, throwOnError: false }) +
+                '</div>';
             }
             return this.origin.code.apply(this, arguments);
           }
@@ -34,18 +78,19 @@
       }
     }
   </script>
-  
+
   <!-- Docsify -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  
+
   <!-- KaTeX - Formüller için -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-katex@1.4.4/dist/docsify-katex.js"></script>
-  
-  <!-- Mermaid -->
+
+  <!-- Mermaid - Diyagramlar için -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({ 
+    mermaid.initialize({
       startOnLoad: false,
       theme: 'default',
       securityLevel: 'loose',
@@ -54,29 +99,18 @@
         htmlLabels: true
       }
     });
-    
-    // Docsify hook to render mermaid after page load
-    if (window.$docsify) {
-      window.$docsify.plugins = [].concat(function(hook) {
-        hook.doneEach(function() {
-          mermaid.run({
-            querySelector: '.mermaid'
-          });
-        });
-      }, window.$docsify.plugins || []);
-    }
   </script>
-  
+
   <!-- Kod renklendirme -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-r.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  
+
   <!-- Arama -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
-  
-  <!-- Sayfa içi navigasyon -->
+
+  <!-- Kod kopyalama düğmesi -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
 </body>
 </html>

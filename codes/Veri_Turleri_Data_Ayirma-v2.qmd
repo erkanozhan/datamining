@@ -114,7 +114,7 @@ Airline verisetinde ay-gün-yıl şeklinde bulunan verileri 3 sütuna ayırmak i
 ```{r}
 # Github dan almak için Raw veriyi githubta tıklatıp linkini almak gerekir.
 
-airline<-read.csv("https://raw.githubusercontent.com/erkanozhan/datamining_lab_data/refs/heads/main/airline.csv",header=TRUE,encoding="UTF-8")
+airline<-read.csv("https://raw.githubusercontent.com/erkanozhan/datamining/main/datasets/airline.csv",header=TRUE,encoding="UTF-8")
 
 # %>% işareti pipeline operatörüdür. Veriyi bir işlemlen diğerine tekrar kullanım için aktarır. 
 ayrik_data<-airline%>%separate(Date,sep="-",into=c("year","month","day"))
