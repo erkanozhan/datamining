@@ -11,7 +11,14 @@ Tel: +90 282 250 23 84
 Ofis: Çorlu Mühendislik Fakültesi, 4. Kat B-410  
 Görüşme Saatleri: Her hafta Perşembe 09:30-12:30 arası.
 
-**Veri setleri ve kodlar:** Notta kullanılan veri setleri [`datasets/`](https://github.com/erkanozhan/datamining/tree/main/datasets), R kodları [`codes/`](https://github.com/erkanozhan/datamining/tree/main/codes) klasöründedir. Notun web sürümü: <https://erkanozhan.github.io/datamining/>
+**Bu not iki yerden okunabilir; içerik ikisinde de aynıdır:**
+
+| | Adres | Ne zaman tercih edilir? |
+| :--- | :--- | :--- |
+| **Web sitesi** | [erkanozhan.github.io/datamining](https://erkanozhan.github.io/datamining/) | Notu okumak ve çalışmak için: Formüller hızlı yüklenir, sayfa içinde **arama** yapılabilir, kenar çubuğundaki içindekilerle bölümler arasında kolayca gezinilir. |
+| **GitHub deposu** | [github.com/erkanozhan/datamining](https://github.com/erkanozhan/datamining) | Veri setlerini ve kod dosyalarını indirmek, notun son değişikliklerini takip etmek için. |
+
+**Veri setleri ve kodlar:** Notta kullanılan veri setleri [`datasets/`](https://github.com/erkanozhan/datamining/tree/main/datasets), R kodları [`codes/`](https://github.com/erkanozhan/datamining/tree/main/codes) klasöründedir.
 
 **Terimler hakkında:** Türkçe kavramların ilk geçtiği yerde parantez içinde İngilizce karşılığı verilmiştir. Gerçek Pozitif, Sahte Pozitif, Gerçek Negatif ve Sahte Negatif terimleri sırasıyla *True Positive*, *False Positive*, *True Negative* ve *False Negative* karşılığında kullanılmıştır.
 
