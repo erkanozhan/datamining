@@ -1474,13 +1474,12 @@ Veri dosyası: [`datasets/2-Bilgisayaralimi-naivebayes-nominal.csv`](https://git
 Bu tablo, bir mağazanın geçmiş müşteri kayıtlarını içermektedir. Her satır mağazaya gelmiş farklı bir kişiyi temsil eder; sütunlar ise o kişiye ait bilinen özellikleri ve kişinin bilgisayar alıp almadığını gösterir. `bilgisayar_alimi` sütunu "sonuç" ya da "hedef" sütunudur. Amaç, diğer sütunlardaki bilgilere bakarak bu sütunu tahmin etmektir. Aşağıdaki olasılık hesaplamalarının tamamı, bu tablodaki "evet" ve "hayır"ların, "genç" ve "yaşlı"ların sayılmasıyla yapılır. Bu tablo, algoritmanın deneyim kazandığı bir ders kitabı işlevi görür.
 
 
-**Görev:** Mağazaya özellikleri aşağıda verilen yeni bir müşteri gelmiştir:
-*   **Yaş:** Genç
-*   **Gelir:** Orta
-*   **Öğrenci mi?:** Evet
-*   **Kredibilite:** Kötü
-
-Soru şudur: **Bu yeni müşteri bilgisayar satın alır mı, almaz mı?**
+> [!IMPORTANT]
+> **Soru:** Mağazaya özellikleri aşağıda verilen yeni bir müşteri gelmiştir. Bu müşteri bilgisayar satın alır mı, almaz mı? Müşterinin sınıfı (`bilgisayar_alimi`) bilinmemektedir; yukarıdaki 14 kayıttan öğrenilen olasılıklarla Naive Bayes yöntemiyle tahmin edilecektir.
+>
+> | Müşteri | yas | gelir | ogrencimi | kredibilite | bilgisayar_alimi |
+> | :---: | :--- | :--- | :--- | :--- | :---: |
+> | **15 (yeni müşteri)** | genc | orta | evet | kotu | **?** |
 
 Naive Bayes bu soruyu olasılık hesabıyla yanıtlar. Yeni müşterinin dört özelliği (yaş = genç, gelir = orta, öğrenci = evet, kredibilite = kötü) için veriden elde edilen olasılıklar şunlardır:
 
@@ -1514,6 +1513,9 @@ Bu olasılıklar Naive Bayes yaklaşımıyla birleştirilir. Her sınıf için p
 
 **Karar Anı:**
 "evet" sınıfının skoru (**0.028**), "hayır" sınıfının skorundan (**0.0069**) yaklaşık dört kat büyüktür. Bu nedenle Naive Bayes, eldeki tüm özellikleri birlikte değerlendirerek yeni müşterinin **bilgisayar alma olasılığının daha yüksek** olduğuna karar verir. İki skor, toplamlarına bölünerek olasılığa dönüştürülürse P(evet | X) = 0.0282 / (0.0282 + 0.0069) ≈ 0.80 bulunur.
+
+> [!TIP]
+> **Cevap:** Yeni müşteri **bilgisayar satın alır (bilgisayar_alimi = evet)**; modelin bu karara güveni yaklaşık %80'dir.
 
 - Bu hesaplama, özelliklerin sınıf verildiğinde koşullu bağımsız olduğunu varsayar; gerçek hayatta tam doğru olmayabilir ama çoğu durumda işe yarar.
 - Birden çok özellik olduğunda çarpımlar çok küçük değerlere düşebilir; uygulamada log-olasılık kullanılır:
@@ -1562,8 +1564,12 @@ Aşağıdaki tablo, 20 bilgisayar kullanıcısının mesleğini, işletim sistem
 | ev | mac | Hayir | Yasli | Safari | Dusuk |
 | ev | win | Hayir | Orta | IE | Yuksek |
 
-Sınıflandırılacak yeni kayıt ($X$) şudur:
-$X = \lbrace \text{meslek: ogrenci, isl sistemi: win, Antivirüs: Hayir, Yaş: Orta, Browser: IE}\rbrace$
+> [!IMPORTANT]
+> **Soru:** Aşağıdaki yeni kullanıcının ($X$) bilgisayarının güvenlik riski yüksek midir, düşük müdür? Bu kaydın sınıfı (Risk) bilinmemektedir; yukarıdaki 20 kayıttan öğrenilen olasılıklarla Naive Bayes yöntemiyle tahmin edilecektir.
+>
+> | Kayıt | meslek | isl sistemi | Antivirüs Kullanıyor? | Yaş | Browser | Risk |
+> | :---: | :--- | :--- | :--- | :--- | :--- | :---: |
+> | **21 (yeni kayıt, $X$)** | ogrenci | win | Hayir | Orta | IE | **?** |
 
 Naive Bayes algoritmasının adımları bu veri seti için sırasıyla uygulanmaktadır.
 
@@ -1612,7 +1618,10 @@ $$P(X | \text{Düşük}) \cdot P(\text{Düşük}) = \frac{4992}{7425860} \approx
 
 ##### 14.2.2.4. Değerlendirme
 
-Hesaplamalar sonucunda $0.01799 > 0.00067$ bulunmuştur; model $X$ kaydını **Yüksek** risk grubuna atar. Yüksek sınıfının skoru, Düşük sınıfının skorundan yaklaşık 27 kat büyüktür. Bu farkın temel nedeni, veride antivirüs kullanmamanın (Yüksek sınıfında 6/7, Düşük sınıfında 4/13), Windows kullanımının (6/7'ye karşı 4/13) ve IE tarayıcısının (4/7'ye karşı 1/13) yüksek riskle birlikte görülmesidir.
+Hesaplamalar sonucunda $0.01799 > 0.00067$ bulunmuştur; model $X$ kaydını **Yüksek** risk grubuna atar. Yüksek sınıfının skoru, Düşük sınıfının skorundan yaklaşık 27 kat büyüktür. Bu farkın temel nedeni, veride antivirüs kullanmamanın (Yüksek sınıfında 6/7, Düşük sınıfında 4/13), Windows kullanımının (6/7'ye karşı 4/13) ve IE tarayıcısının (4/7'ye karşı 1/13) yüksek riskle birlikte görülmesidir. İki skor toplamlarına bölünerek olasılığa dönüştürülürse $P(\text{Yüksek} \mid X) = 0.01799 / (0.01799 + 0.00067) \approx 0.964$ bulunur.
+
+> [!TIP]
+> **Cevap:** Yeni kullanıcının bilgisayarı **yüksek risk (Risk = Yuksek)** grubundadır; modelin bu karara güveni yaklaşık %96'dır.
 
 #### 14.2.3. "Naive" (Saf) Varsayım
 Algoritmanın en kritik noktası, `X` vektöründeki özelliklerin (`x_1, x_2, ..., x_n`) sınıf verildiğinde **koşullu olarak bağımsız** olduğunu varsaymasıdır. Bu, `P(X|C)` terimini basitleştirmemizi sağlar:
