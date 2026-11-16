@@ -1,0 +1,45 @@
+/* Web sürümünün (index.html) ve yazdırma sayfasının (yazdir.html) ortak stilleri */
+
+.mermaid, .mermaid-yazdir { text-align: center; margin: 20px 0; }
+.mermaid-yazdir img { break-inside: avoid; }
+.math-blok { overflow-x: auto; margin: 16px 0; }
+
+/* GitHub uyarı kutuları (> [!NOTE], > [!WARNING], > [!CAUTION] …) */
+.markdown-section blockquote.uyari { border-left: 5px solid; border-radius: 4px; padding: 10px 16px; margin: 16px 0; color: #24292f; }
+.markdown-section blockquote.uyari p { margin: 6px 0; font-weight: 400; }
+.uyari .uyari-baslik { display: block; font-weight: 700; margin-bottom: 4px; }
+.markdown-section blockquote.uyari-note { border-color: #0969da; background: #ddf4ff; } .uyari-note .uyari-baslik { color: #0969da; }
+.markdown-section blockquote.uyari-tip { border-color: #1a7f37; background: #dafbe1; } .uyari-tip .uyari-baslik { color: #1a7f37; }
+.markdown-section blockquote.uyari-important { border-color: #8250df; background: #fbefff; } .uyari-important .uyari-baslik { color: #8250df; }
+.markdown-section blockquote.uyari-warning { border-color: #9a6700; background: #fff8c5; } .uyari-warning .uyari-baslik { color: #9a6700; }
+.markdown-section blockquote.uyari-caution { border-color: #cf222e; background: #ffebe9; } .uyari-caution .uyari-baslik { color: #cf222e; }
+
+/* Kenar çubuğunda bölüm başlıkları biraz daha sıkı dursun */
+.sidebar ul li a { white-space: normal; }
+
+/* ---- Yazdırma sayfası (yazdir.html): notun tamamı tek sayfada ---- */
+body.yazdir .sidebar,
+body.yazdir .sidebar-toggle,
+body.yazdir .github-corner,
+body.yazdir .app-nav { display: none !important; }
+body.yazdir .content { position: static; left: 0; padding-top: 0; }
+body.yazdir .markdown-section { max-width: 820px; }
+.sayfa-sonu { break-after: page; page-break-after: always; }
+
+@page { size: A4; margin: 15mm 14mm; }
+@media print {
+  html, body, body.yazdir main, body.yazdir .content { height: auto !important; overflow: visible !important; }
+  body.yazdir .markdown-section { max-width: none; padding: 0; margin: 0; }
+  body.yazdir .markdown-section pre { white-space: pre-wrap; word-break: break-word; }
+  body.yazdir .markdown-section pre > code { white-space: pre-wrap; }
+  body.yazdir .docsify-copy-code-button { display: none !important; }
+  body.yazdir .markdown-section img { max-width: 100%; break-inside: avoid; }
+  body.yazdir .markdown-section tr,
+  body.yazdir .markdown-section blockquote,
+  body.yazdir .katex-display,
+  body.yazdir .math-blok { break-inside: avoid; }
+  body.yazdir .markdown-section h1,
+  body.yazdir .markdown-section h2,
+  body.yazdir .markdown-section h3 { break-after: avoid; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

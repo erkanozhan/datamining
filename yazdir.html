@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Veri Madenciliği Ders Notu (Tamamı)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="docsify-stil.css">
+</head>
+<body class="yazdir">
+  <!--
+    Notun tüm bölümlerini tek sayfada gösterir. Tarayıcıda açılıp Ctrl+P → "PDF olarak kaydet"
+    ile PDF alınabilir. araclar/pdf_olustur.py bu sayfayı kullanarak PDF'i otomatik üretir.
+  -->
+  <div id="app">Yükleniyor... (notun tüm bölümleri birleştiriliyor)</div>
+
+  <script>window.NOT_YAZDIR = true;</script>
+  <script src="docsify-ayar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@1.4.4/dist/docsify-katex.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: { useMaxWidth: true, htmlLabels: true }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-r.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+
+  <script>
+    // Ana sayfa yerine _sidebar.md'deki sırayla tüm bölümleri getirip tek metin olarak gösterir.
+    // Formül eklentisinden ÖNCE çalışması için eklenti listesinin başına konur.
+    function tumNotuBirlestir(hook) {
+      hook.beforeEach(function (icerik, next) {
+        fetch('_sidebar.md').then(function (r) { return r.text(); }).then(function (kenar) {
+          var dosyalar = [];
+          kenar.replace(/\]\(\/([^)]+\.md)\)/g, function (_, f) { dosyalar.push(f); });
+          return Promise.all(dosyalar.map(function (f) {
+            return fetch(f).then(function (r) { return r.text(); });
+          }));
+        }).then(function (parcalar) {
+          var md = parcalar.map(function (t) {
+            t = t.replace(/\r\n/g, '\n');
+            t = t.replace(/\n---\n+\[[^\n]*\]\([^)\n]*Ders_Notu\.md\)[^\n]*\n*$/, '\n'); // sayfa sonundaki gezinme satırı
+            t = t.replace(/\[([^\]\n]+)\]\((?!https?:)[^)\s]*\.md(#[^)\s]*)?\)/g, '$1');  // bölümler arası bağlantılar düz metin
+            t = t.replace(/\]\(\.\.\/images\//g, '](images/');                            // markdown görselleri
+            t = t.replace(/(src|href)="\.\.\//g, '$1="');                                  // HTML görselleri
+            return t;
+          }).join('\n\n<div class="sayfa-sonu"></div>\n\n');
+          next(md);
+        }).catch(function (e) { next('Bölümler yüklenemedi: ' + e); });
+      });
+      hook.doneEach(function () {
+        // Tıklayınca açılan kutuları baskıda açık göster
+        Array.prototype.forEach.call(document.querySelectorAll('details'), function (d) { d.open = true; });
+        diyagramlariResimOlarakCiz().then(function () {
+          document.body.setAttribute('data-hazir', '1');
+        });
+      });
+    }
+
+    // Chrome, sayfa içine gömülü mermaid SVG'lerini baskıda üst üste basabiliyor.
+    // Bu sayfada diyagramlar sırayla çizilir ve her biri bir resim (<img>) olarak yerleştirilir;
+    // resimler baskıda yerinde kalır. Sınıf adı değiştirildiği için ortak ayarlardaki mermaid çizimi bunlara dokunmaz.
+    function diyagramlariResimOlarakCiz() {
+      var kutular = Array.prototype.slice.call(document.querySelectorAll('.mermaid'));
+      kutular.forEach(function (k) { k.className = 'mermaid-yazdir'; });
+      var zincir = Promise.resolve();
+      kutular.forEach(function (kutu, i) {
+        zincir = zincir.then(function () {
+          var cozucu = document.createElement('textarea');
+          cozucu.innerHTML = kutu.innerHTML;          // &gt; gibi karakter kodlarını çöz
+          return window.mermaid.render('yazdir-diyagram-' + i, cozucu.value).then(function (sonuc) {
+            var gecici = document.createElement('div');
+            gecici.innerHTML = sonuc.svg;
+            var svg = gecici.querySelector('svg');
+            var vb = svg.viewBox.baseVal;
+            svg.setAttribute('width', vb.width);
+            svg.setAttribute('height', vb.height);
+            svg.removeAttribute('style');
+            var resim = new Image();
+            resim.alt = 'Diyagram';
+            resim.style.width = vb.width + 'px';
+            resim.style.maxWidth = '100%';
+            resim.style.height = 'auto';
+            resim.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            kutu.innerHTML = '';
+            kutu.appendChild(resim);
+          }).catch(function (e) { kutu.textContent = 'Diyagram çizilemedi: ' + e; });
+        });
+      });
+      return zincir;
+    }
+    window.$docsify.plugins.unshift(tumNotuBirlestir);
+  </script>
+</body>
+</html>

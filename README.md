@@ -2,8 +2,9 @@
 
 Tekirdağ Namık Kemal Üniversitesi Çorlu Mühendislik Fakültesi Bilgisayar Mühendisliği Bölümü **Veri Madenciliği (BMSB403)** dersinin ders notu, veri setleri ve R kodları.
 
-- **Ders notu:** [Ders_Notu.md](Ders_Notu.md)
-- **Web sürümü:** [erkanozhan.github.io/datamining](https://erkanozhan.github.io/datamining/). Aynı not; formüller, diyagramlar, içindekiler ve arama ile birlikte.
+- **Ders notu:** [Ders_Notu.md](Ders_Notu.md) (giriş ve içindekiler); bölümler [`bolumler/`](bolumler) klasöründe ayrı dosyalardır.
+- **Web sürümü:** [erkanozhan.github.io/datamining](https://erkanozhan.github.io/datamining/). Aynı not; bölüm listesi, tüm notta arama, formüller ve diyagramlarla birlikte.
+- **PDF / yazdırma:** [Notun tamamı tek sayfada](https://erkanozhan.github.io/datamining/yazdir.html) açılıp Ctrl+P ile "PDF olarak kaydet" seçilebilir. Aynı PDF `python araclar/pdf_olustur.py` komutuyla da üretilir (Chrome veya Edge gerekir).
 
 ## Ders Notunun Kapsamı
 
@@ -13,8 +14,10 @@ Veri ve veri kaynakları, veri madenciliği ve bilgi keşfi (KDD), veri ambarlar
 
 | Klasör / dosya | İçerik |
 | :--- | :--- |
-| [`Ders_Notu.md`](Ders_Notu.md) | Ders notunun tamamı (18 bölüm ve kaynaklar) |
-| [`index.html`](index.html) | Web sürümünü oluşturan docsify sayfası |
+| [`Ders_Notu.md`](Ders_Notu.md) | Ders notunun giriş sayfası ve içindekiler |
+| [`bolumler/`](bolumler) | Notun bölümleri (18 bölüm ve kaynaklar; 1–9 ve 10–12. bölümler birer dosyada toplanmıştır) |
+| [`index.html`](index.html), [`_sidebar.md`](_sidebar.md), [`docsify-ayar.js`](docsify-ayar.js), [`docsify-stil.css`](docsify-stil.css) | Web sürümünü oluşturan docsify sayfası, bölüm listesi, ayarları ve stilleri |
+| [`yazdir.html`](yazdir.html), [`araclar/pdf_olustur.py`](araclar/pdf_olustur.py) | Notun tamamını tek sayfada gösteren yazdırma sayfası ve PDF üreten betik |
 | [`images/`](images) | Ders notundaki şekiller |
 | [`LICENSE`](LICENSE) | Lisans metni (GNU GPL v3) |
 
