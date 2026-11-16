@@ -43,3 +43,7 @@ body.yazdir .markdown-section { max-width: 820px; }
   body.yazdir .markdown-section h3 { break-after: avoid; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* docsify-katex eklentisi değişkenlere eski KaTeX'in "mathdefault" sınıfını verir; yeni KaTeX stil dosyasında
+   bu sınıfın karşılığı yoktur. Değişkenler (ör. S(p), T) bu kural olmadan italik değil dik görünür. */
+.katex .mathdefault { font-family: KaTeX_Math; font-style: italic; }
